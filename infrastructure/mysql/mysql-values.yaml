@@ -1,0 +1,9 @@
+primary:
+  persistence:
+    enabled: true
+    size: 1Gi
+auth:
+  rootPassword: changeme
+  database: mydb
+  username: myuser
+  password: changeme

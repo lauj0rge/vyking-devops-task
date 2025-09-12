@@ -1,0 +1,1 @@
+variable "argocd_namespace" {}

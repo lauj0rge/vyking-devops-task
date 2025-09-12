@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mysql-backup
+  labels:
+    app.kubernetes.io/name: mysql
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: vyking-app
+    app.kubernetes.io/environment: {{ .Values.global.environment | default "dev" }}
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: mysql
+            app.kubernetes.io/component: database
+            app.kubernetes.io/part-of: vyking-app
+            app.kubernetes.io/environment: {{ .Values.global.environment | default "dev" }}
+        spec:
+          containers:
+            - name: backup
+              image: mysql:8.0
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  mysqldump -h mysql -u root -p"$MYSQL_PWD" mydb > /backups/backup-$(date +\%Y\%m\%d\%H\%M).sql
+              env:
+                - name: MYSQL_PWD
+                  valueFrom:
+                    secretKeyRef:
+                      name: mysql-root-password
+                      key: mysql-root-password
+              volumeMounts:
+                - name: backup-storage
+                  mountPath: /backups
+          restartPolicy: OnFailure
+          volumes:
+            - name: backup-storage
+              persistentVolumeClaim:
+                claimName: mysql-backup-pvc
