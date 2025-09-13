@@ -79,3 +79,31 @@ Check rollout status of deployments.
 Check HPA scaling (if defined).
 
 Use kubectl top to show resource usage (if metrics-server is available).
+
+
+----
+2. Connecting to MySQL
+
+Once MySQL is deployed:
+
+a. Get the MySQL pod(s):
+
+kubectl get pods -n mysql-dev
+
+
+b. Connect using kubectl exec:
+
+kubectl exec -it <mysql-pod-name> -n mysql-dev -- mysql -u<user> -p<password> <database>
+
+
+The <user>, <password>, <database> come from your Helm values (or Kubernetes Secret if you mapped them).
+
+c. Example (using root):
+
+kubectl exec -it <mysql-pod-name> -n mysql-dev -- \
+mysql -uroot -p$MYSQL_ROOT_PASSWORD
+
+
+To grab the password from the secret:
+
+kubectl get secret mysql -n mysql-dev -o jsonpath="{.data.mysql-root-password}" | base64 -d && echo
