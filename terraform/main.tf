@@ -1,6 +1,7 @@
 module "argocd" {
   source           = "./modules/argocd"
   argocd_namespace = var.argocd_namespace
+  repo_url         = var.repo_url
 }
 
 module "applications" {

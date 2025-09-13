@@ -9,3 +9,17 @@ resource "helm_release" "argocd" {
   wait             = true
   timeout          = 600
 }
+
+resource "kubernetes_secret" "git_repo" {
+  metadata {
+    name      = "repo-vyking-git"
+    namespace = var.argocd_namespace
+    labels = {
+      "argocd.argoproj.io/secret-type" = "repository"
+    }
+  }
+  data = {
+    url  = var.repo_url
+    type = "git"
+  }
+}
