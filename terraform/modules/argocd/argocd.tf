@@ -11,6 +11,8 @@ resource "helm_release" "argocd" {
 }
 
 resource "kubernetes_secret" "git_repo" {
+  depends_on = [helm_release.argocd]
+
   metadata {
     name      = "repo-vyking-git"
     namespace = var.argocd_namespace

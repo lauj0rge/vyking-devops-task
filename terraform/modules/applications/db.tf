@@ -1,3 +1,9 @@
+resource "kubernetes_namespace" "mysql" {
+  metadata {
+    name = var.mysql_namespace
+  }
+}
+
 # Sync secrets first
 resource "kubernetes_manifest" "mysql_secrets" {
   manifest = {

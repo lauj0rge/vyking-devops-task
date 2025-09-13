@@ -28,13 +28,13 @@ securityContext:
 
 probes:
   liveness:
-    path: /health
+    path: /
     initialDelaySeconds: 10
     periodSeconds: 15
     timeoutSeconds: 2
     failureThreshold: 3
   readiness:
-    path: /ready
+    path: /
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 2

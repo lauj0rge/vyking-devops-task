@@ -7,9 +7,9 @@ ARGO_NS="argocd-${ENVIRONMENT}"
 
 echo "=== 🚀 Bootstrapping environment: $ENVIRONMENT ==="
 
-# 0. Install dependencies if needed
-echo "==> Running setup-tools.sh to ensure dependencies are installed"
-./scripts/setup-tools.sh
+# 0. Install dependencies if needed  - uncomment if needed
+#echo "==> Running setup-tools.sh to ensure dependencies are installed"
+#./scripts/setup-tools.sh
 
 # 1. Create cluster
 ./scripts/cluster.sh "$ENVIRONMENT"
