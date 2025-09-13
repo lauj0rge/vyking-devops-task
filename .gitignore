@@ -56,7 +56,6 @@ kubeconfig.yaml
 # =========================
 *.secret.yaml
 *secret*.yaml
-*.secrets/
 *.key
 *.crt
 *.pem
