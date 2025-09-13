@@ -2,7 +2,7 @@ replicaCount: 3
 
 image:
   repository: hashicorp/http-echo
-  tag: "0.2.3"
+  tag: latest
 
 service:
   port: 8080

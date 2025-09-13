@@ -1,6 +1,6 @@
 output "mysql_app_name" {
   description = "Name of the Argo CD Application resource for infrastructure"
-  value       = kubernetes_manifest.mysql.manifest.metadata.name
+  value       = kubernetes_manifest.mysql_app.manifest.metadata.name
 }
 
 output "frontend_app_name" {

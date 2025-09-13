@@ -2,7 +2,7 @@ replicaCount: 3
 
 image:
   repository: nginx
-  tag: "1.29.1"
+  tag: nginx:latest
 
 service:
   port: 3000

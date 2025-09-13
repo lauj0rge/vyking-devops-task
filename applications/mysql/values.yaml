@@ -2,10 +2,7 @@ mysql:
   architecture: standalone
 
   auth:
-    rootPassword: changeme
-    database: mydb
-    username: user
-    password: password
+    existingSecret: mysql-auth
 
   primary:
     persistence:

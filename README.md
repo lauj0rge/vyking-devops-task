@@ -93,14 +93,14 @@ kubectl get pods -n mysql-dev
 
 b. Connect using kubectl exec:
 
-kubectl exec -it <mysql-pod-name> -n mysql-dev -- mysql -u<user> -p<password> <database>
+kubectl exec -it db-mysql-0-n mysql-dev -- mysql -u<user> -p<password> <database>
 
 
 The <user>, <password>, <database> come from your Helm values (or Kubernetes Secret if you mapped them).
 
 c. Example (using root):
 
-kubectl exec -it <mysql-pod-name> -n mysql-dev -- \
+kubectl exec -it db-mysql-0 -n mysql-dev -- \
 mysql -uroot -p$MYSQL_ROOT_PASSWORD
 
 

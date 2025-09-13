@@ -2,10 +2,9 @@ mysql:
   architecture: standalone
 
   auth:
-    rootPassword: devRootPass123
-    database: devdb
+    existingSecret: mysql-auth
     username: devuser
-    password: devpass123
+    database: devdb
 
   primary:
     persistence:

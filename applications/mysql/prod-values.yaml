@@ -2,10 +2,9 @@ mysql:
   architecture: replication
 
   auth:
-    rootPassword: prodRootPass123
-    database: proddb
+    existingSecret: mysql-auth
     username: produser
-    password: prodpass123
+    database: proddb
 
   primary:
     persistence:
