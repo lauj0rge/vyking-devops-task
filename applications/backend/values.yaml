@@ -5,10 +5,17 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
+#service:
+#  type: ClusterIP
+#  port: 8080
+
 service:
   type: ClusterIP
-  port: 8080
+  port: 5678   # http-echo expone por defecto el 5678
 
+args:
+  - "-text=hello backend"
+  -
 resources:
   requests:
     cpu: 100m
@@ -26,19 +33,30 @@ securityContext:
   capabilities:
     drop: ["ALL"]
 
+#probes:
+#  liveness:
+#    path: /
+#    initialDelaySeconds: 10
+#    periodSeconds: 15
+#    timeoutSeconds: 2
+#    failureThreshold: 3
+#  readiness:
+#    path: /
+#    initialDelaySeconds: 5
+#    periodSeconds: 10
+#    timeoutSeconds: 2
+#    failureThreshold: 3
 probes:
   liveness:
     path: /
-    initialDelaySeconds: 10
-    periodSeconds: 15
-    timeoutSeconds: 2
-    failureThreshold: 3
-  readiness:
-    path: /
+    port: 5678
     initialDelaySeconds: 5
     periodSeconds: 10
-    timeoutSeconds: 2
-    failureThreshold: 3
+  readiness:
+    path: /
+    port: 5678
+    initialDelaySeconds: 5
+    periodSeconds: 10
 
 hpa:
   enabled: true
