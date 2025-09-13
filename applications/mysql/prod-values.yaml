@@ -1,0 +1,28 @@
+mysql:
+  architecture: replication
+
+  auth:
+    rootPassword: prodRootPass123
+    database: proddb
+    username: produser
+    password: prodpass123
+
+  primary:
+    persistence:
+      size: 20Gi
+    service:
+      port: 3306   # standard MySQL port
+
+  secondary:
+    replicaCount: 2
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2Gi
+
+commonLabels:
+  environment: prod

@@ -1,15 +1,35 @@
-replicaCount: 2
+replicaCount: 3
 
 image:
   repository: nginx
   tag: "1.29.1"
 
 service:
-  type: ClusterIP
-  port: 80
+  port: 3000
+
+ingress:
+  enabled: true
+  hosts:
+    - host: frontend.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: frontend-tls
+      hosts:
+        - frontend.example.com
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 1
+    memory: 1Gi
 
 hpa:
   enabled: true
-  minReplicas: 2
-  maxReplicas: 6
-  cpuUtilization: 50
+  minReplicas: 3
+  maxReplicas: 10
+  cpuUtilization: 70
+  memoryUtilization: 80

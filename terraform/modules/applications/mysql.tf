@@ -22,7 +22,10 @@ resource "kubernetes_manifest" "mysql" {
       source = {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
-        path           = "infrastructure"
+        path           = "applications/mysql"
+        helm = {
+          valueFiles = ["${var.environment}-values.yaml"]
+        }
       }
       destination = {
         server    = "https://kubernetes.default.svc"

@@ -1,5 +1,6 @@
 **
-chmod +x scripts/setup-tools.sh scripts/verify-tools.sh
+chmod +x scripts/setup-tools.sh ./scripts/cluster.sh ./scripts/bootstrap.sh scripts/tests.sh ./scripts/cleanup.sh
+
 
 # Install everything
 ./scripts/setup-tools.sh
@@ -45,3 +46,36 @@ kubectl get svc -A
 terraform init
 terraform plan -var-file=env/dev.tfvars
 terraform apply -var-file=env/dev.tfvars
+
+
+---
+Behavior
+
+./scripts/bootstrap.sh dev
+
+Runs setup-tools.sh → installs Docker, kubectl, k3d, Helm, Terraform.
+
+Creates the cluster.
+
+Applies Terraform infra (Argo CD, metrics-server).
+
+Applies Terraform apps (frontend, backend, MySQL).
+
+Prints Argo CD password.
+
+Starts port-forward in background.
+
+On a fresh Ubuntu VM, this script will fully prepare your environment end-to-end.
+
+
+---
+script/tests.sh
+full diagnostic + health checker. It will now:
+
+Show all resources.
+
+Check rollout status of deployments.
+
+Check HPA scaling (if defined).
+
+Use kubectl top to show resource usage (if metrics-server is available).

@@ -1,0 +1,25 @@
+mysql:
+  architecture: standalone
+
+  auth:
+    rootPassword: devRootPass123
+    database: devdb
+    username: devuser
+    password: devpass123
+
+  primary:
+    persistence:
+      size: 1Gi
+    service:
+      port: 3307   # dev port to avoid clash with prod
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+commonLabels:
+  environment: dev
