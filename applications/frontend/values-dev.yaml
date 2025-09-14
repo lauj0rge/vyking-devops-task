@@ -7,7 +7,7 @@ image:
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 80
 
 backend:
   host: backend-dev
@@ -16,7 +16,8 @@ backend:
 ingress:
   enabled: true
   host: frontend-dev.local
-  tls: true
+  tls: []
+  annotations: {}
 
 resources:
   requests:
@@ -25,3 +26,19 @@ resources:
   limits:
     cpu: 300m
     memory: 256Mi
+
+probes:
+  liveness:
+    path: /
+    port: 80
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+  readiness:
+    path: /
+    port: 80
+    initialDelaySeconds: 3
+    periodSeconds: 8
+    timeoutSeconds: 2
+    failureThreshold: 3

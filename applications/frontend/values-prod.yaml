@@ -1,14 +1,13 @@
-replicaCount: 2
+replicaCount: 3
 
 image:
   repository: vyking-frontend
   tag: prod
   pullPolicy: IfNotPresent
 
-
 service:
   type: ClusterIP
-  port: 8080
+  port: 80
 
 backend:
   host: backend-prod
@@ -16,9 +15,11 @@ backend:
 
 ingress:
   enabled: true
-  host: frontend-dev.local
+  host: frontend-prod.local
   tls: true
-
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    cert-manager.io/cluster-issuer: "selfsigned-issuer"   # if you use cert-manager
 
 resources:
   requests:
@@ -28,8 +29,15 @@ resources:
     cpu: 500m
     memory: 512Mi
 
-autoscaling:
+hpa:
   enabled: true
-  minReplicas: 2
-  maxReplicas: 5
-  targetCPUUtilizationPercentage: 70
+  minReplicas: 3
+  maxReplicas: 6
+  cpuUtilization: 70
+  memoryUtilization: 70
+
+labels:
+  app.kubernetes.io/name: frontend
+  app.kubernetes.io/component: frontend
+  app.kubernetes.io/part-of: vyking-app
+  environment: prod

@@ -22,5 +22,13 @@ resources:
     cpu: 300m
     memory: 256Mi
 
+probes:
+  liveness:
+    path: /health
+    initialDelaySeconds: 5
+  readiness:
+    path: /ready
+    initialDelaySeconds: 3
+
 autoscaling:
   enabled: false

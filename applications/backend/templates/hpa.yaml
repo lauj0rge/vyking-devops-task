@@ -9,8 +9,9 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ .Release.Name }}-backend
-  minReplicas: {{ .Values.hpa.minReplicas }}
-  maxReplicas: {{ .Values.hpa.maxReplicas }}
+    minReplicas: {{ .Values.hpa.minReplicas }}
+    maxReplicas: {{ .Values.hpa.maxReplicas }}
+    targetCPUUtilizationPercentage: {{ .Values.hpa.cpuUtilization }}
   metrics:
     - type: Resource
       resource:

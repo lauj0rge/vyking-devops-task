@@ -9,16 +9,15 @@ service:
   type: ClusterIP
   port: 3000
 
+backend:
+  host: backend
+  port: 8080
+
 ingress:
   enabled: true
-  className: ""
-  annotations: {}
-  hosts:
-    - host: frontend.local
-      paths:
-        - path: /
-          pathType: Prefix
+  host: frontend.local
   tls: []
+  annotations: {}
 
 resources:
   requests:
@@ -39,13 +38,15 @@ securityContext:
 
 probes:
   liveness:
-    path: /health
+    path: /
+    port: 3000
     initialDelaySeconds: 10
     periodSeconds: 15
     timeoutSeconds: 2
     failureThreshold: 3
   readiness:
     path: /
+    port: 3000
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 2
@@ -57,8 +58,3 @@ hpa:
   maxReplicas: 5
   cpuUtilization: 70
   memoryUtilization: null
-
-labels:
-  app.kubernetes.io/name: frontend
-  app.kubernetes.io/component: frontend
-  app.kubernetes.io/part-of: vyking-app

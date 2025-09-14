@@ -27,4 +27,4 @@ resources:
 
 commonLabels:
   environment: prod
-  app: vyking-mysql
+  app: vyking-mysql-prod
