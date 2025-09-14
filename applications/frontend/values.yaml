@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  tag: 1.27.2
+  repository: vyking-frontend
+  tag: latest
   pullPolicy: IfNotPresent
 
 service:

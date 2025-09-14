@@ -1,21 +1,14 @@
 replicaCount: 1
 
 image:
-  repository: hashicorp/http-echo
+  repository: vyking-backend
   tag: latest
   pullPolicy: IfNotPresent
 
-#service:
-#  type: ClusterIP
-#  port: 8080
-
 service:
   type: ClusterIP
-  port: 5678   # http-echo expone por defecto el 5678
+  port: 8080
 
-args:
-  - "-text=hello backend"
-  -
 resources:
   requests:
     cpu: 100m
@@ -33,37 +26,26 @@ securityContext:
   capabilities:
     drop: ["ALL"]
 
-#probes:
-#  liveness:
-#    path: /
-#    initialDelaySeconds: 10
-#    periodSeconds: 15
-#    timeoutSeconds: 2
-#    failureThreshold: 3
-#  readiness:
-#    path: /
-#    initialDelaySeconds: 5
-#    periodSeconds: 10
-#    timeoutSeconds: 2
-#    failureThreshold: 3
 probes:
   liveness:
     path: /
-    port: 5678
-    initialDelaySeconds: 5
-    periodSeconds: 10
+    initialDelaySeconds: 10
+    periodSeconds: 15
+    timeoutSeconds: 2
+    failureThreshold: 3
   readiness:
     path: /
-    port: 5678
     initialDelaySeconds: 5
     periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
 
 hpa:
   enabled: true
   minReplicas: 2
   maxReplicas: 5
   cpuUtilization: 70
-  memoryUtilization: null # can set a percentage here
+  memoryUtilization: 70
 
 labels:
   app.kubernetes.io/name: backend

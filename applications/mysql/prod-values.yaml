@@ -1,27 +1,30 @@
 mysql:
-  architecture: replication
+  architecture: standalone
 
   auth:
-    existingSecret: mysql-auth
-    username: produser
-    database: proddb
+    existingSecret: mysql-prod-secret
 
   primary:
     persistence:
-      size: 20Gi
+      size: 5Gi
     service:
-      port: 3306   # standard MySQL port
+      port: 3306
 
-  secondary:
-    replicaCount: 2
+  initdbScripts:
+    init.sql: |
+      CREATE TABLE IF NOT EXISTS todos (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        task VARCHAR(255) NOT NULL
+      );
 
-  resources:
-    requests:
-      cpu: 500m
-      memory: 512Mi
-    limits:
-      cpu: 2
-      memory: 2Gi
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 1
+    memory: 1Gi
 
 commonLabels:
   environment: prod
+  app: vyking-mysql

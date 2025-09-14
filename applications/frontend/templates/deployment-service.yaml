@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-frontend
-  labels: {{- toYaml .Values.labels | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -16,34 +15,16 @@ spec:
       containers:
           - name: frontend
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-            imagePullPolicy: {{ .Values.image.pullPolicy }}
             ports:
               - containerPort: {{ .Values.service.port }}
-            resources: {{- toYaml .Values.resources | nindent 12 }}
-            securityContext: {{- toYaml .Values.securityContext | nindent 12 }}
-            livenessProbe:
-              httpGet:
-                path: {{ .Values.probes.liveness.path }}
-                port: {{ .Values.service.port }}
-              initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
-              periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
-              timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
-              failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
-            readinessProbe:
-              httpGet:
-                path: {{ .Values.probes.readiness.path }}
-                port: {{ .Values.service.port }}
-              initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
-              periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
-              timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
-              failureThreshold: {{ .Values.probes.readiness.failureThreshold }}
-
+            env:
+              - name: BACKEND_URL
+                value: "http://{{ .Values.backend.host }}:{{ .Values.backend.port }}"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Release.Name }}-frontend
-  labels: {{- toYaml .Values.labels | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   selector:
@@ -51,3 +32,22 @@ spec:
   ports:
       - port: {{ .Values.service.port }}
         targetPort: {{ .Values.service.port }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-frontend
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - host: "{{ .Values.ingress.host }}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-frontend
+                port:
+                  number: {{ .Values.service.port }}

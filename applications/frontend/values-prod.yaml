@@ -1,35 +1,35 @@
-replicaCount: 3
+replicaCount: 2
 
 image:
-  repository: nginx
-  tag: 1.27.2
+  repository: vyking-frontend
+  tag: prod
+  pullPolicy: IfNotPresent
+
 
 service:
-  port: 3000
+  type: ClusterIP
+  port: 8080
+
+backend:
+  host: backend-prod
+  port: 8081
 
 ingress:
   enabled: true
-  hosts:
-    - host: frontend.example.com
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: frontend-tls
-      hosts:
-        - frontend.example.com
+  host: frontend-dev.local
+  tls: true
+
 
 resources:
   requests:
     cpu: 200m
     memory: 256Mi
   limits:
-    cpu: 1
-    memory: 1Gi
+    cpu: 500m
+    memory: 512Mi
 
-hpa:
+autoscaling:
   enabled: true
-  minReplicas: 3
-  maxReplicas: 10
-  cpuUtilization: 70
-  memoryUtilization: 80
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
