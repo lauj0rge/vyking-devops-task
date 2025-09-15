@@ -126,8 +126,6 @@ echo "==> Argo CD UI: http://localhost:8080"
 # -------------------------
 # 7. Front End access
 # -------------------------
-echo "✅ Port-forward running in background (PID: $PF_PID)"
-echo "==> Argo CD UI: http://localhost:${LOCAL_PORT}"
 echo "==> Frontend URL: http://${FE_HOST}"
 
 if [[ "$ENVIRONMENT" == "dev" ]]; then
