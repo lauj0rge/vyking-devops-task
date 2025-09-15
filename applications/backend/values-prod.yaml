@@ -18,6 +18,15 @@ resources:
     cpu: 500m
     memory: 512Mi
 
+probes:
+  liveness:
+    path: /
+    port: 8081
+    initialDelaySeconds: 5
+  readiness:
+    path: /
+    port: 8081
+    initialDelaySeconds: 3
 hpa:
   minReplicas: 2
   maxReplicas: 5
