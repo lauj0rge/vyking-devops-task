@@ -21,7 +21,6 @@ db_config = {
 }
 
 def get_connection():
-    """Get a MySQL connection with error handling."""
     try:
         return mysql.connector.connect(**db_config)
     except mysql.connector.Error as e:
@@ -77,3 +76,7 @@ def delete_todo(todo_id):
     cursor.close()
     conn.close()
     return {"message": "Task deleted"}
+
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8080))
+    app.run(host="0.0.0.0", port=port, debug=False)
