@@ -16,8 +16,10 @@ backend:
 ingress:
   enabled: true
   host: frontend-dev.local
-  tls: []
-  annotations: {}
+  tls: true
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    cert-manager.io/cluster-issuer: "selfsigned-issuer"
 
 resources:
   requests:

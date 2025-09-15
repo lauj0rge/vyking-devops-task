@@ -4,14 +4,6 @@ mysql:
   auth:
     existingSecret: mysql-auth
 
-  primary:
-    persistence:
-      enabled: true
-      size: 5Gi
-    service:
-      type: ClusterIP
-      port: 3306
-
   # Security hardening
   podSecurityContext:
     enabled: true
@@ -35,8 +27,13 @@ mysql:
       cpu: 1
       memory: 1Gi
 
-  # Probes
   primary:
+    persistence:
+      enabled: true
+      size: 5Gi
+    service:
+      type: ClusterIP
+      port: 3306
     livenessProbe:
       enabled: true
       initialDelaySeconds: 30

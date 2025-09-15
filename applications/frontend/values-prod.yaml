@@ -19,7 +19,7 @@ ingress:
   tls: true
   annotations:
     kubernetes.io/ingress.class: traefik
-    cert-manager.io/cluster-issuer: "selfsigned-issuer"   # if you use cert-manager
+    cert-manager.io/cluster-issuer: "selfsigned-issuer"
 
 resources:
   requests:
