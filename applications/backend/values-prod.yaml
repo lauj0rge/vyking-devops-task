@@ -8,7 +8,7 @@ service:
 
 mysql:
   host: mysql-prod
-  secretName: mysql-prod-secret
+  secretName: mysql-credentials-prod
 
 resources:
   requests:

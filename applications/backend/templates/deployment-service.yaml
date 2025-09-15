@@ -23,27 +23,27 @@ spec:
               - name: MYSQL_HOST
                 valueFrom:
                   secretKeyRef:
-                    name: mysql-credentials-{{ .Values.env }}
+                    name: {{ .Values.mysql.secretName }}
                     key: host
               - name: MYSQL_PORT
                 valueFrom:
                   secretKeyRef:
-                    name: mysql-credentials-{{ .Values.env }}
+                    name: {{ .Values.mysql.secretName }}
                     key: port
               - name: MYSQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: mysql-credentials-{{ .Values.env }}
+                    name: {{ .Values.mysql.secretName }}
                     key: username
               - name: MYSQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: mysql-credentials-{{ .Values.env }}
+                    name: {{ .Values.mysql.secretName }}
                     key: password
               - name: MYSQL_DATABASE
                 valueFrom:
                   secretKeyRef:
-                    name: mysql-credentials-{{ .Values.env }}
+                    name: {{ .Values.mysql.secretName }}
                     key: database
             livenessProbe:
               httpGet:

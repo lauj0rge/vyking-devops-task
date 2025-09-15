@@ -40,46 +40,50 @@ echo "==> Generating sealed secrets for $ENVIRONMENT"
 
 mkdir -p infrastructure/sealed
 
+MYSQL_SECRET_NAME="mysql-${ENVIRONMENT}-secret"
+MYSQL_CRED_NAME="mysql-credentials-${ENVIRONMENT}"
+
 case "$ENVIRONMENT" in
   dev)
-    kubectl create secret generic mysql-dev-secret \
-      -n mysql-dev \
+    kubectl create secret generic ${MYSQL_SECRET_NAME} \
+      -n mysql-${ENVIRONMENT} \
       --from-literal=rootPassword=$DEV_DB_ROOT_PASS \
       --from-literal=username=$DEV_DB_USER \
       --from-literal=password=$DEV_DB_PASS \
       --from-literal=database=$DEV_DB_NAME \
-      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/mysql-dev-secret.yaml
+      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_SECRET_NAME}.yaml
 
-    kubectl create secret generic mysql-credentials-dev \
-      -n backend-dev \
+    kubectl create secret generic ${MYSQL_CRED_NAME} \
+      -n backend-${ENVIRONMENT} \
       --from-literal=username=$DEV_DB_USER \
       --from-literal=password=$DEV_DB_PASS \
       --from-literal=database=$DEV_DB_NAME \
-      --from-literal=host=mysql-dev.mysql-dev.svc.cluster.local \
+      --from-literal=host=mysql-${ENVIRONMENT}.mysql-${ENVIRONMENT}.svc.cluster.local \
       --from-literal=port=3306 \
-      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/mysql-credentials-dev.yaml
+      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_CRED_NAME}.yaml
     ;;
   prod)
-    kubectl create secret generic mysql-prod-secret \
-      -n mysql-prod \
+    kubectl create secret generic ${MYSQL_SECRET_NAME} \
+      -n mysql-${ENVIRONMENT} \
       --from-literal=rootPassword=$PROD_DB_ROOT_PASS \
       --from-literal=username=$PROD_DB_USER \
       --from-literal=password=$PROD_DB_PASS \
       --from-literal=database=$PROD_DB_NAME \
-      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/mysql-prod-secret.yaml
+      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_SECRET_NAME}.yaml
 
-    kubectl create secret generic mysql-credentials-prod \
-      -n backend-prod \
+    kubectl create secret generic ${MYSQL_CRED_NAME} \
+      -n backend-${ENVIRONMENT} \
       --from-literal=username=$PROD_DB_USER \
       --from-literal=password=$PROD_DB_PASS \
       --from-literal=database=$PROD_DB_NAME \
-      --from-literal=host=mysql-prod.mysql-prod.svc.cluster.local \
+      --from-literal=host=mysql-${ENVIRONMENT}.mysql-${ENVIRONMENT}.svc.cluster.local \
       --from-literal=port=3306 \
-      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/mysql-credentials-prod.yaml
+      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_CRED_NAME}.yaml
     ;;
 esac
 
 echo "✅ SealedSecrets generated for $ENVIRONMENT"
+
 
 # -------------------------
 # 4. Build & import images
