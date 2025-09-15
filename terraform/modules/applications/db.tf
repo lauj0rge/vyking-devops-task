@@ -4,7 +4,6 @@ resource "kubernetes_namespace" "mysql" {
   }
 }
 
-# SealedSecrets sync
 resource "kubernetes_manifest" "mysql_sealed_secrets" {
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
@@ -22,7 +21,7 @@ resource "kubernetes_manifest" "mysql_sealed_secrets" {
       }
       destination = {
         server    = "https://kubernetes.default.svc"
-        namespace = var.mysql_namespace
+        namespace = var.backend_namespace
       }
       syncPolicy = {
         automated = {
@@ -34,7 +33,6 @@ resource "kubernetes_manifest" "mysql_sealed_secrets" {
   }
 }
 
-# Then deploy MySQL Helm chart
 resource "kubernetes_manifest" "mysql_app" {
   depends_on = [kubernetes_manifest.mysql_sealed_secrets]
 

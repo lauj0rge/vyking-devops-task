@@ -1,6 +1,4 @@
 apiVersion: autoscaling/v2
-# fallback if cluster doesn’t support v2:
-# apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ .Release.Name }}-hpa

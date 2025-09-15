@@ -9,7 +9,7 @@ apps_namespace   = "default"
 
 # Git repository to sync from
 repo_url    = "https://github.com/lauj0rge/vyking-devops-task.git"
-repo_branch = "main"
+repo_branch = "prod"
 
 frontend_namespace = "frontend-prod"
 backend_namespace  = "backend-prod"

@@ -50,6 +50,7 @@ helmfile.d/
 .kube/
 *.kubeconfig
 kubeconfig.yaml
+*kubeseal*
 
 # =========================
 # Secrets (DON’T COMMIT REAL SECRETS)
@@ -57,6 +58,7 @@ kubeconfig.yaml
 *.secret.yaml
 *secret*.yaml
 *.secrets/
+!*-sealed.yaml
 *.key
 *.crt
 *.pem
