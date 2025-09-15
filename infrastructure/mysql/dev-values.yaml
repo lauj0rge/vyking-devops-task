@@ -1,0 +1,21 @@
+mysql:
+  secretName: mysql-dev-secret
+  database: devdb
+  username: devuser
+  persistence:
+    size: 1Gi
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+
+backup:
+#  schedule: "0 */48 * * *"   # every 2 days
+  schedule: "*/5 * * * *"   # every 5 minutes
+  image: mysql:8.0
+  pvc: mysql-backups

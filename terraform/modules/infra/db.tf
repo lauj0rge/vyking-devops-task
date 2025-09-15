@@ -1,4 +1,4 @@
-resource "kubernetes_namespace" "mysql" {
+resource "kubernetes_namespace" "mysql_ns" {
   metadata {
     name = var.mysql_namespace
   }
@@ -33,7 +33,7 @@ resource "kubernetes_manifest" "mysql_sealed_secrets" {
   }
 }
 
-resource "kubernetes_manifest" "mysql_app" {
+resource "kubernetes_manifest" "mysql" {
   depends_on = [kubernetes_manifest.mysql_sealed_secrets]
 
   manifest = {
@@ -48,7 +48,7 @@ resource "kubernetes_manifest" "mysql_app" {
       source = {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
-        path           = "applications/mysql"
+        path           = "infrastructure/mysql"
         helm = {
           valueFiles = ["${var.environment}-values.yaml"]
         }

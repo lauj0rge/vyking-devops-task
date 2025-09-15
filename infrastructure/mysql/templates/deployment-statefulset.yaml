@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: {{ .Release.Namespace }}
+spec:
+  serviceName: mysql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+              name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mysql.secretName }}
+                  key: rootPassword
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mysql.secretName }}
+                  key: database
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mysql.secretName }}
+                  key: username
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mysql.secretName }}
+                  key: password
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+            - name: init-sql
+              mountPath: /docker-entrypoint-initdb.d
+          livenessProbe:
+            exec:
+              command: ["mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p$(MYSQL_ROOT_PASSWORD)"]
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command: ["mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p$(MYSQL_ROOT_PASSWORD)"]
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+      volumes:
+        - name: init-sql
+          configMap:
+            name: mysql-init
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

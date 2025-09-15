@@ -43,21 +43,39 @@ mkdir -p infrastructure/sealed
 case "$ENVIRONMENT" in
   dev)
     kubectl create secret generic mysql-dev-secret \
+      -n mysql-dev \
+      --from-literal=rootPassword=$DEV_DB_ROOT_PASS \
+      --from-literal=username=$DEV_DB_USER \
+      --from-literal=password=$DEV_DB_PASS \
+      --from-literal=database=$DEV_DB_NAME \
+      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/mysql-dev-secret.yaml
+
+    kubectl create secret generic mysql-credentials-dev \
       -n backend-dev \
       --from-literal=username=$DEV_DB_USER \
       --from-literal=password=$DEV_DB_PASS \
       --from-literal=database=$DEV_DB_NAME \
-      --dry-run=client -o yaml \
-      | kubeseal -o yaml > infrastructure/sealed/mysql-dev-sealed.yaml
+      --from-literal=host=mysql-dev.mysql-dev.svc.cluster.local \
+      --from-literal=port=3306 \
+      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/mysql-credentials-dev.yaml
     ;;
   prod)
     kubectl create secret generic mysql-prod-secret \
+      -n mysql-prod \
+      --from-literal=rootPassword=$PROD_DB_ROOT_PASS \
+      --from-literal=username=$PROD_DB_USER \
+      --from-literal=password=$PROD_DB_PASS \
+      --from-literal=database=$PROD_DB_NAME \
+      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/mysql-prod-secret.yaml
+
+    kubectl create secret generic mysql-credentials-prod \
       -n backend-prod \
       --from-literal=username=$PROD_DB_USER \
       --from-literal=password=$PROD_DB_PASS \
       --from-literal=database=$PROD_DB_NAME \
-      --dry-run=client -o yaml \
-      | kubeseal -o yaml > infrastructure/sealed/mysql-prod-sealed.yaml
+      --from-literal=host=mysql-prod.mysql-prod.svc.cluster.local \
+      --from-literal=port=3306 \
+      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/mysql-credentials-prod.yaml
     ;;
 esac
 
@@ -88,11 +106,13 @@ k3d image import -c "$CLUSTER_NAME" $FE_IMAGE $BE_IMAGE
 cd terraform
 terraform init -input=false
 terraform apply -var-file=env/${ENVIRONMENT}.tfvars -target=module.argocd -auto-approve
+terraform apply -var-file=env/${ENVIRONMENT}.tfvars -target=module.infra -auto-approve
 terraform apply -var-file=env/${ENVIRONMENT}.tfvars -target=module.applications -auto-approve
 
 # -------------------------
 # 6. ArgoCD login info
 # -------------------------
+echo "==> Argo CD username: admin"
 echo "==> Argo CD admin password:"
 kubectl -n $ARGO_NS get secret argocd-initial-admin-secret \
   -o jsonpath="{.data.password}" | base64 -d && echo
@@ -102,3 +122,17 @@ echo $! > "/tmp/argocd-port-forward-${ENVIRONMENT}.pid"
 
 echo "=== ✅ Environment $ENVIRONMENT ready ==="
 echo "==> Argo CD UI: http://localhost:8080"
+
+# -------------------------
+# 7. Final info
+# -------------------------
+echo "✅ Port-forward running in background (PID: $PF_PID)"
+echo "==> Argo CD UI: http://localhost:${LOCAL_PORT}"
+echo "==> Frontend URL: http://${FE_HOST}"
+
+if [[ "$ENVIRONMENT" == "dev" ]]; then
+  echo "==> Frontend URL: https://${FE_HOST} (self-signed)"
+fi
+
+echo "==> Stop port-forward: kill \$(cat /tmp/argocd-port-forward-${ENVIRONMENT}.pid)"
+echo "=== ✅ Environment $ENVIRONMENT ready ==="

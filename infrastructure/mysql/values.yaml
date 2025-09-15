@@ -1,0 +1,4 @@
+mysql:
+  secretName: mysql-dev-secret   # or mysql-prod-secret
+persistence:
+  size: 1Gi
