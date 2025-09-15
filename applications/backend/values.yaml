@@ -9,6 +9,11 @@ service:
   type: ClusterIP
   port: 8080
 
+mysql:
+  host: mysql
+  port: 3306
+  secretName: mysql-secret
+
 resources:
   requests:
     cpu: 100m
@@ -28,13 +33,15 @@ securityContext:
 
 probes:
   liveness:
-    path: /
+    path: /health
+    port: 8080
     initialDelaySeconds: 10
     periodSeconds: 15
     timeoutSeconds: 2
     failureThreshold: 3
   readiness:
-    path: /
+    path: /ready
+    port: 8080
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 2

@@ -1,17 +1,16 @@
-{{- if .Values.hpa.enabled }}
 apiVersion: autoscaling/v2
+# fallback if cluster doesn’t support v2:
+# apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ .Release.Name }}-backend-hpa
-  labels: {{- toYaml .Values.labels | nindent 4 }}
+  name: {{ .Release.Name }}-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ .Release.Name }}-backend
-    minReplicas: {{ .Values.hpa.minReplicas }}
-    maxReplicas: {{ .Values.hpa.maxReplicas }}
-    targetCPUUtilizationPercentage: {{ .Values.hpa.cpuUtilization }}
+    name: {{ .Release.Name }}
+  minReplicas: {{ .Values.hpa.minReplicas }}
+  maxReplicas: {{ .Values.hpa.maxReplicas }}
   metrics:
     - type: Resource
       resource:
@@ -19,12 +18,9 @@ spec:
         target:
           type: Utilization
           averageUtilization: {{ .Values.hpa.cpuUtilization }}
-    {{- if .Values.hpa.memoryUtilization }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
           averageUtilization: {{ .Values.hpa.memoryUtilization }}
-    {{- end }}
-  {{- end }}
