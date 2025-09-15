@@ -4,7 +4,7 @@ module "argocd" {
   repo_url         = var.repo_url
 }
 
-module "mysql" {
+module "infra" {
   source             = "./modules/infra"
   repo_url           = var.repo_url
   repo_branch        = var.repo_branch
@@ -13,7 +13,7 @@ module "mysql" {
   backend_namespace  = var.backend_namespace
   argocd_namespace   = var.argocd_namespace
 
-  depends_on = [module.argocd]
+  depends_on         = [module.argocd]
 }
 
 module "applications" {
@@ -24,6 +24,7 @@ module "applications" {
   frontend_namespace = var.frontend_namespace
   backend_namespace  = var.backend_namespace
   argocd_namespace   = var.argocd_namespace
+  frontend_host      = var.frontend_host
 
   depends_on = [module.argocd]
 }

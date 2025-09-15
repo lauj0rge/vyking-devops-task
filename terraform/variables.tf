@@ -6,3 +6,4 @@ variable "argocd_namespace" {}
 variable "frontend_namespace" {}
 variable "backend_namespace" {}
 variable "mysql_namespace" {}
+variable "frontend_host" {}

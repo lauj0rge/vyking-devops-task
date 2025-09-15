@@ -10,7 +10,7 @@ output "argocd_release_name" {
 
 output "mysql_name" {
   description = "Name of the Argo CD Application resource for infrastructure"
-  value       = module.mysql.mysql_app_name
+  value       = module.infra.mysql_app_name
 }
 
 output "frontend_app_name" {

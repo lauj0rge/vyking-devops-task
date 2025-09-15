@@ -58,7 +58,7 @@ kubeconfig.yaml
 *.secret.yaml
 *secret*.yaml
 *.secrets/
-!*-sealed.yaml
+*credentials*
 *.key
 *.crt
 *.pem
