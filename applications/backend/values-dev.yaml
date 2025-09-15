@@ -22,10 +22,10 @@ resources:
 
 probes:
   liveness:
-    path: /
-    port: 80
+    path: /health
+    port: 8080
     initialDelaySeconds: 5
   readiness:
-    path: /
-    port: 80
+    path: /health
+    port: 8080
     initialDelaySeconds: 3

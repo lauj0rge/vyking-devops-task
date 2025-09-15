@@ -4,7 +4,9 @@ FROM ${BASE_IMAGE}
 # Copy static HTML/JS into Nginx default folder
 COPY html/ /usr/share/nginx/html/
 
-# Expose port
-EXPOSE 8080
+# Add health endpoints
+RUN echo "OK" > /usr/share/nginx/html/health \
+ && echo "READY" > /usr/share/nginx/html/ready
 
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]

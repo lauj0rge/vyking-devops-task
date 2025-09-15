@@ -33,15 +33,15 @@ securityContext:
 
 probes:
   liveness:
-    path: /
-    port: 80
+    path: /health
+    port: 8080
     initialDelaySeconds: 10
     periodSeconds: 15
     timeoutSeconds: 2
     failureThreshold: 3
   readiness:
-    path: /
-    port: 80
+    path: /health
+    port: 8080
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 2

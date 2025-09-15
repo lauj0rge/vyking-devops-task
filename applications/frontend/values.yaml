@@ -38,15 +38,15 @@ securityContext:
 
 probes:
   liveness:
-    path: /
-    port: 3000
+    path: /index.html
+    port: 80
     initialDelaySeconds: 10
     periodSeconds: 15
     timeoutSeconds: 2
     failureThreshold: 3
   readiness:
-    path: /
-    port: 3000
+    path: /index
+    port: 80
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 2
