@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 ENVIRONMENT="${1:-dev}"
 CLUSTER_NAME="vyking-${ENVIRONMENT}"
@@ -10,7 +10,7 @@ echo "=== 🚀 Bootstrapping environment: $ENVIRONMENT ==="
 # -------------------------
 # 0. Verify dependencies
 # -------------------------
-for cmd in docker kubectl k3d helm terraform; do
+for cmd in docker kubectl k3d helm terraform kubeseal; do
   if ! command -v $cmd &> /dev/null; then
     echo "❌ $cmd is not installed. Please run ./scripts/setup-tools.sh first."
     exit 1
@@ -19,118 +19,86 @@ done
 echo "✅ All dependencies found"
 
 # -------------------------
-# 1. Update /etc/hosts
+# 1. Load secrets file
 # -------------------------
-if [[ "$ENVIRONMENT" == "dev" ]]; then
-  FE_HOST="frontend-dev.local"
-elif [[ "$ENVIRONMENT" == "prod" ]]; then
-  FE_HOST="frontend-prod.local"
+if [[ -f "./scripts/secrets.env" ]]; then
+  source ./scripts/secrets.env
 else
-  FE_HOST="frontend-dev.local"
-fi
-
-if ! grep -q "$FE_HOST" /etc/hosts; then
-  echo "==> Adding $FE_HOST to /etc/hosts"
-  echo "127.0.0.1   $FE_HOST" | sudo tee -a /etc/hosts
-else
-  echo "✅ /etc/hosts already contains $FE_HOST"
+  echo "❌ ./scripts/secrets.env not found. Please create it first."
+  exit 1
 fi
 
 # -------------------------
-# 2. Create cluster
+# 2. Create cluster (with SealedSecrets)
 # -------------------------
 ./scripts/cluster.sh "$ENVIRONMENT"
 
 # -------------------------
-# 3. Pre-pull base images (for offline / restricted networks)
+# 3. Generate SealedSecrets
 # -------------------------
-echo "==> Ensuring base images are available"
+echo "==> Generating sealed secrets for $ENVIRONMENT"
 
-# Base image versions
+mkdir -p infrastructure/sealed
+
+case "$ENVIRONMENT" in
+  dev)
+    kubectl create secret generic mysql-dev-secret \
+      -n backend-dev \
+      --from-literal=username=$DEV_DB_USER \
+      --from-literal=password=$DEV_DB_PASS \
+      --from-literal=database=$DEV_DB_NAME \
+      --dry-run=client -o yaml \
+      | kubeseal -o yaml > infrastructure/sealed/mysql-dev-sealed.yaml
+    ;;
+  prod)
+    kubectl create secret generic mysql-prod-secret \
+      -n backend-prod \
+      --from-literal=username=$PROD_DB_USER \
+      --from-literal=password=$PROD_DB_PASS \
+      --from-literal=database=$PROD_DB_NAME \
+      --dry-run=client -o yaml \
+      | kubeseal -o yaml > infrastructure/sealed/mysql-prod-sealed.yaml
+    ;;
+esac
+
+echo "✅ SealedSecrets generated for $ENVIRONMENT"
+
+# -------------------------
+# 4. Build & import images
+# -------------------------
 NGINX_BASE="nginx:1.25-alpine"
 PYTHON_BASE="python:3.11-slim-bullseye"
 
-# Tarball paths
-NGINX_TAR="/tmp/nginx.tar"
-PYTHON_TAR="/tmp/python.tar"
+docker pull $NGINX_BASE
+docker pull $PYTHON_BASE
 
-# Function to pull+save if tarball missing
-ensure_image() {
-  local image=$1
-  local tar=$2
-  if [[ -f "$tar" ]]; then
-    echo "✅ Tarball already exists for $image ($tar)"
-  else
-    echo "==> Pulling $image from Docker Hub"
-    docker pull "$image" || {
-      echo "❌ Failed to pull $image. Please check your network/proxy."
-      exit 1
-    }
-    echo "==> Saving $image to $tar"
-    docker save "$image" -o "$tar"
-  fi
-}
-
-ensure_image "$NGINX_BASE" "$NGINX_TAR"
-ensure_image "$PYTHON_BASE" "$PYTHON_TAR"
-
-echo "==> Building and importing Docker images for $ENVIRONMENT"
-
-# Tags per environment
 FE_IMAGE="vyking-frontend:${ENVIRONMENT}"
 BE_IMAGE="vyking-backend:${ENVIRONMENT}"
 
-# Frontend
 docker build --build-arg BASE_IMAGE=$NGINX_BASE \
   -t $FE_IMAGE ./applications/frontend
-k3d image import -c "$CLUSTER_NAME" $FE_IMAGE
-
-# Backend
 docker build --build-arg BASE_IMAGE=$PYTHON_BASE \
   -t $BE_IMAGE ./applications/backend/app
-k3d image import -c "$CLUSTER_NAME" $BE_IMAGE
+
+k3d image import -c "$CLUSTER_NAME" $FE_IMAGE $BE_IMAGE
 
 # -------------------------
-# 4. Terraform init + infra
+# 5. Terraform apply
 # -------------------------
 cd terraform
 terraform init -input=false
 terraform apply -var-file=env/${ENVIRONMENT}.tfvars -target=module.argocd -auto-approve
-echo "==> Waiting for SealedSecrets controller..."
-kubectl rollout status deployment/sealed-secrets-controller -n kube-system --timeout=90s
-# -------------------------
-# 5. Terraform apps
-# -------------------------
 terraform apply -var-file=env/${ENVIRONMENT}.tfvars -target=module.applications -auto-approve
 
 # -------------------------
-# 6. Get Argo CD admin password
+# 6. ArgoCD login info
 # -------------------------
 echo "==> Argo CD admin password:"
 kubectl -n $ARGO_NS get secret argocd-initial-admin-secret \
   -o jsonpath="{.data.password}" | base64 -d && echo
 
-# -------------------------
-# 7. Start Argo CD port-forward
-# -------------------------
-if [[ "$ENVIRONMENT" == "dev" ]]; then
-  LOCAL_PORT=8080
-elif [[ "$ENVIRONMENT" == "prod" ]]; then
-  LOCAL_PORT=9090
-else
-  LOCAL_PORT=8080
-fi
-
-kubectl port-forward svc/argocd-server -n "$ARGO_NS" ${LOCAL_PORT}:443 >/dev/null 2>&1 &
-PF_PID=$!
-echo $PF_PID > "/tmp/argocd-port-forward-${ENVIRONMENT}.pid"
-
-# -------------------------
-# 8. Final info
-# -------------------------
-echo "✅ Port-forward running in background (PID: $PF_PID)"
-echo "==> Argo CD UI: http://localhost:${LOCAL_PORT}"
-echo "==> Frontend URL: http://${FE_HOST}"
-echo "==> Stop port-forward: kill \$(cat /tmp/argocd-port-forward-${ENVIRONMENT}.pid)"
+kubectl port-forward svc/argocd-server -n "$ARGO_NS" 8080:443 >/dev/null 2>&1 &
+echo $! > "/tmp/argocd-port-forward-${ENVIRONMENT}.pid"
 
 echo "=== ✅ Environment $ENVIRONMENT ready ==="
+echo "==> Argo CD UI: http://localhost:8080"

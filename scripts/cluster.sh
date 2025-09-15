@@ -29,8 +29,14 @@ echo "==> Cluster info:"
 kubectl cluster-info
 kubectl get nodes -o wide
 
+# -------------------------
+# Install SealedSecrets
+# -------------------------
 echo "==> Installing SealedSecrets controller"
 kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.26.0/controller.yaml
-wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.26.0/kubeseal-0.26.0-linux-amd64.tar.gz
-tar -xvf kubeseal-0.26.0-linux-amd64.tar.gz
-sudo install -m 755 kubeseal /usr/local/bin/kubeseal
+
+echo "==> Waiting for SealedSecrets controller to be ready..."
+kubectl rollout status deployment sealed-secrets-controller \
+  -n kube-system --timeout=120s
+
+echo "==> Cluster ${CLUSTER_NAME} is ready with SealedSecrets installed."

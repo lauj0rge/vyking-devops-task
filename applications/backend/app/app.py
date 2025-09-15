@@ -4,7 +4,6 @@ import os
 
 app = Flask(__name__)
 
-# MySQL connection from env vars
 db_config = {
     "host": os.getenv("MYSQL_HOST", "mysql-dev"),
     "port": int(os.getenv("MYSQL_PORT", "3306")),
