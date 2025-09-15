@@ -7,7 +7,7 @@ image:
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 8081
 
 mysql:
   host: mysql
@@ -34,14 +34,14 @@ securityContext:
 probes:
   liveness:
     path: /health
-    port: 8080
+    port: 8081
     initialDelaySeconds: 10
     periodSeconds: 15
     timeoutSeconds: 2
     failureThreshold: 3
   readiness:
     path: /health
-    port: 8080
+    port: 8081
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 2

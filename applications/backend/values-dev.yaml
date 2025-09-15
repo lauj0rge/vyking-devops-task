@@ -7,7 +7,7 @@ image:
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 8081
 
 mysql:
   secretName: mysql-credentials-dev   # match sealed secret name
@@ -23,9 +23,9 @@ resources:
 probes:
   liveness:
     path: /health
-    port: 8080
+    port: 8081
     initialDelaySeconds: 5
   readiness:
     path: /health
-    port: 8080
+    port: 8081
     initialDelaySeconds: 3
