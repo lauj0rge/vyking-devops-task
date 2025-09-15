@@ -82,6 +82,18 @@ esac
 echo "✅ SealedSecrets generated for $ENVIRONMENT"
 
 # -------------------------
+# 3b. Setup cert-manager issuer + certificate
+# -------------------------
+echo "==> Applying cert-manager ClusterIssuer"
+kubectl apply -f infrastructure/cert-manager/selfsigned-issuer.yaml
+
+if [[ "$ENVIRONMENT" == "dev" ]]; then
+  kubectl apply -f infrastructure/cert-manager/certificate-dev.yaml
+elif [[ "$ENVIRONMENT" == "prod" ]]; then
+  kubectl apply -f infrastructure/cert-manager/certificate-prod.yaml
+fi
+
+# -------------------------
 # 4. Build & import images
 # -------------------------
 NGINX_BASE="nginx:1.25-alpine"

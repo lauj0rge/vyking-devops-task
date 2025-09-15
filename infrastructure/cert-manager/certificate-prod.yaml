@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: frontend-cert-prod
+  namespace: frontend-prod
+spec:
+  secretName: frontend-prod-tls
+  duration: 2160h
+  renewBefore: 360h
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    - frontend-prod.local
