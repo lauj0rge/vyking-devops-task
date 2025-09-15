@@ -54,6 +54,9 @@ kubeconfig.yaml
 # =========================
 # Secrets (DON’T COMMIT REAL SECRETS)
 # =========================
+*.secret.yaml
+*secret*.yaml
+*.secrets/
 *.key
 *.crt
 *.pem

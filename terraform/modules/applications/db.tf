@@ -4,13 +4,13 @@ resource "kubernetes_namespace" "mysql" {
   }
 }
 
-# Sync secrets first
-resource "kubernetes_manifest" "mysql_secrets" {
+# SealedSecrets sync
+resource "kubernetes_manifest" "mysql_sealed_secrets" {
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"
     metadata = {
-      name      = "mysql-secrets"
+      name      = "mysql-sealed-secrets"
       namespace = var.argocd_namespace
     }
     spec = {
@@ -18,7 +18,7 @@ resource "kubernetes_manifest" "mysql_secrets" {
       source = {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
-        path           = "infrastructure/secrets"
+        path           = "infrastructure/sealed"
       }
       destination = {
         server    = "https://kubernetes.default.svc"
@@ -34,9 +34,9 @@ resource "kubernetes_manifest" "mysql_secrets" {
   }
 }
 
-# Then sync MySQL
+# Then deploy MySQL Helm chart
 resource "kubernetes_manifest" "mysql_app" {
-  depends_on = [kubernetes_manifest.mysql_secrets]
+  depends_on = [kubernetes_manifest.mysql_sealed_secrets]
 
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"

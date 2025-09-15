@@ -107,3 +107,25 @@ mysql -uroot -p$MYSQL_ROOT_PASSWORD
 To grab the password from the secret:
 
 kubectl get secret mysql -n mysql-dev -o jsonpath="{.data.mysql-root-password}" | base64 -d && echo
+
+
+-----
+Create and seal your secrets:
+
+kubectl create secret generic mysql-dev-secret \
+--from-literal=username=devuser \
+--from-literal=password=devpass \
+--from-literal=database=devdb \
+-n backend-dev \
+--dry-run=client -o yaml | \
+kubeseal -o yaml > infrastructure/sealed/mysql-dev-sealed.yaml
+
+
+kubectl create secret generic mysql-prod-secret \
+--from-literal=username=produser \
+--from-literal=password=prodpass \
+--from-literal=database=proddb \
+-n backend-prod \
+--dry-run=client -o yaml | \
+kubeseal -o yaml > infrastructure/sealed/mysql-prod-sealed.yaml
+

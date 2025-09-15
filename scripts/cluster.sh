@@ -1,11 +1,9 @@
 #!/bin/bash
 
-# Default cluster name if not provided
 ENVIRONMENT="${1:-dev}"
 CLUSTER_NAME="vyking-${ENVIRONMENT}"
 ARGO_NS="argocd-${ENVIRONMENT}"
 
-# Ports only for prod
 if [[ "$ENVIRONMENT" == "prod" ]]; then
   PORTS=(-p "8080:80@loadbalancer" -p "8443:443@loadbalancer")
 else
@@ -30,30 +28,9 @@ export KUBECONFIG=$HOME/.kube/${CLUSTER_NAME}-config
 echo "==> Cluster info:"
 kubectl cluster-info
 kubectl get nodes -o wide
-#
-## -------------------------
-## Argo CD Port Forward (background)
-## -------------------------
-#if [[ "$ENVIRONMENT" == "dev" ]]; then
-#  LOCAL_PORT=8080
-#elif [[ "$ENVIRONMENT" == "prod" ]]; then
-#  LOCAL_PORT=9090
-#else
-#  LOCAL_PORT=8080
-#fi
-#
-#echo "==> Setting up port-forward for Argo CD (namespace: $ARGO_NS)"
-#kubectl port-forward svc/argocd-server -n "$ARGO_NS" ${LOCAL_PORT}:443 >/dev/null 2>&1 &
-#PF_PID=$!
-#echo $PF_PID > "/tmp/argocd-port-forward-${ENVIRONMENT}.pid"
-#
-#echo "✅ Port-forward running in background (PID: $PF_PID)"
-#echo "==> Access Argo CD UI at: http://localhost:${LOCAL_PORT}"
-#echo "==> To stop port-forward: kill \$(cat /tmp/argocd-port-forward-${ENVIRONMENT}.pid)"
-#
-## -------------------------
-## Argo CD Admin Password Helper
-## -------------------------
-#echo "==> Once Argo CD is deployed, get the admin password with:"
-#echo "kubectl -n $ARGO_NS get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d && echo"
-#
+
+echo "==> Installing SealedSecrets controller"
+kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.26.0/controller.yaml
+wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.26.0/kubeseal-0.26.0-linux-amd64.tar.gz
+tar -xvf kubeseal-0.26.0-linux-amd64.tar.gz
+sudo install -m 755 kubeseal /usr/local/bin/kubeseal

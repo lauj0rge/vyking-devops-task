@@ -96,7 +96,8 @@ k3d image import -c "$CLUSTER_NAME" $BE_IMAGE
 cd terraform
 terraform init -input=false
 terraform apply -var-file=env/${ENVIRONMENT}.tfvars -target=module.argocd -auto-approve
-
+echo "==> Waiting for SealedSecrets controller..."
+kubectl rollout status deployment/sealed-secrets-controller -n kube-system --timeout=90s
 # -------------------------
 # 5. Terraform apps
 # -------------------------
