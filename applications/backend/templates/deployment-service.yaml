@@ -1,3 +1,24 @@
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-backend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-backend
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-backend
+    spec:
+      containers:
+          - name: backend
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            ports:
+              - containerPort: {{ .Values.service.port }}
 env:
   - name: MYSQL_HOST
     valueFrom:
@@ -24,27 +45,6 @@ env:
       secretKeyRef:
         name: mysql-credentials-{{ .Values.env }}
         key: database
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ .Release.Name }}-backend
-spec:
-  replicas: {{ .Values.replicaCount }}
-  selector:
-    matchLabels:
-      app: {{ .Release.Name }}-backend
-  template:
-    metadata:
-      labels:
-        app: {{ .Release.Name }}-backend
-    spec:
-      containers:
-          - name: backend
-            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-            ports:
-              - containerPort: {{ .Values.service.port }}
-
 ---
 apiVersion: v1
 kind: Service
