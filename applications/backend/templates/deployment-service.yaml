@@ -45,6 +45,7 @@ spec:
                   secretKeyRef:
                     name: {{ .Values.mysql.secretName }}
                     key: database
+
             livenessProbe:
               httpGet:
                 path: {{ .Values.probes.liveness.path }}
