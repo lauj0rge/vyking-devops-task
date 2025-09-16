@@ -189,6 +189,7 @@ docker build --build-arg BASE_IMAGE=$PYTHON_BASE \
 
 k3d image import -c "$CLUSTER_NAME" $FE_IMAGE $BE_IMAGE
 
+
 # -------------------------
 # 5. Terraform apply with environment values
 # -------------------------
@@ -207,8 +208,8 @@ fi
 
 terraform init -input=false
 
-terraform apply -var-file="$TFVARS_FILE" -target=module.argocd -auto-approve
 terraform apply -var-file="$TFVARS_FILE" -target=module.infra -auto-approve
+terraform apply -var-file="$TFVARS_FILE" -target=module.argocd -auto-approve
 terraform apply -var-file="$TFVARS_FILE" -target=module.applications -auto-approve
 
 cd ..
