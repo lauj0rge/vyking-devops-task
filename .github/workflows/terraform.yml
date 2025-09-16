@@ -20,6 +20,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install k3d & kubectl
+        run: |
+          curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+          sudo apt-get update
+          sudo apt-get install -y kubectl
+          k3d cluster create $CLUSTER_NAME --wait
+
+
+
       - name: Build and import images
         run: |
           docker build -t $FE_IMAGE ./applications/frontend/app
