@@ -25,7 +25,7 @@ resource "kubernetes_manifest" "frontend_app" {
         targetRevision = var.repo_branch
         path           = "applications/frontend"
         helm = {
-          valueFiles = ["values-${var.environment}.yaml"]
+          valueFiles = ["environments/${var.environment}-values.yaml"]
         }
       }
       destination = {

@@ -50,7 +50,7 @@ resource "kubernetes_manifest" "mysql" {
         targetRevision = var.repo_branch
         path           = "infrastructure/mysql"
         helm = {
-          valueFiles = ["${var.environment}-values.yaml"]
+          valueFiles = ["environments/environments/values-${var.environment}.yaml"]
         }
       }
       destination = {

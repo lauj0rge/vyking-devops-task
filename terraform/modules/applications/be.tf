@@ -25,7 +25,7 @@ resource "kubernetes_manifest" "backend_app" {
         targetRevision = var.repo_branch
         path           = "applications/backend"
         helm = {
-          valueFiles = ["values-${var.environment}.yaml"]
+          valueFiles = ["environments/${var.environment}-values.yaml"]
         }
       }
       destination = {
