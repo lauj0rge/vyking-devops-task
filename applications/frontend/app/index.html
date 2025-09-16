@@ -2,73 +2,116 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vyking App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vyking App - Todo Manager</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        button { padding: 5px 10px; margin: 2px; }
-        footer { margin-top: 20px; font-size: 0.9em; color: gray; text-align: center; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; margin-bottom: 20px; }
+        .add-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background: #2980b9; }
+        button.delete {
+            background: #e74c3c;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        button.delete:hover { background: #c0392b; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th { background: #f8f9fa; font-weight: 600; }
+        tr:hover { background: #f8f9fa; }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        .error { color: #e74c3c; margin: 10px 0; }
     </style>
 </head>
 <body>
-<h1>Todos</h1>
-<form id="addForm">
-    <input type="text" id="taskInput" placeholder="New task" required>
-    <button type="submit">Add</button>
-</form>
-<table>
-    <thead>
-    <tr><th>ID</th><th>Task</th><th>Actions</th></tr>
-    </thead>
-    <tbody id="todosTable"></tbody>
-</table>
+<div class="container">
+    <h1>📝 Vyking Todo App</h1>
+
+    <div class="add-form">
+        <input type="text" id="taskInput" placeholder="Enter new task..." required>
+        <button type="button" onclick="addTodo()">Add Task</button>
+    </div>
+
+    <div id="errorMessage" class="error" style="display: none;"></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Task</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="todosTable">
+        <tr><td colspan="3">Loading todos...</td></tr>
+        </tbody>
+    </table>
+</div>
 
 <footer>
-    Lau Jorge — Cloud Engineer
+    Lau Jorge — Cloud Engineer @ Vyking DevOps Task
 </footer>
 
+<script src="app.js"></script>
 <script>
-    const API = "http://localhost:8081"; // adjust for service/ingress
-
-    async function fetchTodos() {
-      const res = await fetch(`${API}/todos`);
-      const todos = await res.json();
-      const tbody = document.getElementById("todosTable");
-      tbody.innerHTML = "";
-      todos.forEach(todo => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${todo.id}</td>
-          <td>${todo.task}</td>
-          <td><button onclick="deleteTodo(${todo.id})">Delete</button></td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
-
-    async function addTodo(task) {
-      await fetch(`${API}/add`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ task })
-      });
-      fetchTodos();
-    }
-
-    async function deleteTodo(id) {
-      await fetch(`${API}/delete/${id}`, { method: "DELETE" });
-      fetchTodos();
-    }
-
-    document.getElementById("addForm").addEventListener("submit", e => {
-      e.preventDefault();
-      const task = document.getElementById("taskInput").value;
-      addTodo(task);
-      document.getElementById("taskInput").value = "";
+    // Additional inline script for form handling
+    document.getElementById('taskInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            addTodo();
+        }
     });
 
-    fetchTodos();
+    function showError(message) {
+        const errorDiv = document.getElementById('errorMessage');
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        setTimeout(() => errorDiv.style.display = 'none', 5000);
+    }
 </script>
 </body>
 </html>

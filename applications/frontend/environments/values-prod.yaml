@@ -7,7 +7,8 @@ image:
 
 service:
   type: ClusterIP
-  port: 80
+  port: 3001  # Unique port for prod
+  targetPort: 8080
 
 backend:
   host: backend-prod
@@ -31,6 +32,22 @@ resources:
   limits:
     cpu: 500m
     memory: 512Mi
+
+probes:
+  liveness:
+    path: /health/liveness
+    port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 15
+    timeoutSeconds: 2
+    failureThreshold: 3
+  readiness:
+    path: /health/readiness
+    port: 8080
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
 
 hpa:
   enabled: true

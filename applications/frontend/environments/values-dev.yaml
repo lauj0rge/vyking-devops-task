@@ -7,7 +7,8 @@ image:
 
 service:
   type: ClusterIP
-  port: 80
+  port: 3000  # Unique port for dev
+  targetPort: 8080
 
 backend:
   host: backend-dev
@@ -28,15 +29,15 @@ resources:
 
 probes:
   liveness:
-    path: /
-    port: 80
+    path: /health/liveness
+    port: 8080
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 2
     failureThreshold: 3
   readiness:
-    path: /
-    port: 80
+    path: /health/readiness
+    port: 8080
     initialDelaySeconds: 3
     periodSeconds: 8
     timeoutSeconds: 2
