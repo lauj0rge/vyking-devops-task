@@ -21,7 +21,13 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 8080  # Fixed container port
+            - containerPort: 8080
+          volumeMounts:
+              - name: nginx-cache
+                mountPath: /var/cache/nginx
+          volumes:
+            - name: nginx-cache
+              emptyDir: { }
           env:
             - name: BACKEND_URL
               value: "http://{{ .Values.backend.host }}:{{ .Values.backend.port }}"
