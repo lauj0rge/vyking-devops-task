@@ -20,13 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install k3d & kubectl
-        run: |
-          curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
-          curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-          k3d cluster create $CLUSTER_NAME --wait
-
       - name: Build and import images
         run: |
           docker build -t $FE_IMAGE ./applications/frontend/app
@@ -60,13 +53,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install k3d & kubectl
-        run: |
-          curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
-          curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-          k3d cluster create $CLUSTER_NAME --wait
 
       - name: Build and import images
         run: |
