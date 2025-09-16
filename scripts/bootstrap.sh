@@ -225,15 +225,6 @@ echo $! > "/tmp/argocd-port-forward-${ENVIRONMENT}.pid"
 echo "=== ✅ Environment $ENVIRONMENT ready ==="
 echo "==> Argo CD UI: http://localhost:8080"
 
-# -------------------------
-# 7. Front End access
-# -------------------------
-echo "==> Frontend URL: http://${FE_HOST}"
-
-if [[ "$ENVIRONMENT" == "dev" ]]; then
-  echo "==> Frontend URL: https://${FE_HOST} (self-signed)"
-fi
-
 echo "==> Stop port-forward: kill \$(cat /tmp/argocd-port-forward-${ENVIRONMENT}.pid)"
 echo "=== ✅ Environment $ENVIRONMENT ready ==="
 
