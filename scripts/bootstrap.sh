@@ -195,21 +195,18 @@ k3d image import -c "$CLUSTER_NAME" $FE_IMAGE $BE_IMAGE
 # -------------------------
 cd terraform
 
-# Debug: Check if .tfvars file exists
 TFVARS_FILE="env/${ENVIRONMENT}.tfvars"
-echo "DEBUG: Looking for Terraform vars file: $TFVARS_FILE"
-
-if [[ ! -f "$TFVARS_FILE" ]]; then
-    echo "❌ Terraform variables file not found: $TFVARS_FILE"
-    echo "Available files in env/:"
-    ls -la env/
-    exit 1
-fi
 
 terraform init -input=false
 
-terraform apply -var-file="$TFVARS_FILE" -target=module.infra -auto-approve
 terraform apply -var-file="$TFVARS_FILE" -target=module.argocd -auto-approve
+
+echo "==> Waiting for ArgoCD Application CRD"
+kubectl wait --for=condition=Established crd/applications.argoproj.io --timeout=120s || {
+  echo "❌ Application CRD not ready, ArgoCD might have failed to install"
+  exit 1
+}
+terraform apply -var-file="$TFVARS_FILE" -target=module.infra -auto-approve
 terraform apply -var-file="$TFVARS_FILE" -target=module.applications -auto-approve
 
 cd ..

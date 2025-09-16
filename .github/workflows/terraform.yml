@@ -1,4 +1,4 @@
-name: Terraform Deploy POC
+name: Vyking CICD
 
 on:
   push:
