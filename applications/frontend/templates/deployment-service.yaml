@@ -23,11 +23,8 @@ spec:
           ports:
             - containerPort: 8080
           volumeMounts:
-              - name: nginx-cache
-                mountPath: /var/cache/nginx
-          volumes:
             - name: nginx-cache
-              emptyDir: { }
+              mountPath: /var/cache/nginx
           env:
             - name: BACKEND_URL
               value: "http://{{ .Values.backend.host }}:{{ .Values.backend.port }}"
@@ -51,17 +48,6 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ .Release.Name }}-frontend
-spec:
-  type: {{ .Values.service.type }}
-  selector:
-    app: {{ .Release.Name }}-frontend
-  ports:
-      - port: {{ .Values.service.port }}
-        targetPort: {{ .Values.service.targetPort }}
-        protocol: TCP
+      volumes:                # ✅ Correct placement
+        - name: nginx-cache
+          emptyDir: {}
