@@ -32,12 +32,10 @@ def get_connection():
 
 @app.route("/health", methods=["GET"])
 def health():
-    """Liveness probe – just confirm app is running."""
-    return {"status": "alive"}, 200
+    return {"status": "ok"}, 200
 
 @app.route("/readiness", methods=["GET"])
 def readiness():
-    """Readiness probe – check DB connection."""
     try:
         conn = get_connection()
         conn.close()
