@@ -3,7 +3,7 @@ mysql:
   database: devdb
   username: devuser
   persistence:
-    size: 1Gi
+    size: 8i
 
 resources:
   requests:
@@ -13,9 +13,10 @@ resources:
     cpu: 500m
     memory: 512Mi
 
-
 backup:
-#  schedule: "0 */48 * * *"   # every 2 days
-  schedule: "*/5 * * * *"   # every 5 minutes
+  # schedule: "0 */48 * * *"   # every 2 days
+  schedule: "*/5 * * * *"      # every 5 minutes
   image: mysql:8.0
   pvc: mysql-backups
+  envFromSecret:
+    name: mysql-dev-secret
