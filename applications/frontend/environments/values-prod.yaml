@@ -1,63 +1,15 @@
-replicaCount: 3
+replicaCount: 2
 
 image:
-  repository: vyking-frontend
   tag: prod
-  pullPolicy: IfNotPresent
-
-service:
-  type: ClusterIP
-  port: 3001  # Unique port for prod
-  targetPort: 8080
 
 backend:
-  host: backend-prod
+  host: backend-backend.backend-prod.svc.cluster.local
   port: 8081
-
-ingress:
-  enabled: true
-  host: frontend-prod.local
-  tls:
-    - secretName: frontend-tls-prod
-      hosts:
-        - frontend-prod.local
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    cert-manager.io/cluster-issuer: "selfsigned-issuer"
-
-resources:
-  requests:
-    cpu: 200m
-    memory: 256Mi
-  limits:
-    cpu: 500m
-    memory: 512Mi
-
-probes:
-  liveness:
-    path: /health/liveness
-    port: 8080
-    initialDelaySeconds: 10
-    periodSeconds: 15
-    timeoutSeconds: 2
-    failureThreshold: 3
-  readiness:
-    path: /health/readiness
-    port: 8080
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 2
-    failureThreshold: 3
 
 hpa:
   enabled: true
-  minReplicas: 3
-  maxReplicas: 6
-  cpuUtilization: 70
-  memoryUtilization: 70
-
-labels:
-  app.kubernetes.io/name: frontend
-  app.kubernetes.io/component: frontend
-  app.kubernetes.io/part-of: vyking-app
-  environment: prod
+  minReplicas: 2
+  maxReplicas: 5
+  cpuUtilization: 60
+  memoryUtilization: 75

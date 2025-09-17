@@ -7,54 +7,36 @@ image:
 
 service:
   type: ClusterIP
-  port: 3000
+  port: 80
+  targetPort: 8080
 
 backend:
-  host: backend
-  port: 8080
-
-ingress:
-  enabled: true
-  host: frontend.local
-  tls: []
-  annotations: {}
+  host: backend-backend.default.svc.cluster.local
+  port: 8081
 
 resources:
   requests:
     cpu: 100m
     memory: 128Mi
   limits:
-    cpu: 500m
-    memory: 512Mi
-
-securityContext:
-  runAsNonRoot: true
-  runAsUser: 1000
-  runAsGroup: 1000
-  allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: true
-  capabilities:
-    drop: ["ALL"]
+    cpu: 300m
+    memory: 256Mi
 
 probes:
   liveness:
-    path: /index.html
-    port: 80
-    initialDelaySeconds: 10
-    periodSeconds: 15
-    timeoutSeconds: 2
-    failureThreshold: 3
-  readiness:
-    path: /index
-    port: 80
+    path: /
+    port: 8080
     initialDelaySeconds: 5
+    periodSeconds: 15
+  readiness:
+    path: /
+    port: 8080
+    initialDelaySeconds: 3
     periodSeconds: 10
-    timeoutSeconds: 2
-    failureThreshold: 3
 
 hpa:
-  enabled: true
-  minReplicas: 2
-  maxReplicas: 5
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
   cpuUtilization: 70
-  memoryUtilization: null
+  memoryUtilization: 80

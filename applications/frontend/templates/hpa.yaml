@@ -5,9 +5,8 @@ metadata:
   name: {{ .Release.Name }}-frontend
   labels:
     app.kubernetes.io/name: frontend
-    app.kubernetes.io/component:
     app.kubernetes.io/part-of: vyking-app
-    environment: {{ .Values.environment | default "prod" }}
+    environment: {{ .Values.environment | default "dev" }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

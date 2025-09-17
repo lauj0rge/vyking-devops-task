@@ -1,44 +1,15 @@
 replicaCount: 1
 
 image:
-  repository: vyking-frontend
   tag: dev
-  pullPolicy: IfNotPresent
-
-service:
-  type: ClusterIP
-  port: 3000  # Unique port for dev
-  targetPort: 8080
 
 backend:
-  host: backend-dev
+  host: backend-backend.backend-dev.svc.cluster.local
   port: 8081
 
-ingress:
+hpa:
   enabled: true
-  host: frontend-dev.local
-  tls: []
-
-resources:
-  requests:
-    cpu: 100m
-    memory: 128Mi
-  limits:
-    cpu: 300m
-    memory: 256Mi
-
-probes:
-  liveness:
-    path: /health/liveness
-    port: 8080
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 2
-    failureThreshold: 3
-  readiness:
-    path: /health/readiness
-    port: 8080
-    initialDelaySeconds: 3
-    periodSeconds: 8
-    timeoutSeconds: 2
-    failureThreshold: 3
+  minReplicas: 1
+  maxReplicas: 3
+  cpuUtilization: 70
+  memoryUtilization: 80
