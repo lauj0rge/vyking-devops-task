@@ -1,14 +1,6 @@
-// Auto-detect backend URL based on environment
-const getBackendUrl = () => {
-  const hostname = window.location.hostname;
 
-  if (hostname.includes('dev') || hostname.includes('localhost')) {
-    return 'http://backend-dev:8081';
-  } else if (hostname.includes('prod')) {
-    return 'http://backend-prod:8081';
-  } else {
-    return '/api'; // Proxy through nginx for ingress
-  }
+const getBackendUrl = () => {
+  return '/api';
 };
 
 const API_BASE = getBackendUrl();

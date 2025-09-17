@@ -1,18 +1,14 @@
 replicaCount: 1
 
 image:
+  repository: vyking-frontend
   tag: dev
+  pullPolicy: IfNotPresent
 
-backend:
-  host: backend-backend.backend-dev.svc.cluster.local
-  port: 8081
-
-hpa:
-  enabled: true
-  minReplicas: 1
-  maxReplicas: 3
-  cpuUtilization: 70
-  memoryUtilization: 80
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
 
 ingress:
   enabled: true
@@ -23,7 +19,36 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+        - path: /api
+          pathType: Prefix
   tls:
     - secretName: frontend-tls-dev
       hosts:
         - frontend-dev.local
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi
+
+probes:
+  liveness:
+    path: /
+    port: 80
+    initialDelaySeconds: 5
+    periodSeconds: 15
+  readiness:
+    path: /
+    port: 80
+    initialDelaySeconds: 3
+    periodSeconds: 10
+
+hpa:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  cpuUtilization: 70
+  memoryUtilization: 80
