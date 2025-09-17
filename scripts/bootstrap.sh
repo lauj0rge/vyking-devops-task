@@ -256,7 +256,7 @@ echo "kubectl run -it --rm mysql-client --image=mysql:8.0 --restart=Never -- \
 
 echo "=== ✅ Environment $ENVIRONMENT bootstrap completed ==="
 
----
+
 # -------------------------
 # 10. Run Tests & Save Report
 # -------------------------
@@ -268,7 +268,7 @@ REPORT_FILE="tests-results.md"
   echo "# 🧪 Test Results for $ENVIRONMENT"
   echo
   echo '```bash'
-  ./scripts/test.sh "$ENVIRONMENT"
+  ./scripts/tests.sh "$ENVIRONMENT"
   echo '```'
 } > "$REPORT_FILE"
 
