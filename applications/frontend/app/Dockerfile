@@ -1,19 +1,6 @@
-ARG BASE_IMAGE=nginx:1.25-alpine
-FROM ${BASE_IMAGE}
+FROM nginx:1.25-alpine
 
-# Copy static HTML/JS into Nginx default folder
-COPY . /usr/share/nginx/html/
-
-# Create dedicated health check endpoints
-RUN mkdir -p /usr/share/nginx/html/health && \
-    echo "OK" > /usr/share/nginx/html/health/liveness && \
-    echo "READY" > /usr/share/nginx/html/health/readiness
-
-COPY index.html /usr/share/nginx/html/
-RUN mkdir -p /var/cache/nginx && chmod -R 777 /var/cache/nginx
-
-# Use non-root user
-RUN chown -R nginx:nginx /usr/share/nginx/html
-EXPOSE 8080
+COPY index.html /usr/share/nginx/html/index.html
+COPY nginx.conf /etc/nginx/nginx.conf
 
 CMD ["nginx", "-g", "daemon off;"]
