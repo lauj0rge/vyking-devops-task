@@ -52,3 +52,7 @@ hpa:
   maxReplicas: 5
   cpuUtilization: 60
   memoryUtilization: 75
+
+backend:
+  host: backend-backend.backend-prod.svc.cluster.local
+  port: 8081

@@ -17,7 +17,7 @@ data:
 
       # Proxy API calls to backend
       location /api/ {
-        proxy_pass http://backend-backend.backend-{{ .Values.environment | default "dev" }}.svc.cluster.local:{{ .Values.backend.port }}/;
+        proxy_pass http://{{ .Values.backend.host }}:{{ .Values.backend.port }}/;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection keep-alive;
