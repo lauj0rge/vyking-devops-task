@@ -25,7 +25,7 @@ spec:
           volumeMounts:
             - name: nginx-config
               mountPath: /etc/nginx/conf.d/default.conf
-              subPath: default.conf
+              subPath: nginx.conf
           env:
             - name: BACKEND_URL
               value: "http://{{ .Values.backend.host }}:{{ .Values.backend.port }}"
@@ -48,7 +48,7 @@ spec:
           configMap:
             name: {{ .Release.Name }}-nginx-config
             items:
-                - key: default.conf
+                - key: nginx.conf
                   path: default.conf
 
 ---
