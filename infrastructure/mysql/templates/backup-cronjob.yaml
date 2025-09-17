@@ -10,13 +10,10 @@ spec:
         spec:
           containers:
             - name: mysql-backup
-              image: {{ .Values.backup.image }}
-              command:
-                - /bin/sh
-                - -c
-                - |
-                  mysqldump -h {{ .Release.Name }} -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE) \
-                    > /backups/backup-$(date +\%F-\%H-\%M).sql
+              image: mysql:8.0
+              command: ["sh", "-c"]
+              args: ["mysqldump -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE > /backups/backup-$(date +\%F-\%H-\%M).sql"]
+
               env:
                 - name: MYSQL_USER
                   valueFrom:
