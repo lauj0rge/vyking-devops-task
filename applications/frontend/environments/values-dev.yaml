@@ -13,3 +13,17 @@ hpa:
   maxReplicas: 3
   cpuUtilization: 70
   memoryUtilization: 80
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  hosts:
+    - host: frontend-dev.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: frontend-tls-dev
+      hosts:
+        - frontend-dev.local

@@ -10,6 +10,12 @@ service:
   port: 80
   targetPort: 8080
 
+ingress:
+  enabled: false
+  annotations: {}
+  hosts: []
+  tls: []
+
 backend:
   host: backend-backend.default.svc.cluster.local
   port: 8081

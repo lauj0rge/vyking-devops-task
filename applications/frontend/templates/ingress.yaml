@@ -1,25 +1,26 @@
+{{- if .Values.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Release.Name }}-frontend
   annotations:
-    kubernetes.io/ingress.class: traefik
-    {{- if .Values.ingress.annotations }}
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
-    {{- end }}
 spec:
   rules:
-    - host: {{ .Values.ingress.host }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host }}
       http:
         paths:
-          - path: /
-            pathType: Prefix
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ .Release.Name }}-frontend
+                name: {{ $.Release.Name }}-frontend
                 port:
-                  number: {{ .Values.service.port }}
-  {{- if .Values.ingress.tls }}
+                  number: {{ $.Values.service.port }}
+          {{- end }}
+    {{- end }}
   tls:
     {{- toYaml .Values.ingress.tls | nindent 4 }}
   {{- end }}
