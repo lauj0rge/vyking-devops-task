@@ -46,7 +46,7 @@ spec:
       volumes:
         - name: nginx-config
           configMap:
-            name: {{ .Release.Name }}-frontend-nginx
+            name: {{ .Release.Name }}-nginx-config
             items:
                 - key: default.conf
                   path: default.conf
