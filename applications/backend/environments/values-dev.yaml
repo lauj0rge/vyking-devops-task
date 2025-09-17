@@ -1,4 +1,4 @@
-replicaCount: 1
+replicaCount: 2
 
 image:
   repository: vyking-backend
@@ -35,3 +35,8 @@ probes:
     periodSeconds: 10
     timeoutSeconds: 3
     failureThreshold: 5
+
+labels:
+  app.kubernetes.io/name: backend
+  app.kubernetes.io/part-of: vyking-app
+  environment: {{ .Values.environment }}
