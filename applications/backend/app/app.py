@@ -32,13 +32,19 @@ def get_connection():
 
 @app.route("/health", methods=["GET"])
 def health():
-    """Health check endpoint for Kubernetes probes."""
+    """Liveness probe – just confirm app is running."""
+    return {"status": "alive"}, 200
+
+@app.route("/readiness", methods=["GET"])
+def readiness():
+    """Readiness probe – check DB connection."""
     try:
         conn = get_connection()
         conn.close()
-        return {"status": "ok"}, 200
+        return {"status": "ready"}, 200
     except Exception as e:
-        return {"status": "error", "details": str(e)}, 500
+        return {"status": "not ready", "details": str(e)}, 500
+
 
 @app.route("/todos", methods=["GET"])
 def get_todos():
