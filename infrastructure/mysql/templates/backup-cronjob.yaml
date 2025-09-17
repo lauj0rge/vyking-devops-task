@@ -11,25 +11,20 @@ spec:
           containers:
             - name: mysql-backup
               image: mysql:8.0
-              command: ["sh", "-c"]
-              args: ["mysqldump -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE > /backups/backup-$(date +\%F-\%H-\%M).sql"]
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  mysqldump \
+                    -h mysql.mysql-dev.svc.cluster.local \
+                    -P 3306 \
+                    -u $MYSQL_USER \
+                    -p$MYSQL_PASSWORD \
+                    $MYSQL_DATABASE > /backup/backup.sql
+              envFrom:
+                - secretRef:
+                    name: mysql-credentials-dev
 
-              env:
-                - name: MYSQL_USER
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ .Values.mysql.secretName }}
-                      key: username
-                - name: MYSQL_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ .Values.mysql.secretName }}
-                      key: password
-                - name: MYSQL_DATABASE
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ .Values.mysql.secretName }}
-                      key: database
               volumeMounts:
                 - name: backup-storage
                   mountPath: /backups
