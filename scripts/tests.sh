@@ -5,112 +5,90 @@ ENVIRONMENT="${1:-dev}"
 CLUSTER_NAME="vyking-${ENVIRONMENT}"
 ARGO_NS="argocd-${ENVIRONMENT}"
 
-echo "=== 📊 Status for environment: $ENVIRONMENT ==="
-
-# 1. Cluster info
+echo "# 🧪 Test Results for \`$ENVIRONMENT\`"
 echo
-echo "==> Cluster info"
-kubectl cluster-info || true
 
-echo
-echo "==> Nodes"
-kubectl get nodes -o wide
+# Helper to wrap outputs in collapsible blocks
+collapse() {
+  local title="$1"
+  shift
+  echo "<details><summary>${title}</summary>"
+  echo
+  echo '```bash'
+  "$@"
+  echo '```'
+  echo "</details>"
+  echo
+}
 
-# 2. Namespaces
-echo
-echo "==> Namespaces"
-kubectl get ns
+# Cluster Info
+collapse "🌐 Cluster Info" kubectl cluster-info
+collapse "🖥️ Nodes" kubectl get nodes -o wide
+collapse "📦 Namespaces" kubectl get ns
+collapse "🟢 Pods (all namespaces)" kubectl get pods -A -o wide
+collapse "🔌 Services (all namespaces)" kubectl get svc -A -o wide
+collapse "🌍 Ingresses" kubectl get ingress -A
 
-# 3. Pods
-echo
-echo "==> Pods (all namespaces)"
-kubectl get pods -A -o wide
+# ArgoCD Applications
+collapse "🚦 Argo CD Applications" kubectl get applications -n "$ARGO_NS"
 
-# 4. Services
-echo
-echo "==> Services (all namespaces)"
-kubectl get svc -A -o wide
-
-# 5. Ingresses
-echo
-echo "==> Ingresses (all namespaces)"
-kubectl get ingress -A || echo "No ingresses defined."
-
-# 6. Argo CD Applications
-echo
-echo "==> Argo CD Applications"
-kubectl get applications -n "$ARGO_NS" || echo "No Argo CD applications yet."
-
-# 7. Argo CD UI link
+# ArgoCD UI
 if [[ "$ENVIRONMENT" == "dev" ]]; then
   LOCAL_PORT=8080
-elif [[ "$ENVIRONMENT" == "prod" ]]; then
-  LOCAL_PORT=9090
 else
-  LOCAL_PORT=8080
+  LOCAL_PORT=9090
 fi
+echo "👉 **Argo CD UI:** [http://localhost:${LOCAL_PORT}](http://localhost:${LOCAL_PORT})"
 echo
-echo "==> Argo CD UI should be available at: http://localhost:${LOCAL_PORT}"
 
-# 8. Deployment rollout status
-echo
-echo "==> Checking deployment rollout status"
+# Deployment rollout
+echo "## 🚀 Deployment Rollout Status"
 for ns in $(kubectl get ns -o jsonpath='{.items[*].metadata.name}'); do
   for dep in $(kubectl get deploy -n $ns -o jsonpath='{.items[*].metadata.name}' 2>/dev/null || true); do
-    echo "-- $ns/$dep"
+    echo "### 📦 $ns/$dep"
+    echo "<details><summary>Status</summary>"
+    echo
+    echo '```bash'
     kubectl rollout status deploy/$dep -n $ns --timeout=10s || echo "⚠️  $ns/$dep not ready"
+    echo '```'
+    echo "</details>"
+    echo
   done
 done
 
-# 9. Horizontal Pod Autoscalers
-echo
-echo "==> HPAs"
-kubectl get hpa -A || echo "No HPAs defined."
+# HPAs
+collapse "📈 HPAs" kubectl get hpa -A
 
-# 10. Resource usage (if metrics-server is available)
-echo
-echo "==> Resource usage (nodes)"
-if kubectl top nodes >/dev/null 2>&1; then
-  kubectl top nodes
-else
-  echo "⚠️ metrics-server not reporting node metrics"
-fi
+# Resource Usage
+collapse "📊 Resource Usage (nodes)" kubectl top nodes
+collapse "📊 Resource Usage (pods)" kubectl top pods -A
 
-echo
-echo "==> Resource usage (pods)"
-if kubectl top pods -A >/dev/null 2>&1; then
-  kubectl top pods -A
-else
-  echo "⚠️ metrics-server not reporting pod metrics"
-fi
+# Connection Tests
+echo "## 🔗 Connection Tests"
 
-# 11. Connection hints
-echo
-echo "==> Connection tests"
-
-# MySQL
+## MySQL
+echo "### 🛢️ MySQL"
 if kubectl get svc -n "mysql-${ENVIRONMENT}" | grep -q mysql; then
   MYSQL_SVC=$(kubectl get svc -n "mysql-${ENVIRONMENT}" -o jsonpath='{.items[0].metadata.name}')
   MYSQL_PORT=$(kubectl get svc -n "mysql-${ENVIRONMENT}" $MYSQL_SVC -o jsonpath='{.spec.ports[0].port}')
-  echo "MySQL service: $MYSQL_SVC (port $MYSQL_PORT, namespace mysql-${ENVIRONMENT})"
-  echo "👉 Test with: kubectl run mysql-client --rm -it --image=bitnami/mysql:8.0 -n mysql-${ENVIRONMENT} -- bash"
+  echo "**Service:** $MYSQL_SVC"
+  echo "**Namespace:** mysql-${ENVIRONMENT}"
+  echo "**Port:** $MYSQL_PORT"
+  echo
+  echo '```bash'
+  echo "kubectl run mysql-client --rm -it --image=bitnami/mysql:8.0 -n mysql-${ENVIRONMENT} -- bash"
+  echo '```'
 else
-  echo "No MySQL service found in mysql-${ENVIRONMENT}"
+  echo "❌ No MySQL service found in mysql-${ENVIRONMENT}"
 fi
-
-# Frontend
-if kubectl get svc -n "frontend-${ENVIRONMENT}" >/dev/null 2>&1; then
-  echo
-  echo "Frontend services:"
-  kubectl get svc -n "frontend-${ENVIRONMENT}" -o wide
-fi
-
-# Backend
-if kubectl get svc -n "backend-${ENVIRONMENT}" >/dev/null 2>&1; then
-  echo
-  echo "Backend services:"
-  kubectl get svc -n "backend-${ENVIRONMENT}" -o wide
-fi
-
 echo
-echo "✅ Status check complete"
+
+## Frontend
+echo "### 🎨 Frontend"
+collapse "Frontend services" kubectl get svc -n "frontend-${ENVIRONMENT}" -o wide || true
+
+## Backend
+echo "### ⚙️ Backend"
+collapse "Backend services" kubectl get svc -n "backend-${ENVIRONMENT}" -o wide || true
+
+echo "✅ Tests complete."

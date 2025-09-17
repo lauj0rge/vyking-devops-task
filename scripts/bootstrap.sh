@@ -255,3 +255,21 @@ echo "kubectl run -it --rm mysql-client --image=mysql:8.0 --restart=Never -- \
   mysql -h $MYSQL_HOST -P $MYSQL_PORT -u$MYSQL_USER -p$MYSQL_PASS $MYSQL_DB"
 
 echo "=== ✅ Environment $ENVIRONMENT bootstrap completed ==="
+
+---
+# -------------------------
+# 10. Run Tests & Save Report
+# -------------------------
+echo "==> Running cluster tests..."
+REPORT_FILE="tests-results.md"
+
+# Run test.sh and redirect output to Markdown with fencing
+{
+  echo "# 🧪 Test Results for $ENVIRONMENT"
+  echo
+  echo '```bash'
+  ./scripts/test.sh "$ENVIRONMENT"
+  echo '```'
+} > "$REPORT_FILE"
+
+echo "✅ Test results written to $REPORT_FILE"
