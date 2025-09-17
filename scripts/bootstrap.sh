@@ -230,8 +230,24 @@ echo $! > "/tmp/argocd-port-forward-${ENVIRONMENT}.pid"
 echo "=== ✅ Environment $ENVIRONMENT ready ==="
 echo "==> Argo CD UI: http://localhost:8080"
 
-echo "==> Stop port-forward: kill \$(cat /tmp/argocd-port-forward-${ENVIRONMENT}.pid)"
-echo "=== ✅ Environment $ENVIRONMENT ready ==="
+
+# -------------------------
+# 7. Ingress-NGINX port-forward
+# -------------------------
+echo "==> Setting up ingress-nginx port-forward"
+
+# Kill old port-forward if it exists
+if [[ -f "/tmp/ingress-port-forward-${ENVIRONMENT}.pid" ]]; then
+  kill $(cat /tmp/ingress-port-forward-${ENVIRONMENT}.pid) >/dev/null 2>&1 || true
+  rm -f /tmp/ingress-port-forward-${ENVIRONMENT}.pid
+fi
+
+# Forward local 8443 -> ingress-nginx 443
+kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8443:443 >/dev/null 2>&1 &
+echo $! > "/tmp/ingress-port-forward-${ENVIRONMENT}.pid"
+
+echo "✅ Ingress-NGINX available at https://frontend-${ENVIRONMENT}.local:8443"
+echo "==> Stop port-forward: kill \$(cat /tmp/ingress-port-forward-${ENVIRONMENT}.pid)"
 
 # -------------------------
 # 8. MySQL Connection Info
