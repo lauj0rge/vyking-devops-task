@@ -29,8 +29,7 @@ jobs:
       - name: Write kubeconfig for Terraform
         run: |
           mkdir -p ~/.kube
-          k3d kubeconfig get $CLUSTER_NAME > ~/.kube/vyking-${ENVIRONMENT}-config  
-          cp ~/.kube/${CLUSTER_NAME}-config ~/.kube/vyking-${ENVIRONMENT}-config
+          k3d kubeconfig get $CLUSTER_NAME > ~/.kube/vyking-${ENVIRONMENT}-config 
 
       - name: Build and import images
         run: |
