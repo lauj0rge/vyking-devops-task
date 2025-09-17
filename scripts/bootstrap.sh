@@ -178,19 +178,22 @@ docker pull $PYTHON_BASE
 FE_IMAGE="vyking-frontend:${ENVIRONMENT}"
 BE_IMAGE="vyking-backend:${ENVIRONMENT}"
 
-echo "DEBUG: Building frontend image: $FE_IMAGE"
-echo "DEBUG: Building backend image: $BE_IMAGE"
+echo "==> Building images for $ENVIRONMENT"
 
-# Build frontend with correct path
-docker build --build-arg BASE_IMAGE=$NGINX_BASE \
+# Build frontend
+docker build --no-cache \
+  --build-arg BASE_IMAGE=$NGINX_BASE \
+  --build-arg ENVIRONMENT=$ENVIRONMENT \
   -t $FE_IMAGE ./applications/frontend/app
 
-# Build backend with correct path
-docker build --build-arg BASE_IMAGE=$PYTHON_BASE \
+# Build backend
+docker build --no-cache \
+  --build-arg BASE_IMAGE=$PYTHON_BASE \
+  --build-arg ENVIRONMENT=$ENVIRONMENT \
   -t $BE_IMAGE ./applications/backend/app
 
-k3d image import -c "$CLUSTER_NAME" $FE_IMAGE $BE_IMAGE
-
+echo "==> Importing images into k3d cluster: $CLUSTER_NAME"
+k3d image import -c "$CLUSTER_NAME" $FE_IMAGE $BE_IMAGE --keep-tools
 
 # -------------------------
 # 5. Terraform apply with environment values
