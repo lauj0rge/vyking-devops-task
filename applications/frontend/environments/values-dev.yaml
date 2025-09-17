@@ -55,4 +55,4 @@ hpa:
 
 backend:
   host: backend-backend.backend-dev.svc.cluster.local
-  port: 8081
+  port: 80
