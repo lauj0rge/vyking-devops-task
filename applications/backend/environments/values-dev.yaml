@@ -29,9 +29,9 @@ probes:
     failureThreshold: 3
 
   readiness:
-    path: /readiness
+    path: /health
     port: 8081
-    initialDelaySeconds: 20   # give MySQL time to initialize
+    initialDelaySeconds: 20   
     periodSeconds: 10
     timeoutSeconds: 3
     failureThreshold: 5
