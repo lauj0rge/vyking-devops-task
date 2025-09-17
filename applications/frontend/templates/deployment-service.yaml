@@ -22,6 +22,14 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 80
+          volumeMounts:   
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /var/run
+          env:
+            - name: BACKEND_URL
+              value: "http://{{ .Values.backend.host }}:{{ .Values.backend.port }}"
           livenessProbe:
             httpGet:
               path: {{ .Values.probes.liveness.path }}
@@ -34,22 +42,13 @@ spec:
               port: {{ .Values.probes.readiness.port }}
             initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
-          volumes:
-            - name: nginx-cache
-              emptyDir: {}
-            - name: nginx-run
-              emptyDir: {}
-          volumeMounts:
-            - name: nginx-cache
-              mountPath: /var/cache/nginx
-            - name: nginx-run
-              mountPath: /var/run
-          env:
-            - name: BACKEND_URL
-              value: "http://{{ .Values.backend.host }}:{{ .Values.backend.port }}"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-
+      volumes:
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
 
 ---
 apiVersion: v1
