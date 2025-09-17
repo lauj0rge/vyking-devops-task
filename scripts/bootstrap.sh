@@ -55,7 +55,7 @@ case "$ENVIRONMENT" in
       --from-literal=username=$DEV_DB_USER \
       --from-literal=password=$DEV_DB_PASS \
       --from-literal=database=$DEV_DB_NAME \
-      --from-literal=host=mysql-${ENVIRONMENT}.mysql-${ENVIRONMENT}.svc.cluster.local \
+      --from-literal=host=mysql.mysql-${ENVIRONMENT}.svc.cluster.local \
       --from-literal=port=3306 \
       --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_CRED_NAME}.yaml
 
@@ -65,6 +65,7 @@ case "$ENVIRONMENT" in
       --from-literal=username=$DEV_DB_USER \
       --from-literal=password=$DEV_DB_PASS \
       --from-literal=database=$DEV_DB_NAME \
+      --from-literal=host=mysql.mysql-${ENVIRONMENT}.svc.cluster.local \
       --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_SECRET_NAME}.yaml
     ;;
   prod)
@@ -73,7 +74,7 @@ case "$ENVIRONMENT" in
       --from-literal=username=$PROD_DB_USER \
       --from-literal=password=$PROD_DB_PASS \
       --from-literal=database=$PROD_DB_NAME \
-      --from-literal=host=mysql-${ENVIRONMENT}.mysql-${ENVIRONMENT}.svc.cluster.local \
+      --from-literal=host=mysql.mysql-${ENVIRONMENT}.svc.cluster.local \
       --from-literal=port=3306 \
       --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_CRED_NAME}.yaml
 
@@ -83,6 +84,7 @@ case "$ENVIRONMENT" in
       --from-literal=username=$PROD_DB_USER \
       --from-literal=password=$PROD_DB_PASS \
       --from-literal=database=$PROD_DB_NAME \
+      --from-literal=host=mysql.mysql-${ENVIRONMENT}.svc.cluster.local \
       --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_SECRET_NAME}.yaml
     ;;
 esac

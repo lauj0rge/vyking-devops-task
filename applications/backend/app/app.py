@@ -38,6 +38,9 @@ def health():
 def readiness():
     try:
         conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT 1")
+        cursor.close()
         conn.close()
         return {"status": "ready"}, 200
     except Exception as e:
