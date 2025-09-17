@@ -25,6 +25,13 @@ spec:
           volumeMounts:
             - name: nginx-cache
               mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /var/run
+      volumes:
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
           env:
             - name: BACKEND_URL
               value: "http://{{ .Values.backend.host }}:{{ .Values.backend.port }}"
@@ -48,6 +55,4 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-      volumes:                # ✅ Correct placement
-        - name: nginx-cache
-          emptyDir: {}
+
