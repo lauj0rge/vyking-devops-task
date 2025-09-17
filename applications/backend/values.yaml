@@ -40,7 +40,7 @@ probes:
     timeoutSeconds: 2
     failureThreshold: 3
   readiness:
-    path: /readiness
+    path: /health
     port: 8081
     initialDelaySeconds: 5
     periodSeconds: 10
