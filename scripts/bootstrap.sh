@@ -280,15 +280,9 @@ echo "=== ✅ Environment $ENVIRONMENT bootstrap completed ==="
 # 10. Run Tests & Save Report
 # -------------------------
 echo "==> Running cluster tests..."
-REPORT_FILE="tests-results.md"
+TIMESTAMP=$(date '+%Y%m%d-%H%M%S')
+REPORT_FILE="tests-results-${ENVIRONMENT}-${TIMESTAMP}.md"
 
-# Run test.sh and redirect output to Markdown with fencing
-{
-  echo "# 🧪 Test Results for $ENVIRONMENT"
-  echo
-  echo '```bash'
-  ./scripts/tests.sh "$ENVIRONMENT"
-  echo '```'
-} > "$REPORT_FILE"
+./scripts/tests.sh "$ENVIRONMENT" > "$REPORT_FILE"
 
 echo "✅ Test results written to $REPORT_FILE"
