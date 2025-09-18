@@ -13,19 +13,28 @@ spec:
         paths:
           - path: /
             pathType: Prefix
+          {{- if .paths }}
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType | default "Prefix" }}
             backend:
               service:
                 name: {{ $.Release.Name }}-frontend
                 port:
                   number: {{ $.Values.service.port }}
-          - path: /api
+          {{- end }}
+          {{- else }}
+          - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ $.Release.Name }}-backend
+                name: {{ $.Release.Name }}-frontend
                 port:
-                  number: {{ $.Values.backend.port }}
+                  number: {{ $.Values.service.port }}
+        { { - end } }
     {{- end }}
+  {{- if .Values.ingress.tls }}
   tls:
     {{- toYaml .Values.ingress.tls | nindent 4 }}
   {{- end }}
+{{- end }}
