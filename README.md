@@ -102,6 +102,6 @@ SealedSecrets names follow the pattern `mysql-credentials-<env>` (backend namesp
 
 - Argo CD UI: forwarded to http://localhost:8080 for `dev` and 8080/8443 load balancer bindings in prod clusters.【F:scripts/cluster.sh†L5-L20】【F:scripts/bootstrap.sh†L142-L168】
 - Frontend Ingress: reachable via the ingress-nginx port-forward started by the bootstrap script at `https://frontend-<env>.local:8443`.【F:scripts/bootstrap.sh†L170-L183】
-- Backend API: available inside the cluster at the `backend` Service (default `ClusterIP` on port 8081) with `/health`, `/readiness`, `/todos`, `/add`, and `/delete/<id>` routes.【F:applications/backend/templates/deployment-service.yaml†L20-L63】【F:applications/backend/app/app.py†L27-L76】
+- Backend API: available inside the cluster at the `backend` Service (default `ClusterIP` on port 8081) with `/health`, `/readiness`, and `/leaderboard` routes exposing the mock player leaderboard dataset.【F:applications/backend/templates/deployment-service.yaml†L20-L63】【F:applications/backend/app/app.py†L27-L94】
 
 With this README you can quickly identify where each concern lives in the codebase and how to operate the full deployment workflow end to end.
