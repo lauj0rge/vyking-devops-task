@@ -1,14 +1,13 @@
 # 🧪 Cluster Test Results for `dev`
 
 ## 📋 Summary
-- **Generated:** 2025-09-18 20:55:55 CEST
+- **Generated:** 2025-09-18 21:06:23 CEST
 - **Environment:** `dev`
 - **Cluster Name:** `vyking-dev`
 - **Argo CD Namespace:** `argocd-dev`
 
 ## 🧭 Access Checks
-<details><summary>kubectl version --short</summary>
-
+### kubectl version --short
 ```bash
 + kubectl version --short
 error: unknown flag: --short
@@ -16,28 +15,22 @@ See 'kubectl version --help' for usage.
 
 [command failed with exit code 1]
 ```
-</details>
 
-<details><summary>Current context</summary>
-
+### Current context
 ```bash
 + kubectl config current-context
 k3d-vyking-dev
 ```
-</details>
 
-<details><summary>Available contexts</summary>
-
+### Available contexts
 ```bash
 + kubectl config get-contexts
 CURRENT   NAME             CLUSTER          AUTHINFO               NAMESPACE
 *         k3d-vyking-dev   k3d-vyking-dev   admin@k3d-vyking-dev   
 ```
-</details>
 
 ## 🌐 Cluster Overview
-<details><summary>Cluster info</summary>
-
+### Cluster info
 ```bash
 + kubectl cluster-info
 Kubernetes control plane is running at https://0.0.0.0:45689
@@ -46,470 +39,408 @@ Metrics-server is running at https://0.0.0.0:45689/api/v1/namespaces/kube-system
 
 To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
 ```
-</details>
 
-<details><summary>Nodes</summary>
-
+### Nodes
 ```bash
 + kubectl get nodes -o wide
 NAME                      STATUS   ROLES                  AGE    VERSION        INTERNAL-IP   EXTERNAL-IP   OS-IMAGE           KERNEL-VERSION     CONTAINER-RUNTIME
-k3d-vyking-dev-agent-0    Ready    <none>                 120m   v1.31.5+k3s1   172.18.0.3    <none>        K3s v1.31.5+k3s1   6.8.0-79-generic   containerd://1.7.23-k3s2
-k3d-vyking-dev-agent-1    Ready    <none>                 120m   v1.31.5+k3s1   172.18.0.4    <none>        K3s v1.31.5+k3s1   6.8.0-79-generic   containerd://1.7.23-k3s2
-k3d-vyking-dev-server-0   Ready    control-plane,master   120m   v1.31.5+k3s1   172.18.0.2    <none>        K3s v1.31.5+k3s1   6.8.0-79-generic   containerd://1.7.23-k3s2
+k3d-vyking-dev-agent-0    Ready    <none>                 130m   v1.31.5+k3s1   172.18.0.3    <none>        K3s v1.31.5+k3s1   6.8.0-79-generic   containerd://1.7.23-k3s2
+k3d-vyking-dev-agent-1    Ready    <none>                 130m   v1.31.5+k3s1   172.18.0.4    <none>        K3s v1.31.5+k3s1   6.8.0-79-generic   containerd://1.7.23-k3s2
+k3d-vyking-dev-server-0   Ready    control-plane,master   131m   v1.31.5+k3s1   172.18.0.2    <none>        K3s v1.31.5+k3s1   6.8.0-79-generic   containerd://1.7.23-k3s2
 ```
-</details>
 
-<details><summary>Namespaces</summary>
-
+### Namespaces
 ```bash
 + kubectl get ns
 NAME              STATUS   AGE
-argocd-dev        Active   112m
-backend-dev       Active   108m
-cert-manager      Active   109m
-default           Active   120m
-frontend-dev      Active   108m
-ingress-nginx     Active   108m
-kube-node-lease   Active   120m
-kube-public       Active   120m
-kube-system       Active   120m
-mysql-dev         Active   109m
+argocd-dev        Active   123m
+backend-dev       Active   118m
+cert-manager      Active   119m
+default           Active   131m
+frontend-dev      Active   118m
+ingress-nginx     Active   118m
+kube-node-lease   Active   131m
+kube-public       Active   131m
+kube-system       Active   131m
+mysql-dev         Active   120m
 ```
-</details>
 
-<details><summary>Pods (all namespaces)</summary>
-
+### Pods (all namespaces)
 ```bash
 + kubectl get pods -A -o wide
-NAMESPACE       NAME                                                READY   STATUS                  RESTARTS        AGE     IP           NODE                      NOMINATED NODE   READINESS GATES
-argocd-dev      argocd-application-controller-0                     1/1     Running                 0               111m    10.42.1.7    k3d-vyking-dev-agent-1    <none>           <none>
-argocd-dev      argocd-applicationset-controller-78f49df558-b5mnz   1/1     Running                 0               111m    10.42.0.5    k3d-vyking-dev-agent-0    <none>           <none>
-argocd-dev      argocd-dex-server-796678d5bc-9w8w6                  1/1     Running                 0               111m    10.42.2.8    k3d-vyking-dev-server-0   <none>           <none>
-argocd-dev      argocd-notifications-controller-6d84bf8458-7wcgf    1/1     Running                 0               111m    10.42.2.6    k3d-vyking-dev-server-0   <none>           <none>
-argocd-dev      argocd-redis-7c7fb7fc74-dpv8x                       1/1     Running                 0               111m    10.42.1.6    k3d-vyking-dev-agent-1    <none>           <none>
-argocd-dev      argocd-repo-server-d587f667c-gqwsv                  1/1     Running                 0               111m    10.42.2.9    k3d-vyking-dev-server-0   <none>           <none>
-argocd-dev      argocd-server-556b554c94-5pclw                      1/1     Running                 1 (111m ago)    111m    10.42.2.7    k3d-vyking-dev-server-0   <none>           <none>
-backend-dev     backend-backend-66c96df8b-7kknr                     1/1     Running                 0               108m    10.42.2.10   k3d-vyking-dev-server-0   <none>           <none>
-backend-dev     backend-backend-66c96df8b-fkr8p                     1/1     Running                 0               108m    10.42.1.10   k3d-vyking-dev-agent-1    <none>           <none>
-cert-manager    cert-manager-55c69bf5cf-hgxp6                       1/1     Running                 0               109m    10.42.1.8    k3d-vyking-dev-agent-1    <none>           <none>
-cert-manager    cert-manager-cainjector-5765b5f544-j6b7r            1/1     Running                 0               109m    10.42.0.6    k3d-vyking-dev-agent-0    <none>           <none>
-cert-manager    cert-manager-webhook-6b67444dc9-tdkfq               1/1     Running                 0               109m    10.42.0.7    k3d-vyking-dev-agent-0    <none>           <none>
-frontend-dev    frontend-frontend-597d68f8cf-glz64                  1/1     Running                 0               108m    10.42.0.8    k3d-vyking-dev-agent-0    <none>           <none>
-ingress-nginx   ingress-nginx-controller-b4b575f8-h27bz             1/1     Running                 0               107m    10.42.0.9    k3d-vyking-dev-agent-0    <none>           <none>
-kube-system     coredns-ccb96694c-85tws                             1/1     Running                 0               120m    10.42.0.2    k3d-vyking-dev-agent-0    <none>           <none>
-kube-system     helm-install-traefik-6xcsc                          0/1     Completed               0               120m    10.42.2.3    k3d-vyking-dev-server-0   <none>           <none>
-kube-system     helm-install-traefik-crd-vfxdl                      0/1     Completed               0               120m    10.42.1.2    k3d-vyking-dev-agent-1    <none>           <none>
-kube-system     local-path-provisioner-5cf85fd84d-mnsll             1/1     Running                 0               120m    10.42.0.3    k3d-vyking-dev-agent-0    <none>           <none>
-kube-system     metrics-server-5985cbc9d7-dwk2r                     1/1     Running                 0               120m    10.42.2.2    k3d-vyking-dev-server-0   <none>           <none>
-kube-system     sealed-secrets-controller-5655858cbc-48hb7          1/1     Running                 0               120m    10.42.1.3    k3d-vyking-dev-agent-1    <none>           <none>
-kube-system     svclb-ingress-nginx-controller-cfddc8d6-2vn82       0/2     Pending                 0               107m    <none>       <none>                    <none>           <none>
-kube-system     svclb-ingress-nginx-controller-cfddc8d6-4dfjw       0/2     Pending                 0               107m    <none>       <none>                    <none>           <none>
-kube-system     svclb-ingress-nginx-controller-cfddc8d6-lw6gv       0/2     Pending                 0               107m    <none>       <none>                    <none>           <none>
-kube-system     svclb-traefik-57d28a11-czhkk                        2/2     Running                 0               118m    10.42.0.4    k3d-vyking-dev-agent-0    <none>           <none>
-kube-system     svclb-traefik-57d28a11-hclmg                        2/2     Running                 0               118m    10.42.2.4    k3d-vyking-dev-server-0   <none>           <none>
-kube-system     svclb-traefik-57d28a11-lsm6s                        2/2     Running                 0               118m    10.42.1.4    k3d-vyking-dev-agent-1    <none>           <none>
-kube-system     traefik-5d45fc8cc9-rbhlx                            1/1     Running                 0               118m    10.42.1.5    k3d-vyking-dev-agent-1    <none>           <none>
-mysql-dev       mysql-0                                             0/1     Init:ImagePullBackOff   0               107m    10.42.1.13   k3d-vyking-dev-agent-1    <none>           <none>
-mysql-dev       mysql-backup-29303690-7jhpj                         0/1     CrashLoopBackOff        5 (2m44s ago)   5m57s   10.42.2.33   k3d-vyking-dev-server-0   <none>           <none>
-mysql-dev       mysql-backup-29303695-rm7gk                         0/1     Error                   3 (32s ago)     57s     10.42.2.34   k3d-vyking-dev-server-0   <none>           <none>
+NAMESPACE       NAME                                                READY   STATUS                  RESTARTS       AGE    IP           NODE                      NOMINATED NODE   READINESS GATES
+argocd-dev      argocd-application-controller-0                     1/1     Running                 0              122m   10.42.1.7    k3d-vyking-dev-agent-1    <none>           <none>
+argocd-dev      argocd-applicationset-controller-78f49df558-b5mnz   1/1     Running                 0              122m   10.42.0.5    k3d-vyking-dev-agent-0    <none>           <none>
+argocd-dev      argocd-dex-server-796678d5bc-9w8w6                  1/1     Running                 0              122m   10.42.2.8    k3d-vyking-dev-server-0   <none>           <none>
+argocd-dev      argocd-notifications-controller-6d84bf8458-7wcgf    1/1     Running                 0              122m   10.42.2.6    k3d-vyking-dev-server-0   <none>           <none>
+argocd-dev      argocd-redis-7c7fb7fc74-dpv8x                       1/1     Running                 0              122m   10.42.1.6    k3d-vyking-dev-agent-1    <none>           <none>
+argocd-dev      argocd-repo-server-d587f667c-gqwsv                  1/1     Running                 0              122m   10.42.2.9    k3d-vyking-dev-server-0   <none>           <none>
+argocd-dev      argocd-server-556b554c94-5pclw                      1/1     Running                 1 (122m ago)   122m   10.42.2.7    k3d-vyking-dev-server-0   <none>           <none>
+backend-dev     backend-backend-66c96df8b-7kknr                     1/1     Running                 0              118m   10.42.2.10   k3d-vyking-dev-server-0   <none>           <none>
+backend-dev     backend-backend-66c96df8b-fkr8p                     1/1     Running                 0              118m   10.42.1.10   k3d-vyking-dev-agent-1    <none>           <none>
+cert-manager    cert-manager-55c69bf5cf-hgxp6                       1/1     Running                 0              119m   10.42.1.8    k3d-vyking-dev-agent-1    <none>           <none>
+cert-manager    cert-manager-cainjector-5765b5f544-j6b7r            1/1     Running                 0              119m   10.42.0.6    k3d-vyking-dev-agent-0    <none>           <none>
+cert-manager    cert-manager-webhook-6b67444dc9-tdkfq               1/1     Running                 0              119m   10.42.0.7    k3d-vyking-dev-agent-0    <none>           <none>
+frontend-dev    frontend-frontend-597d68f8cf-glz64                  1/1     Running                 0              118m   10.42.0.8    k3d-vyking-dev-agent-0    <none>           <none>
+ingress-nginx   ingress-nginx-controller-b4b575f8-h27bz             1/1     Running                 0              118m   10.42.0.9    k3d-vyking-dev-agent-0    <none>           <none>
+kube-system     coredns-ccb96694c-85tws                             1/1     Running                 0              130m   10.42.0.2    k3d-vyking-dev-agent-0    <none>           <none>
+kube-system     helm-install-traefik-6xcsc                          0/1     Completed               0              130m   10.42.2.3    k3d-vyking-dev-server-0   <none>           <none>
+kube-system     helm-install-traefik-crd-vfxdl                      0/1     Completed               0              130m   10.42.1.2    k3d-vyking-dev-agent-1    <none>           <none>
+kube-system     local-path-provisioner-5cf85fd84d-mnsll             1/1     Running                 0              130m   10.42.0.3    k3d-vyking-dev-agent-0    <none>           <none>
+kube-system     metrics-server-5985cbc9d7-dwk2r                     1/1     Running                 0              130m   10.42.2.2    k3d-vyking-dev-server-0   <none>           <none>
+kube-system     sealed-secrets-controller-5655858cbc-48hb7          1/1     Running                 0              130m   10.42.1.3    k3d-vyking-dev-agent-1    <none>           <none>
+kube-system     svclb-ingress-nginx-controller-cfddc8d6-2vn82       0/2     Pending                 0              118m   <none>       <none>                    <none>           <none>
+kube-system     svclb-ingress-nginx-controller-cfddc8d6-4dfjw       0/2     Pending                 0              118m   <none>       <none>                    <none>           <none>
+kube-system     svclb-ingress-nginx-controller-cfddc8d6-lw6gv       0/2     Pending                 0              118m   <none>       <none>                    <none>           <none>
+kube-system     svclb-traefik-57d28a11-czhkk                        2/2     Running                 0              129m   10.42.0.4    k3d-vyking-dev-agent-0    <none>           <none>
+kube-system     svclb-traefik-57d28a11-hclmg                        2/2     Running                 0              129m   10.42.2.4    k3d-vyking-dev-server-0   <none>           <none>
+kube-system     svclb-traefik-57d28a11-lsm6s                        2/2     Running                 0              129m   10.42.1.4    k3d-vyking-dev-agent-1    <none>           <none>
+kube-system     traefik-5d45fc8cc9-rbhlx                            1/1     Running                 0              129m   10.42.1.5    k3d-vyking-dev-agent-1    <none>           <none>
+mysql-dev       mysql-0                                             0/1     Init:ImagePullBackOff   0              118m   10.42.1.13   k3d-vyking-dev-agent-1    <none>           <none>
+mysql-dev       mysql-backup-29303705-tc6zf                         0/1     CrashLoopBackOff        3 (32s ago)    86s    10.42.2.36   k3d-vyking-dev-server-0   <none>           <none>
 ```
-</details>
 
-<details><summary>Services (all namespaces)</summary>
-
+### Services (all namespaces)
 ```bash
 + kubectl get svc -A -o wide
 NAMESPACE       NAME                                    TYPE           CLUSTER-IP      EXTERNAL-IP                        PORT(S)                      AGE    SELECTOR
-argocd-dev      argocd-application-controller-metrics   ClusterIP      10.43.233.10    <none>                             8082/TCP                     111m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-application-controller
-argocd-dev      argocd-applicationset-controller        ClusterIP      10.43.84.26     <none>                             7000/TCP                     111m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-applicationset-controller
-argocd-dev      argocd-dex-server                       ClusterIP      10.43.48.63     <none>                             5556/TCP,5557/TCP,5558/TCP   111m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-dex-server
-argocd-dev      argocd-redis                            ClusterIP      10.43.123.126   <none>                             6379/TCP                     111m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-redis
-argocd-dev      argocd-redis-metrics                    ClusterIP      None            <none>                             9121/TCP                     111m   app.kubernetes.io/component=redis,app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-redis
-argocd-dev      argocd-repo-server                      ClusterIP      10.43.14.77     <none>                             8081/TCP                     111m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-repo-server
-argocd-dev      argocd-repo-server-metrics              ClusterIP      10.43.145.32    <none>                             8084/TCP                     111m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-repo-server
-argocd-dev      argocd-server                           ClusterIP      10.43.56.155    <none>                             80/TCP,443/TCP               111m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-server
-backend-dev     backend-backend                         ClusterIP      10.43.26.94     <none>                             8081/TCP                     108m   app=backend-backend
-cert-manager    cert-manager                            ClusterIP      10.43.69.30     <none>                             9402/TCP                     109m   app.kubernetes.io/component=controller,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cert-manager
-cert-manager    cert-manager-cainjector                 ClusterIP      10.43.231.41    <none>                             9402/TCP                     109m   app.kubernetes.io/component=cainjector,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cainjector
-cert-manager    cert-manager-webhook                    ClusterIP      10.43.49.142    <none>                             443/TCP,9402/TCP             109m   app.kubernetes.io/component=webhook,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=webhook
-default         kubernetes                              ClusterIP      10.43.0.1       <none>                             443/TCP                      120m   <none>
-frontend-dev    frontend-frontend                       ClusterIP      10.43.159.88    <none>                             8080/TCP                     108m   app=frontend-frontend
-ingress-nginx   ingress-nginx-controller                LoadBalancer   10.43.65.46     <pending>                          80:32765/TCP,443:30795/TCP   107m   app.kubernetes.io/component=controller,app.kubernetes.io/instance=ingress-nginx,app.kubernetes.io/name=ingress-nginx
-ingress-nginx   ingress-nginx-controller-admission      ClusterIP      10.43.75.38     <none>                             443/TCP                      107m   app.kubernetes.io/component=controller,app.kubernetes.io/instance=ingress-nginx,app.kubernetes.io/name=ingress-nginx
-kube-system     kube-dns                                ClusterIP      10.43.0.10      <none>                             53/UDP,53/TCP,9153/TCP       120m   k8s-app=kube-dns
-kube-system     metrics-server                          ClusterIP      10.43.226.186   <none>                             443/TCP                      120m   k8s-app=metrics-server
-kube-system     sealed-secrets-controller               ClusterIP      10.43.90.203    <none>                             8080/TCP                     120m   name=sealed-secrets-controller
-kube-system     sealed-secrets-controller-metrics       ClusterIP      10.43.106.103   <none>                             8081/TCP                     120m   name=sealed-secrets-controller
-kube-system     traefik                                 LoadBalancer   10.43.90.134    172.18.0.2,172.18.0.3,172.18.0.4   80:31468/TCP,443:31509/TCP   118m   app.kubernetes.io/instance=traefik-kube-system,app.kubernetes.io/name=traefik
-mysql-dev       mysql                                   ClusterIP      10.43.8.153     <none>                             3306/TCP                     107m   app.kubernetes.io/component=primary,app.kubernetes.io/instance=mysql,app.kubernetes.io/name=mysql,app.kubernetes.io/part-of=mysql
-mysql-dev       mysql-headless                          ClusterIP      None            <none>                             3306/TCP                     107m   app.kubernetes.io/component=primary,app.kubernetes.io/instance=mysql,app.kubernetes.io/name=mysql
+argocd-dev      argocd-application-controller-metrics   ClusterIP      10.43.233.10    <none>                             8082/TCP                     122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-application-controller
+argocd-dev      argocd-applicationset-controller        ClusterIP      10.43.84.26     <none>                             7000/TCP                     122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-applicationset-controller
+argocd-dev      argocd-dex-server                       ClusterIP      10.43.48.63     <none>                             5556/TCP,5557/TCP,5558/TCP   122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-dex-server
+argocd-dev      argocd-redis                            ClusterIP      10.43.123.126   <none>                             6379/TCP                     122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-redis
+argocd-dev      argocd-redis-metrics                    ClusterIP      None            <none>                             9121/TCP                     122m   app.kubernetes.io/component=redis,app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-redis
+argocd-dev      argocd-repo-server                      ClusterIP      10.43.14.77     <none>                             8081/TCP                     122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-repo-server
+argocd-dev      argocd-repo-server-metrics              ClusterIP      10.43.145.32    <none>                             8084/TCP                     122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-repo-server
+argocd-dev      argocd-server                           ClusterIP      10.43.56.155    <none>                             80/TCP,443/TCP               122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-server
+backend-dev     backend-backend                         ClusterIP      10.43.26.94     <none>                             8081/TCP                     118m   app=backend-backend
+cert-manager    cert-manager                            ClusterIP      10.43.69.30     <none>                             9402/TCP                     119m   app.kubernetes.io/component=controller,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cert-manager
+cert-manager    cert-manager-cainjector                 ClusterIP      10.43.231.41    <none>                             9402/TCP                     119m   app.kubernetes.io/component=cainjector,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cainjector
+cert-manager    cert-manager-webhook                    ClusterIP      10.43.49.142    <none>                             443/TCP,9402/TCP             119m   app.kubernetes.io/component=webhook,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=webhook
+default         kubernetes                              ClusterIP      10.43.0.1       <none>                             443/TCP                      131m   <none>
+frontend-dev    frontend-frontend                       ClusterIP      10.43.159.88    <none>                             8080/TCP                     118m   app=frontend-frontend
+ingress-nginx   ingress-nginx-controller                LoadBalancer   10.43.65.46     <pending>                          80:32765/TCP,443:30795/TCP   118m   app.kubernetes.io/component=controller,app.kubernetes.io/instance=ingress-nginx,app.kubernetes.io/name=ingress-nginx
+ingress-nginx   ingress-nginx-controller-admission      ClusterIP      10.43.75.38     <none>                             443/TCP                      118m   app.kubernetes.io/component=controller,app.kubernetes.io/instance=ingress-nginx,app.kubernetes.io/name=ingress-nginx
+kube-system     kube-dns                                ClusterIP      10.43.0.10      <none>                             53/UDP,53/TCP,9153/TCP       131m   k8s-app=kube-dns
+kube-system     metrics-server                          ClusterIP      10.43.226.186   <none>                             443/TCP                      130m   k8s-app=metrics-server
+kube-system     sealed-secrets-controller               ClusterIP      10.43.90.203    <none>                             8080/TCP                     130m   name=sealed-secrets-controller
+kube-system     sealed-secrets-controller-metrics       ClusterIP      10.43.106.103   <none>                             8081/TCP                     130m   name=sealed-secrets-controller
+kube-system     traefik                                 LoadBalancer   10.43.90.134    172.18.0.2,172.18.0.3,172.18.0.4   80:31468/TCP,443:31509/TCP   129m   app.kubernetes.io/instance=traefik-kube-system,app.kubernetes.io/name=traefik
+mysql-dev       mysql                                   ClusterIP      10.43.8.153     <none>                             3306/TCP                     118m   app.kubernetes.io/component=primary,app.kubernetes.io/instance=mysql,app.kubernetes.io/name=mysql,app.kubernetes.io/part-of=mysql
+mysql-dev       mysql-headless                          ClusterIP      None            <none>                             3306/TCP                     118m   app.kubernetes.io/component=primary,app.kubernetes.io/instance=mysql,app.kubernetes.io/name=mysql
 ```
-</details>
 
-<details><summary>Ingresses (all namespaces)</summary>
-
+### Ingresses (all namespaces)
 ```bash
 + kubectl get ingress -A
 NAMESPACE      NAME                CLASS    HOSTS                ADDRESS   PORTS     AGE
-frontend-dev   frontend-frontend   <none>   frontend-dev.local             80, 443   108m
+frontend-dev   frontend-frontend   <none>   frontend-dev.local             80, 443   118m
 ```
-</details>
 
-<details><summary>Deployments (all namespaces)</summary>
-
+### Deployments (all namespaces)
 ```bash
 + kubectl get deploy -A
 NAMESPACE       NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
-argocd-dev      argocd-applicationset-controller   1/1     1            1           111m
-argocd-dev      argocd-dex-server                  1/1     1            1           111m
-argocd-dev      argocd-notifications-controller    1/1     1            1           111m
-argocd-dev      argocd-redis                       1/1     1            1           111m
-argocd-dev      argocd-repo-server                 1/1     1            1           111m
-argocd-dev      argocd-server                      1/1     1            1           111m
-backend-dev     backend-backend                    2/2     2            2           108m
-cert-manager    cert-manager                       1/1     1            1           109m
-cert-manager    cert-manager-cainjector            1/1     1            1           109m
-cert-manager    cert-manager-webhook               1/1     1            1           109m
-frontend-dev    frontend-frontend                  1/1     1            1           108m
-ingress-nginx   ingress-nginx-controller           1/1     1            1           107m
-kube-system     coredns                            1/1     1            1           120m
-kube-system     local-path-provisioner             1/1     1            1           120m
-kube-system     metrics-server                     1/1     1            1           120m
-kube-system     sealed-secrets-controller          1/1     1            1           120m
-kube-system     traefik                            1/1     1            1           118m
+argocd-dev      argocd-applicationset-controller   1/1     1            1           122m
+argocd-dev      argocd-dex-server                  1/1     1            1           122m
+argocd-dev      argocd-notifications-controller    1/1     1            1           122m
+argocd-dev      argocd-redis                       1/1     1            1           122m
+argocd-dev      argocd-repo-server                 1/1     1            1           122m
+argocd-dev      argocd-server                      1/1     1            1           122m
+backend-dev     backend-backend                    2/2     2            2           118m
+cert-manager    cert-manager                       1/1     1            1           119m
+cert-manager    cert-manager-cainjector            1/1     1            1           119m
+cert-manager    cert-manager-webhook               1/1     1            1           119m
+frontend-dev    frontend-frontend                  1/1     1            1           118m
+ingress-nginx   ingress-nginx-controller           1/1     1            1           118m
+kube-system     coredns                            1/1     1            1           131m
+kube-system     local-path-provisioner             1/1     1            1           131m
+kube-system     metrics-server                     1/1     1            1           130m
+kube-system     sealed-secrets-controller          1/1     1            1           130m
+kube-system     traefik                            1/1     1            1           129m
 ```
-</details>
 
-<details><summary>StatefulSets (all namespaces)</summary>
-
+### StatefulSets (all namespaces)
 ```bash
 + kubectl get statefulset -A
 NAMESPACE    NAME                            READY   AGE
-argocd-dev   argocd-application-controller   1/1     111m
-mysql-dev    mysql                           0/1     107m
+argocd-dev   argocd-application-controller   1/1     122m
+mysql-dev    mysql                           0/1     118m
 ```
-</details>
 
-<details><summary>DaemonSets (all namespaces)</summary>
-
+### DaemonSets (all namespaces)
 ```bash
 + kubectl get daemonset -A
 NAMESPACE     NAME                                      DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
-kube-system   svclb-ingress-nginx-controller-cfddc8d6   3         3         0       3            0           <none>          107m
-kube-system   svclb-traefik-57d28a11                    3         3         3       3            3           <none>          118m
+kube-system   svclb-ingress-nginx-controller-cfddc8d6   3         3         0       3            0           <none>          118m
+kube-system   svclb-traefik-57d28a11                    3         3         3       3            3           <none>          129m
 ```
-</details>
 
-<details><summary>PersistentVolumeClaims (all namespaces)</summary>
-
+### PersistentVolumeClaims (all namespaces)
 ```bash
 + kubectl get pvc -A
 NAMESPACE   NAME            STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
-mysql-dev   data-mysql-0    Bound    pvc-5f1de3f4-2179-441a-9b61-f9fcb6bf8d20   8Gi        RWO            local-path     <unset>                 107m
-mysql-dev   mysql-backups   Bound    pvc-f9127179-0feb-403b-85e2-2c0142b5e81a   2Gi        RWO            local-path     <unset>                 107m
+mysql-dev   data-mysql-0    Bound    pvc-5f1de3f4-2179-441a-9b61-f9fcb6bf8d20   8Gi        RWO            local-path     <unset>                 118m
+mysql-dev   mysql-backups   Bound    pvc-f9127179-0feb-403b-85e2-2c0142b5e81a   2Gi        RWO            local-path     <unset>                 118m
 ```
-</details>
 
-<details><summary>PersistentVolumes</summary>
-
+### PersistentVolumes
 ```bash
 + kubectl get pv
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                     STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
-pvc-5f1de3f4-2179-441a-9b61-f9fcb6bf8d20   8Gi        RWO            Delete           Bound    mysql-dev/data-mysql-0    local-path     <unset>                          107m
-pvc-f9127179-0feb-403b-85e2-2c0142b5e81a   2Gi        RWO            Delete           Bound    mysql-dev/mysql-backups   local-path     <unset>                          105m
+pvc-5f1de3f4-2179-441a-9b61-f9fcb6bf8d20   8Gi        RWO            Delete           Bound    mysql-dev/data-mysql-0    local-path     <unset>                          118m
+pvc-f9127179-0feb-403b-85e2-2c0142b5e81a   2Gi        RWO            Delete           Bound    mysql-dev/mysql-backups   local-path     <unset>                          116m
 ```
-</details>
 
-<details><summary>StorageClasses</summary>
-
+### StorageClasses
 ```bash
 + kubectl get storageclass
 NAME                   PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-local-path (default)   rancher.io/local-path   Delete          WaitForFirstConsumer   false                  120m
+local-path (default)   rancher.io/local-path   Delete          WaitForFirstConsumer   false                  131m
 ```
-</details>
 
-<details><summary>Jobs (all namespaces)</summary>
-
+### Jobs (all namespaces)
 ```bash
 + kubectl get jobs -A
 NAMESPACE     NAME                       STATUS     COMPLETIONS   DURATION   AGE
-kube-system   helm-install-traefik       Complete   1/1           96s        120m
-kube-system   helm-install-traefik-crd   Complete   1/1           87s        120m
-mysql-dev     mysql-backup-29303685      Failed     0/1           11m        11m
-mysql-dev     mysql-backup-29303690      Running    0/1           6m1s       6m1s
-mysql-dev     mysql-backup-29303695      Running    0/1           61s        61s
+kube-system   helm-install-traefik       Complete   1/1           96s        130m
+kube-system   helm-install-traefik-crd   Complete   1/1           87s        130m
+mysql-dev     mysql-backup-29303700      Failed     0/1           6m32s      6m32s
+mysql-dev     mysql-backup-29303705      Running    0/1           92s        92s
 ```
-</details>
 
-<details><summary>CronJobs (all namespaces)</summary>
-
+### CronJobs (all namespaces)
 ```bash
 + kubectl get cronjobs -A
 NAMESPACE   NAME           SCHEDULE      TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE
-mysql-dev   mysql-backup   */5 * * * *   <none>     False     2        61s             107m
+mysql-dev   mysql-backup   */5 * * * *   <none>     False     1        93s             118m
 ```
-</details>
 
-<details><summary>Horizontal Pod Autoscalers (all namespaces)</summary>
-
+### Horizontal Pod Autoscalers (all namespaces)
 ```bash
 + kubectl get hpa -A
 NAMESPACE      NAME                REFERENCE                      TARGETS                        MINPODS   MAXPODS   REPLICAS   AGE
-backend-dev    backend-backend     Deployment/backend-backend     cpu: 1%/70%, memory: 20%/70%   2         5         2          108m
-frontend-dev   frontend-frontend   Deployment/frontend-frontend   cpu: 1%/70%, memory: 3%/80%    1         3         1          108m
-mysql-dev      mysql-hpa           StatefulSet/mysql              cpu: <unknown>/70%             1         3         1          107m
+backend-dev    backend-backend     Deployment/backend-backend     cpu: 1%/70%, memory: 20%/70%   2         5         2          118m
+frontend-dev   frontend-frontend   Deployment/frontend-frontend   cpu: 1%/70%, memory: 3%/80%    1         3         1          118m
+mysql-dev      mysql-hpa           StatefulSet/mysql              cpu: <unknown>/70%             1         3         1          118m
 ```
-</details>
 
-<details><summary>Resource usage (nodes)</summary>
-
+### Resource usage (nodes)
 ```bash
 + kubectl top nodes
 NAME                      CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)   
-k3d-vyking-dev-agent-0    249m         8%       379Mi           4%          
-k3d-vyking-dev-agent-1    215m         7%       446Mi           5%          
-k3d-vyking-dev-server-0   229m         7%       1120Mi          14%         
+k3d-vyking-dev-agent-0    210m         7%       372Mi           4%          
+k3d-vyking-dev-agent-1    242m         8%       472Mi           5%          
+k3d-vyking-dev-server-0   287m         9%       1117Mi          14%         
 ```
-</details>
 
-<details><summary>Resource usage (pods, all namespaces)</summary>
-
+### Resource usage (pods, all namespaces)
 ```bash
 + kubectl top pods -A
 NAMESPACE       NAME                                                CPU(cores)   MEMORY(bytes)   
-argocd-dev      argocd-application-controller-0                     18m          131Mi           
-argocd-dev      argocd-applicationset-controller-78f49df558-b5mnz   2m           31Mi            
-argocd-dev      argocd-dex-server-796678d5bc-9w8w6                  1m           25Mi            
-argocd-dev      argocd-notifications-controller-6d84bf8458-7wcgf    1m           19Mi            
-argocd-dev      argocd-redis-7c7fb7fc74-dpv8x                       4m           3Mi             
-argocd-dev      argocd-repo-server-d587f667c-gqwsv                  4m           31Mi            
-argocd-dev      argocd-server-556b554c94-5pclw                      9m           65Mi            
+argocd-dev      argocd-application-controller-0                     16m          135Mi           
+argocd-dev      argocd-applicationset-controller-78f49df558-b5mnz   3m           31Mi            
+argocd-dev      argocd-dex-server-796678d5bc-9w8w6                  1m           22Mi            
+argocd-dev      argocd-notifications-controller-6d84bf8458-7wcgf    2m           19Mi            
+argocd-dev      argocd-redis-7c7fb7fc74-dpv8x                       5m           3Mi             
+argocd-dev      argocd-repo-server-d587f667c-gqwsv                  31m          80Mi            
+argocd-dev      argocd-server-556b554c94-5pclw                      4m           67Mi            
 backend-dev     backend-backend-66c96df8b-7kknr                     1m           25Mi            
-backend-dev     backend-backend-66c96df8b-fkr8p                     1m           25Mi            
-cert-manager    cert-manager-55c69bf5cf-hgxp6                       5m           20Mi            
-cert-manager    cert-manager-cainjector-5765b5f544-j6b7r            5m           25Mi            
-cert-manager    cert-manager-webhook-6b67444dc9-tdkfq               1m           11Mi            
+backend-dev     backend-backend-66c96df8b-fkr8p                     2m           25Mi            
+cert-manager    cert-manager-55c69bf5cf-hgxp6                       6m           22Mi            
+cert-manager    cert-manager-cainjector-5765b5f544-j6b7r            6m           26Mi            
+cert-manager    cert-manager-webhook-6b67444dc9-tdkfq               2m           11Mi            
 frontend-dev    frontend-frontend-597d68f8cf-glz64                  1m           4Mi             
-ingress-nginx   ingress-nginx-controller-b4b575f8-h27bz             3m           49Mi            
-kube-system     coredns-ccb96694c-85tws                             8m           17Mi            
+ingress-nginx   ingress-nginx-controller-b4b575f8-h27bz             4m           49Mi            
+kube-system     coredns-ccb96694c-85tws                             7m           17Mi            
 kube-system     local-path-provisioner-5cf85fd84d-mnsll             1m           8Mi             
-kube-system     metrics-server-5985cbc9d7-dwk2r                     18m          23Mi            
-kube-system     sealed-secrets-controller-5655858cbc-48hb7          3m           10Mi            
+kube-system     metrics-server-5985cbc9d7-dwk2r                     19m          24Mi            
+kube-system     sealed-secrets-controller-5655858cbc-48hb7          1m           10Mi            
 kube-system     svclb-traefik-57d28a11-czhkk                        0m           0Mi             
 kube-system     svclb-traefik-57d28a11-hclmg                        0m           0Mi             
 kube-system     svclb-traefik-57d28a11-lsm6s                        0m           0Mi             
-kube-system     traefik-5d45fc8cc9-rbhlx                            1m           35Mi            
+kube-system     traefik-5d45fc8cc9-rbhlx                            1m           32Mi            
 ```
-</details>
 
-<details><summary>Recent cluster events</summary>
-
+### Recent cluster events
 ```bash
 + bash -lc set\ -o\ pipefail\;\ kubectl\ get\ events\ -A\ --sort-by=.metadata.creationTimestamp\ \|\ tail\ -n\ 40
-mysql-dev     25m         Normal    SuccessfulDelete          job/mysql-backup-29303665                           Deleted pod: mysql-backup-29303665-6dqvb
-mysql-dev     25m         Warning   BackoffLimitExceeded      job/mysql-backup-29303665                           Job has reached the specified backoff limit
-mysql-dev     21m         Normal    SuccessfulCreate          job/mysql-backup-29303675                           Created pod: mysql-backup-29303675-j6x7h
-mysql-dev     21m         Normal    Scheduled                 pod/mysql-backup-29303675-j6x7h                     Successfully assigned mysql-dev/mysql-backup-29303675-j6x7h to k3d-vyking-dev-server-0
-mysql-dev     19m         Normal    Pulled                    pod/mysql-backup-29303675-j6x7h                     Container image "mysql:8.0" already present on machine
-mysql-dev     19m         Normal    Created                   pod/mysql-backup-29303675-j6x7h                     Created container mysql-backup
-mysql-dev     19m         Normal    Started                   pod/mysql-backup-29303675-j6x7h                     Started container mysql-backup
-mysql-dev     16m         Warning   BackOff                   pod/mysql-backup-29303675-j6x7h                     Back-off restarting failed container mysql-backup in pod mysql-backup-29303675-j6x7h_mysql-dev(092c0fbc-e693-4c37-800d-e9e6c541a93b)
-mysql-dev     20m         Normal    SuccessfulDelete          job/mysql-backup-29303670                           Deleted pod: mysql-backup-29303670-zd57b
-mysql-dev     20m         Warning   BackoffLimitExceeded      job/mysql-backup-29303670                           Job has reached the specified backoff limit
-mysql-dev     16m         Normal    SuccessfulCreate          job/mysql-backup-29303680                           Created pod: mysql-backup-29303680-7t6x4
-mysql-dev     16m         Normal    Scheduled                 pod/mysql-backup-29303680-7t6x4                     Successfully assigned mysql-dev/mysql-backup-29303680-7t6x4 to k3d-vyking-dev-server-0
-mysql-dev     14m         Normal    Created                   pod/mysql-backup-29303680-7t6x4                     Created container mysql-backup
-mysql-dev     14m         Normal    Pulled                    pod/mysql-backup-29303680-7t6x4                     Container image "mysql:8.0" already present on machine
-mysql-dev     14m         Normal    Started                   pod/mysql-backup-29303680-7t6x4                     Started container mysql-backup
-mysql-dev     11m         Warning   BackOff                   pod/mysql-backup-29303680-7t6x4                     Back-off restarting failed container mysql-backup in pod mysql-backup-29303680-7t6x4_mysql-dev(a4e2c166-1156-48c1-b9a6-fdc0989f03a2)
-mysql-dev     15m         Normal    SuccessfulDelete          job/mysql-backup-29303675                           Deleted pod: mysql-backup-29303675-j6x7h
-mysql-dev     15m         Warning   BackoffLimitExceeded      job/mysql-backup-29303675                           Job has reached the specified backoff limit
-mysql-dev     11m         Normal    SuccessfulCreate          job/mysql-backup-29303685                           Created pod: mysql-backup-29303685-6dtnw
-mysql-dev     11m         Normal    Scheduled                 pod/mysql-backup-29303685-6dtnw                     Successfully assigned mysql-dev/mysql-backup-29303685-6dtnw to k3d-vyking-dev-server-0
-mysql-dev     9m26s       Normal    Created                   pod/mysql-backup-29303685-6dtnw                     Created container mysql-backup
-mysql-dev     9m26s       Normal    Pulled                    pod/mysql-backup-29303685-6dtnw                     Container image "mysql:8.0" already present on machine
-mysql-dev     9m24s       Normal    Started                   pod/mysql-backup-29303685-6dtnw                     Started container mysql-backup
-mysql-dev     6m          Warning   BackOff                   pod/mysql-backup-29303685-6dtnw                     Back-off restarting failed container mysql-backup in pod mysql-backup-29303685-6dtnw_mysql-dev(da1bc023-70eb-4c32-9feb-7ce694b3bf5f)
-mysql-dev     10m         Normal    SuccessfulDelete          job/mysql-backup-29303680                           Deleted pod: mysql-backup-29303680-7t6x4
-mysql-dev     10m         Warning   BackoffLimitExceeded      job/mysql-backup-29303680                           Job has reached the specified backoff limit
-mysql-dev     6m3s        Normal    SuccessfulCreate          job/mysql-backup-29303690                           Created pod: mysql-backup-29303690-7jhpj
-mysql-dev     6m2s        Normal    Scheduled                 pod/mysql-backup-29303690-7jhpj                     Successfully assigned mysql-dev/mysql-backup-29303690-7jhpj to k3d-vyking-dev-server-0
-mysql-dev     4m27s       Normal    Pulled                    pod/mysql-backup-29303690-7jhpj                     Container image "mysql:8.0" already present on machine
-mysql-dev     4m27s       Normal    Created                   pod/mysql-backup-29303690-7jhpj                     Created container mysql-backup
-mysql-dev     4m27s       Normal    Started                   pod/mysql-backup-29303690-7jhpj                     Started container mysql-backup
-mysql-dev     53s         Warning   BackOff                   pod/mysql-backup-29303690-7jhpj                     Back-off restarting failed container mysql-backup in pod mysql-backup-29303690-7jhpj_mysql-dev(2f8e96db-0cc0-4b58-ac28-72c8257e67f3)
-mysql-dev     4m59s       Normal    SuccessfulDelete          job/mysql-backup-29303685                           Deleted pod: mysql-backup-29303685-6dtnw
-mysql-dev     4m56s       Warning   BackoffLimitExceeded      job/mysql-backup-29303685                           Job has reached the specified backoff limit
-mysql-dev     63s         Normal    SuccessfulCreate          job/mysql-backup-29303695                           Created pod: mysql-backup-29303695-rm7gk
-mysql-dev     62s         Normal    Scheduled                 pod/mysql-backup-29303695-rm7gk                     Successfully assigned mysql-dev/mysql-backup-29303695-rm7gk to k3d-vyking-dev-server-0
-mysql-dev     11s         Normal    Created                   pod/mysql-backup-29303695-rm7gk                     Created container mysql-backup
-mysql-dev     11s         Normal    Pulled                    pod/mysql-backup-29303695-rm7gk                     Container image "mysql:8.0" already present on machine
-mysql-dev     10s         Normal    Started                   pod/mysql-backup-29303695-rm7gk                     Started container mysql-backup
-mysql-dev     8s          Warning   BackOff                   pod/mysql-backup-29303695-rm7gk                     Back-off restarting failed container mysql-backup in pod mysql-backup-29303695-rm7gk_mysql-dev(f03e5984-2d2b-4838-86b2-4938633fe9ec)
+mysql-dev     19m         Normal    Started                   pod/mysql-backup-29303685-6dtnw                     Started container mysql-backup
+mysql-dev     16m         Warning   BackOff                   pod/mysql-backup-29303685-6dtnw                     Back-off restarting failed container mysql-backup in pod mysql-backup-29303685-6dtnw_mysql-dev(da1bc023-70eb-4c32-9feb-7ce694b3bf5f)
+mysql-dev     20m         Normal    SuccessfulDelete          job/mysql-backup-29303680                           Deleted pod: mysql-backup-29303680-7t6x4
+mysql-dev     20m         Warning   BackoffLimitExceeded      job/mysql-backup-29303680                           Job has reached the specified backoff limit
+mysql-dev     16m         Normal    SuccessfulCreate          job/mysql-backup-29303690                           Created pod: mysql-backup-29303690-7jhpj
+mysql-dev     16m         Normal    Scheduled                 pod/mysql-backup-29303690-7jhpj                     Successfully assigned mysql-dev/mysql-backup-29303690-7jhpj to k3d-vyking-dev-server-0
+mysql-dev     15m         Normal    Pulled                    pod/mysql-backup-29303690-7jhpj                     Container image "mysql:8.0" already present on machine
+mysql-dev     15m         Normal    Created                   pod/mysql-backup-29303690-7jhpj                     Created container mysql-backup
+mysql-dev     15m         Normal    Started                   pod/mysql-backup-29303690-7jhpj                     Started container mysql-backup
+mysql-dev     11m         Warning   BackOff                   pod/mysql-backup-29303690-7jhpj                     Back-off restarting failed container mysql-backup in pod mysql-backup-29303690-7jhpj_mysql-dev(2f8e96db-0cc0-4b58-ac28-72c8257e67f3)
+mysql-dev     15m         Normal    SuccessfulDelete          job/mysql-backup-29303685                           Deleted pod: mysql-backup-29303685-6dtnw
+mysql-dev     15m         Warning   BackoffLimitExceeded      job/mysql-backup-29303685                           Job has reached the specified backoff limit
+mysql-dev     11m         Normal    SuccessfulCreate          job/mysql-backup-29303695                           Created pod: mysql-backup-29303695-rm7gk
+mysql-dev     11m         Normal    Scheduled                 pod/mysql-backup-29303695-rm7gk                     Successfully assigned mysql-dev/mysql-backup-29303695-rm7gk to k3d-vyking-dev-server-0
+mysql-dev     9m51s       Normal    Pulled                    pod/mysql-backup-29303695-rm7gk                     Container image "mysql:8.0" already present on machine
+mysql-dev     9m51s       Normal    Created                   pod/mysql-backup-29303695-rm7gk                     Created container mysql-backup
+mysql-dev     9m50s       Normal    Started                   pod/mysql-backup-29303695-rm7gk                     Started container mysql-backup
+mysql-dev     6m34s       Warning   BackOff                   pod/mysql-backup-29303695-rm7gk                     Back-off restarting failed container mysql-backup in pod mysql-backup-29303695-rm7gk_mysql-dev(f03e5984-2d2b-4838-86b2-4938633fe9ec)
+mysql-dev     10m         Normal    SuccessfulDelete          job/mysql-backup-29303690                           Deleted pod: mysql-backup-29303690-7jhpj
+mysql-dev     10m         Warning   BackoffLimitExceeded      job/mysql-backup-29303690                           Job has reached the specified backoff limit
+mysql-dev     6m36s       Normal    Scheduled                 pod/mysql-backup-29303700-rtnp5                     Successfully assigned mysql-dev/mysql-backup-29303700-rtnp5 to k3d-vyking-dev-server-0
+mysql-dev     6m36s       Normal    SuccessfulCreate          job/mysql-backup-29303700                           Created pod: mysql-backup-29303700-rtnp5
+mysql-dev     5m5s        Normal    Created                   pod/mysql-backup-29303700-rtnp5                     Created container mysql-backup
+mysql-dev     5m4s        Normal    Started                   pod/mysql-backup-29303700-rtnp5                     Started container mysql-backup
+mysql-dev     5m5s        Normal    Pulled                    pod/mysql-backup-29303700-rtnp5                     Container image "mysql:8.0" already present on machine
+mysql-dev     81s         Warning   BackOff                   pod/mysql-backup-29303700-rtnp5                     Back-off restarting failed container mysql-backup in pod mysql-backup-29303700-rtnp5_mysql-dev(0d04cba0-956f-481b-8980-219dab975411)
+mysql-dev     5m26s       Normal    SuccessfulDelete          job/mysql-backup-29303695                           Deleted pod: mysql-backup-29303695-rm7gk
+mysql-dev     5m23s       Warning   BackoffLimitExceeded      job/mysql-backup-29303695                           Job has reached the specified backoff limit
+argocd-dev    4m12s       Normal    OperationStarted          application/mysql                                   Initiated automated sync to '96ceaa778c94e5ab0a9b57b504aa4a032226acb0'
+argocd-dev    4m12s       Normal    ResourceUpdated           application/mysql                                   Updated sync status: Synced -> OutOfSync
+argocd-dev    4m7s        Normal    ResourceUpdated           application/mysql                                   Updated sync status: OutOfSync -> Synced
+argocd-dev    4m6s        Normal    OperationCompleted        application/mysql                                   Sync operation to 96ceaa778c94e5ab0a9b57b504aa4a032226acb0 succeeded
+mysql-dev     96s         Normal    SuccessfulCreate          job/mysql-backup-29303705                           Created pod: mysql-backup-29303705-tc6zf
+mysql-dev     96s         Normal    Scheduled                 pod/mysql-backup-29303705-tc6zf                     Successfully assigned mysql-dev/mysql-backup-29303705-tc6zf to k3d-vyking-dev-server-0
+mysql-dev     1s          Normal    Created                   pod/mysql-backup-29303705-tc6zf                     Created container mysql-backup
+mysql-dev     43s         Normal    Started                   pod/mysql-backup-29303705-tc6zf                     Started container mysql-backup
+mysql-dev     1s          Normal    Pulled                    pod/mysql-backup-29303705-tc6zf                     Container image "mysql:8.0" already present on machine
+mysql-dev     16s         Warning   BackOff                   pod/mysql-backup-29303705-tc6zf                     Back-off restarting failed container mysql-backup in pod mysql-backup-29303705-tc6zf_mysql-dev(ab848ebe-b0ee-40cd-abfb-56142dee6397)
+mysql-dev     40s         Normal    SuccessfulDelete          job/mysql-backup-29303700                           Deleted pod: mysql-backup-29303700-rtnp5
+mysql-dev     38s         Warning   BackoffLimitExceeded      job/mysql-backup-29303700                           Job has reached the specified backoff limit
 ```
-</details>
 
 ## 🚦 Argo CD (`argocd-dev`)
-<details><summary>Pods</summary>
-
+### Pods
 ```bash
 + kubectl get pods -n argocd-dev -o wide
 NAME                                                READY   STATUS    RESTARTS       AGE    IP          NODE                      NOMINATED NODE   READINESS GATES
-argocd-application-controller-0                     1/1     Running   0              111m   10.42.1.7   k3d-vyking-dev-agent-1    <none>           <none>
-argocd-applicationset-controller-78f49df558-b5mnz   1/1     Running   0              112m   10.42.0.5   k3d-vyking-dev-agent-0    <none>           <none>
-argocd-dex-server-796678d5bc-9w8w6                  1/1     Running   0              112m   10.42.2.8   k3d-vyking-dev-server-0   <none>           <none>
-argocd-notifications-controller-6d84bf8458-7wcgf    1/1     Running   0              112m   10.42.2.6   k3d-vyking-dev-server-0   <none>           <none>
-argocd-redis-7c7fb7fc74-dpv8x                       1/1     Running   0              112m   10.42.1.6   k3d-vyking-dev-agent-1    <none>           <none>
-argocd-repo-server-d587f667c-gqwsv                  1/1     Running   0              112m   10.42.2.9   k3d-vyking-dev-server-0   <none>           <none>
-argocd-server-556b554c94-5pclw                      1/1     Running   1 (111m ago)   112m   10.42.2.7   k3d-vyking-dev-server-0   <none>           <none>
+argocd-application-controller-0                     1/1     Running   0              122m   10.42.1.7   k3d-vyking-dev-agent-1    <none>           <none>
+argocd-applicationset-controller-78f49df558-b5mnz   1/1     Running   0              122m   10.42.0.5   k3d-vyking-dev-agent-0    <none>           <none>
+argocd-dex-server-796678d5bc-9w8w6                  1/1     Running   0              122m   10.42.2.8   k3d-vyking-dev-server-0   <none>           <none>
+argocd-notifications-controller-6d84bf8458-7wcgf    1/1     Running   0              122m   10.42.2.6   k3d-vyking-dev-server-0   <none>           <none>
+argocd-redis-7c7fb7fc74-dpv8x                       1/1     Running   0              122m   10.42.1.6   k3d-vyking-dev-agent-1    <none>           <none>
+argocd-repo-server-d587f667c-gqwsv                  1/1     Running   0              122m   10.42.2.9   k3d-vyking-dev-server-0   <none>           <none>
+argocd-server-556b554c94-5pclw                      1/1     Running   1 (122m ago)   122m   10.42.2.7   k3d-vyking-dev-server-0   <none>           <none>
 ```
-</details>
 
-<details><summary>Deployments</summary>
-
+### Deployments
 ```bash
 + kubectl get deploy -n argocd-dev -o wide
 NAME                               READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS                  IMAGES                                                 SELECTOR
-argocd-applicationset-controller   1/1     1            1           112m   applicationset-controller   quay.io/argoproj/argocd:v3.1.5                         app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-applicationset-controller
-argocd-dex-server                  1/1     1            1           112m   dex-server                  ghcr.io/dexidp/dex:v2.44.0                             app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-dex-server
-argocd-notifications-controller    1/1     1            1           112m   notifications-controller    quay.io/argoproj/argocd:v3.1.5                         app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-notifications-controller
-argocd-redis                       1/1     1            1           112m   redis                       ecr-public.aws.com/docker/library/redis:7.2.8-alpine   app.kubernetes.io/name=argocd-redis
-argocd-repo-server                 1/1     1            1           112m   repo-server                 quay.io/argoproj/argocd:v3.1.5                         app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-repo-server
-argocd-server                      1/1     1            1           112m   server                      quay.io/argoproj/argocd:v3.1.5                         app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-server
+argocd-applicationset-controller   1/1     1            1           122m   applicationset-controller   quay.io/argoproj/argocd:v3.1.5                         app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-applicationset-controller
+argocd-dex-server                  1/1     1            1           122m   dex-server                  ghcr.io/dexidp/dex:v2.44.0                             app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-dex-server
+argocd-notifications-controller    1/1     1            1           122m   notifications-controller    quay.io/argoproj/argocd:v3.1.5                         app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-notifications-controller
+argocd-redis                       1/1     1            1           122m   redis                       ecr-public.aws.com/docker/library/redis:7.2.8-alpine   app.kubernetes.io/name=argocd-redis
+argocd-repo-server                 1/1     1            1           122m   repo-server                 quay.io/argoproj/argocd:v3.1.5                         app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-repo-server
+argocd-server                      1/1     1            1           122m   server                      quay.io/argoproj/argocd:v3.1.5                         app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-server
 ```
-</details>
 
-<details><summary>StatefulSets</summary>
-
+### StatefulSets
 ```bash
 + kubectl get statefulset -n argocd-dev -o wide
 NAME                            READY   AGE    CONTAINERS               IMAGES
-argocd-application-controller   1/1     112m   application-controller   quay.io/argoproj/argocd:v3.1.5
+argocd-application-controller   1/1     122m   application-controller   quay.io/argoproj/argocd:v3.1.5
 ```
-</details>
 
-<details><summary>DaemonSets</summary>
-
+### DaemonSets
 ```bash
 + kubectl get daemonset -n argocd-dev -o wide
 No resources found in argocd-dev namespace.
 ```
-</details>
 
-<details><summary>Services</summary>
-
+### Services
 ```bash
 + kubectl get svc -n argocd-dev -o wide
 NAME                                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE    SELECTOR
-argocd-application-controller-metrics   ClusterIP   10.43.233.10    <none>        8082/TCP                     112m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-application-controller
-argocd-applicationset-controller        ClusterIP   10.43.84.26     <none>        7000/TCP                     112m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-applicationset-controller
-argocd-dex-server                       ClusterIP   10.43.48.63     <none>        5556/TCP,5557/TCP,5558/TCP   112m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-dex-server
-argocd-redis                            ClusterIP   10.43.123.126   <none>        6379/TCP                     112m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-redis
-argocd-redis-metrics                    ClusterIP   None            <none>        9121/TCP                     112m   app.kubernetes.io/component=redis,app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-redis
-argocd-repo-server                      ClusterIP   10.43.14.77     <none>        8081/TCP                     112m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-repo-server
-argocd-repo-server-metrics              ClusterIP   10.43.145.32    <none>        8084/TCP                     112m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-repo-server
-argocd-server                           ClusterIP   10.43.56.155    <none>        80/TCP,443/TCP               112m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-server
+argocd-application-controller-metrics   ClusterIP   10.43.233.10    <none>        8082/TCP                     122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-application-controller
+argocd-applicationset-controller        ClusterIP   10.43.84.26     <none>        7000/TCP                     122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-applicationset-controller
+argocd-dex-server                       ClusterIP   10.43.48.63     <none>        5556/TCP,5557/TCP,5558/TCP   122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-dex-server
+argocd-redis                            ClusterIP   10.43.123.126   <none>        6379/TCP                     122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-redis
+argocd-redis-metrics                    ClusterIP   None            <none>        9121/TCP                     122m   app.kubernetes.io/component=redis,app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-redis
+argocd-repo-server                      ClusterIP   10.43.14.77     <none>        8081/TCP                     122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-repo-server
+argocd-repo-server-metrics              ClusterIP   10.43.145.32    <none>        8084/TCP                     122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-repo-server
+argocd-server                           ClusterIP   10.43.56.155    <none>        80/TCP,443/TCP               122m   app.kubernetes.io/instance=argocd,app.kubernetes.io/name=argocd-server
 ```
-</details>
 
-<details><summary>Ingresses</summary>
-
+### Ingresses
 ```bash
 + kubectl get ingress -n argocd-dev
 No resources found in argocd-dev namespace.
 ```
-</details>
 
-<details><summary>ConfigMaps</summary>
-
+### ConfigMaps
 ```bash
 + kubectl get configmap -n argocd-dev
 NAME                            DATA   AGE
-argocd-cm                       18     112m
-argocd-cmd-params-cm            41     112m
-argocd-gpg-keys-cm              0      112m
-argocd-notifications-cm         1      112m
-argocd-rbac-cm                  4      112m
-argocd-redis-health-configmap   2      112m
-argocd-ssh-known-hosts-cm       1      112m
-argocd-tls-certs-cm             0      112m
-kube-root-ca.crt                1      113m
+argocd-cm                       18     122m
+argocd-cmd-params-cm            41     122m
+argocd-gpg-keys-cm              0      122m
+argocd-notifications-cm         1      122m
+argocd-rbac-cm                  4      122m
+argocd-redis-health-configmap   2      122m
+argocd-ssh-known-hosts-cm       1      122m
+argocd-tls-certs-cm             0      122m
+kube-root-ca.crt                1      123m
 ```
-</details>
 
-<details><summary>Secrets</summary>
-
+### Secrets
 ```bash
 + kubectl get secret -n argocd-dev
 NAME                           TYPE                 DATA   AGE
-argocd-initial-admin-secret    Opaque               1      111m
-argocd-notifications-secret    Opaque               0      112m
-argocd-redis                   Opaque               1      112m
-argocd-secret                  Opaque               3      112m
-repo-vyking-git                Opaque               2      109m
-sh.helm.release.v1.argocd.v1   helm.sh/release.v1   1      113m
+argocd-initial-admin-secret    Opaque               1      122m
+argocd-notifications-secret    Opaque               0      122m
+argocd-redis                   Opaque               1      122m
+argocd-secret                  Opaque               3      122m
+repo-vyking-git                Opaque               2      120m
+sh.helm.release.v1.argocd.v1   helm.sh/release.v1   1      123m
 ```
-</details>
 
-<details><summary>Horizontal Pod Autoscalers</summary>
-
+### Horizontal Pod Autoscalers
 ```bash
 + kubectl get hpa -n argocd-dev
 No resources found in argocd-dev namespace.
 ```
-</details>
 
-<details><summary>Jobs</summary>
-
+### Jobs
 ```bash
 + kubectl get jobs -n argocd-dev
 No resources found in argocd-dev namespace.
 ```
-</details>
 
-<details><summary>CronJobs</summary>
-
+### CronJobs
 ```bash
 + kubectl get cronjobs -n argocd-dev
 No resources found in argocd-dev namespace.
 ```
-</details>
 
-<details><summary>PersistentVolumeClaims</summary>
-
+### PersistentVolumeClaims
 ```bash
 + kubectl get pvc -n argocd-dev
 No resources found in argocd-dev namespace.
 ```
-</details>
 
-<details><summary>Recent Events</summary>
-
+### Recent Events
 ```bash
 + bash -lc set\ -o\ pipefail\;\ kubectl\ get\ events\ -n\ \"argocd-dev\"\ --sort-by=.metadata.creationTimestamp\ \|\ tail\ -n\ 20
-No resources found in argocd-dev namespace.
+LAST SEEN   TYPE     REASON               OBJECT              MESSAGE
+4m21s       Normal   OperationStarted     application/mysql   Initiated automated sync to '96ceaa778c94e5ab0a9b57b504aa4a032226acb0'
+4m21s       Normal   ResourceUpdated      application/mysql   Updated sync status: Synced -> OutOfSync
+4m16s       Normal   ResourceUpdated      application/mysql   Updated sync status: OutOfSync -> Synced
+4m15s       Normal   OperationCompleted   application/mysql   Sync operation to 96ceaa778c94e5ab0a9b57b504aa4a032226acb0 succeeded
 ```
-</details>
 
-<details><summary>Resource Usage (pods)</summary>
-
+### Resource Usage (pods)
 ```bash
 + kubectl top pods -n argocd-dev
 NAME                                                CPU(cores)   MEMORY(bytes)   
-argocd-application-controller-0                     18m          131Mi           
-argocd-applicationset-controller-78f49df558-b5mnz   2m           31Mi            
-argocd-dex-server-796678d5bc-9w8w6                  1m           25Mi            
-argocd-notifications-controller-6d84bf8458-7wcgf    1m           19Mi            
-argocd-redis-7c7fb7fc74-dpv8x                       4m           3Mi             
-argocd-repo-server-d587f667c-gqwsv                  4m           31Mi            
-argocd-server-556b554c94-5pclw                      9m           65Mi            
+argocd-application-controller-0                     16m          135Mi           
+argocd-applicationset-controller-78f49df558-b5mnz   3m           31Mi            
+argocd-dex-server-796678d5bc-9w8w6                  1m           22Mi            
+argocd-notifications-controller-6d84bf8458-7wcgf    2m           19Mi            
+argocd-redis-7c7fb7fc74-dpv8x                       5m           3Mi             
+argocd-repo-server-d587f667c-gqwsv                  31m          80Mi            
+argocd-server-556b554c94-5pclw                      4m           67Mi            
 ```
-</details>
 
 
-<details><summary>Applications</summary>
-
+### Applications
 ```bash
 + kubectl get applications -n argocd-dev
 NAME                   SYNC STATUS   HEALTH STATUS
@@ -518,24 +449,19 @@ frontend               Synced        Progressing
 mysql                  Synced        Progressing
 mysql-sealed-secrets   Synced        Healthy
 ```
-</details>
 
-<details><summary>ApplicationSets</summary>
-
+### ApplicationSets
 ```bash
 + kubectl get applicationsets -n argocd-dev
 No resources found in argocd-dev namespace.
 ```
-</details>
 
-<details><summary>AppProjects</summary>
-
+### AppProjects
 ```bash
 + kubectl get appprojects -n argocd-dev
 NAME      AGE
-default   111m
+default   122m
 ```
-</details>
 
 **UI:** [http://localhost:8080](http://localhost:8080)
 **Port-forward command:**
@@ -544,126 +470,98 @@ kubectl port-forward svc/argocd-server -n argocd-dev 8080:80
 ```
 
 ## 🎨 Frontend (`frontend-dev`)
-<details><summary>Pods</summary>
-
+### Pods
 ```bash
 + kubectl get pods -n frontend-dev -o wide
 NAME                                 READY   STATUS    RESTARTS   AGE    IP          NODE                     NOMINATED NODE   READINESS GATES
-frontend-frontend-597d68f8cf-glz64   1/1     Running   0          108m   10.42.0.8   k3d-vyking-dev-agent-0   <none>           <none>
+frontend-frontend-597d68f8cf-glz64   1/1     Running   0          118m   10.42.0.8   k3d-vyking-dev-agent-0   <none>           <none>
 ```
-</details>
 
-<details><summary>Deployments</summary>
-
+### Deployments
 ```bash
 + kubectl get deploy -n frontend-dev -o wide
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS   IMAGES                SELECTOR
-frontend-frontend   1/1     1            1           108m   frontend     vyking-frontend:dev   app=frontend-frontend
+frontend-frontend   1/1     1            1           118m   frontend     vyking-frontend:dev   app=frontend-frontend
 ```
-</details>
 
-<details><summary>StatefulSets</summary>
-
+### StatefulSets
 ```bash
 + kubectl get statefulset -n frontend-dev -o wide
 No resources found in frontend-dev namespace.
 ```
-</details>
 
-<details><summary>DaemonSets</summary>
-
+### DaemonSets
 ```bash
 + kubectl get daemonset -n frontend-dev -o wide
 No resources found in frontend-dev namespace.
 ```
-</details>
 
-<details><summary>Services</summary>
-
+### Services
 ```bash
 + kubectl get svc -n frontend-dev -o wide
 NAME                TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE    SELECTOR
-frontend-frontend   ClusterIP   10.43.159.88   <none>        8080/TCP   108m   app=frontend-frontend
+frontend-frontend   ClusterIP   10.43.159.88   <none>        8080/TCP   119m   app=frontend-frontend
 ```
-</details>
 
-<details><summary>Ingresses</summary>
-
+### Ingresses
 ```bash
 + kubectl get ingress -n frontend-dev
 NAME                CLASS    HOSTS                ADDRESS   PORTS     AGE
-frontend-frontend   <none>   frontend-dev.local             80, 443   108m
+frontend-frontend   <none>   frontend-dev.local             80, 443   118m
 ```
-</details>
 
-<details><summary>ConfigMaps</summary>
-
+### ConfigMaps
 ```bash
 + kubectl get configmap -n frontend-dev
 NAME                    DATA   AGE
-frontend-nginx-config   1      108m
-kube-root-ca.crt        1      108m
+frontend-nginx-config   1      119m
+kube-root-ca.crt        1      119m
 ```
-</details>
 
-<details><summary>Secrets</summary>
-
+### Secrets
 ```bash
 + kubectl get secret -n frontend-dev
 NAME               TYPE                DATA   AGE
-frontend-tls-dev   kubernetes.io/tls   3      108m
+frontend-tls-dev   kubernetes.io/tls   3      119m
 ```
-</details>
 
-<details><summary>Horizontal Pod Autoscalers</summary>
-
+### Horizontal Pod Autoscalers
 ```bash
 + kubectl get hpa -n frontend-dev
 NAME                REFERENCE                      TARGETS                       MINPODS   MAXPODS   REPLICAS   AGE
-frontend-frontend   Deployment/frontend-frontend   cpu: 1%/70%, memory: 3%/80%   1         3         1          108m
+frontend-frontend   Deployment/frontend-frontend   cpu: 1%/70%, memory: 3%/80%   1         3         1          119m
 ```
-</details>
 
-<details><summary>Jobs</summary>
-
+### Jobs
 ```bash
 + kubectl get jobs -n frontend-dev
 No resources found in frontend-dev namespace.
 ```
-</details>
 
-<details><summary>CronJobs</summary>
-
+### CronJobs
 ```bash
 + kubectl get cronjobs -n frontend-dev
 No resources found in frontend-dev namespace.
 ```
-</details>
 
-<details><summary>PersistentVolumeClaims</summary>
-
+### PersistentVolumeClaims
 ```bash
 + kubectl get pvc -n frontend-dev
 No resources found in frontend-dev namespace.
 ```
-</details>
 
-<details><summary>Recent Events</summary>
-
+### Recent Events
 ```bash
 + bash -lc set\ -o\ pipefail\;\ kubectl\ get\ events\ -n\ \"frontend-dev\"\ --sort-by=.metadata.creationTimestamp\ \|\ tail\ -n\ 20
 No resources found in frontend-dev namespace.
 ```
-</details>
 
-<details><summary>Resource Usage (pods)</summary>
-
+### Resource Usage (pods)
 ```bash
 + kubectl top pods -n frontend-dev
 NAME                                 CPU(cores)   MEMORY(bytes)   
 frontend-frontend-597d68f8cf-glz64   1m           4Mi             
 ```
-</details>
 
 
 - **Service:** `frontend-frontend`
@@ -676,126 +574,98 @@ kubectl port-forward svc/frontend-frontend -n frontend-dev 8080:8080
 ```
 
 ## ⚙️ Backend (`backend-dev`)
-<details><summary>Pods</summary>
-
+### Pods
 ```bash
 + kubectl get pods -n backend-dev -o wide
 NAME                              READY   STATUS    RESTARTS   AGE    IP           NODE                      NOMINATED NODE   READINESS GATES
-backend-backend-66c96df8b-7kknr   1/1     Running   0          108m   10.42.2.10   k3d-vyking-dev-server-0   <none>           <none>
-backend-backend-66c96df8b-fkr8p   1/1     Running   0          108m   10.42.1.10   k3d-vyking-dev-agent-1    <none>           <none>
+backend-backend-66c96df8b-7kknr   1/1     Running   0          119m   10.42.2.10   k3d-vyking-dev-server-0   <none>           <none>
+backend-backend-66c96df8b-fkr8p   1/1     Running   0          119m   10.42.1.10   k3d-vyking-dev-agent-1    <none>           <none>
 ```
-</details>
 
-<details><summary>Deployments</summary>
-
+### Deployments
 ```bash
 + kubectl get deploy -n backend-dev -o wide
 NAME              READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS   IMAGES               SELECTOR
-backend-backend   2/2     2            2           108m   backend      vyking-backend:dev   app=backend-backend
+backend-backend   2/2     2            2           119m   backend      vyking-backend:dev   app=backend-backend
 ```
-</details>
 
-<details><summary>StatefulSets</summary>
-
+### StatefulSets
 ```bash
 + kubectl get statefulset -n backend-dev -o wide
 No resources found in backend-dev namespace.
 ```
-</details>
 
-<details><summary>DaemonSets</summary>
-
+### DaemonSets
 ```bash
 + kubectl get daemonset -n backend-dev -o wide
 No resources found in backend-dev namespace.
 ```
-</details>
 
-<details><summary>Services</summary>
-
+### Services
 ```bash
 + kubectl get svc -n backend-dev -o wide
 NAME              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)    AGE    SELECTOR
-backend-backend   ClusterIP   10.43.26.94   <none>        8081/TCP   108m   app=backend-backend
+backend-backend   ClusterIP   10.43.26.94   <none>        8081/TCP   119m   app=backend-backend
 ```
-</details>
 
-<details><summary>Ingresses</summary>
-
+### Ingresses
 ```bash
 + kubectl get ingress -n backend-dev
 No resources found in backend-dev namespace.
 ```
-</details>
 
-<details><summary>ConfigMaps</summary>
-
+### ConfigMaps
 ```bash
 + kubectl get configmap -n backend-dev
 NAME               DATA   AGE
-kube-root-ca.crt   1      108m
+kube-root-ca.crt   1      119m
 ```
-</details>
 
-<details><summary>Secrets</summary>
-
+### Secrets
 ```bash
 + kubectl get secret -n backend-dev
 NAME                    TYPE     DATA   AGE
-mysql-credentials-dev   Opaque   5      108m
+mysql-credentials-dev   Opaque   5      118m
 ```
-</details>
 
-<details><summary>Horizontal Pod Autoscalers</summary>
-
+### Horizontal Pod Autoscalers
 ```bash
 + kubectl get hpa -n backend-dev
 NAME              REFERENCE                    TARGETS                        MINPODS   MAXPODS   REPLICAS   AGE
-backend-backend   Deployment/backend-backend   cpu: 1%/70%, memory: 20%/70%   2         5         2          108m
+backend-backend   Deployment/backend-backend   cpu: 1%/70%, memory: 20%/70%   2         5         2          119m
 ```
-</details>
 
-<details><summary>Jobs</summary>
-
+### Jobs
 ```bash
 + kubectl get jobs -n backend-dev
 No resources found in backend-dev namespace.
 ```
-</details>
 
-<details><summary>CronJobs</summary>
-
+### CronJobs
 ```bash
 + kubectl get cronjobs -n backend-dev
 No resources found in backend-dev namespace.
 ```
-</details>
 
-<details><summary>PersistentVolumeClaims</summary>
-
+### PersistentVolumeClaims
 ```bash
 + kubectl get pvc -n backend-dev
 No resources found in backend-dev namespace.
 ```
-</details>
 
-<details><summary>Recent Events</summary>
-
+### Recent Events
 ```bash
 + bash -lc set\ -o\ pipefail\;\ kubectl\ get\ events\ -n\ \"backend-dev\"\ --sort-by=.metadata.creationTimestamp\ \|\ tail\ -n\ 20
 No resources found in backend-dev namespace.
 ```
-</details>
 
-<details><summary>Resource Usage (pods)</summary>
-
+### Resource Usage (pods)
 ```bash
 + kubectl top pods -n backend-dev
 NAME                              CPU(cores)   MEMORY(bytes)   
-backend-backend-66c96df8b-7kknr   2m           25Mi            
+backend-backend-66c96df8b-7kknr   1m           25Mi            
 backend-backend-66c96df8b-fkr8p   1m           25Mi            
 ```
-</details>
 
 
 - **Service:** `backend-backend`
@@ -808,154 +678,126 @@ kubectl port-forward svc/backend-backend -n backend-dev 8081:8081
 ```
 
 ## 🛢️ MySQL (`mysql-dev`)
-<details><summary>Pods</summary>
-
+### Pods
 ```bash
 + kubectl get pods -n mysql-dev -o wide
 NAME                          READY   STATUS                  RESTARTS      AGE    IP           NODE                      NOMINATED NODE   READINESS GATES
-mysql-0                       0/1     Init:ImagePullBackOff   0             108m   10.42.1.13   k3d-vyking-dev-agent-1    <none>           <none>
-mysql-backup-29303695-rm7gk   0/1     CrashLoopBackOff        3 (41s ago)   95s    10.42.2.34   k3d-vyking-dev-server-0   <none>           <none>
+mysql-0                       0/1     Init:ImagePullBackOff   0             118m   10.42.1.13   k3d-vyking-dev-agent-1    <none>           <none>
+mysql-backup-29303705-tc6zf   0/1     CrashLoopBackOff        4 (27s ago)   2m4s   10.42.2.36   k3d-vyking-dev-server-0   <none>           <none>
 ```
-</details>
 
-<details><summary>Deployments</summary>
-
+### Deployments
 ```bash
 + kubectl get deploy -n mysql-dev -o wide
 No resources found in mysql-dev namespace.
 ```
-</details>
 
-<details><summary>StatefulSets</summary>
-
+### StatefulSets
 ```bash
 + kubectl get statefulset -n mysql-dev -o wide
 NAME    READY   AGE    CONTAINERS   IMAGES
-mysql   0/1     108m   mysql        docker.io/bitnami/mysql:9.4.0-debian-12-r1
+mysql   0/1     118m   mysql        docker.io/bitnami/mysql:9.4.0-debian-12-r1
 ```
-</details>
 
-<details><summary>DaemonSets</summary>
-
+### DaemonSets
 ```bash
 + kubectl get daemonset -n mysql-dev -o wide
 No resources found in mysql-dev namespace.
 ```
-</details>
 
-<details><summary>Services</summary>
-
+### Services
 ```bash
 + kubectl get svc -n mysql-dev -o wide
 NAME             TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)    AGE    SELECTOR
-mysql            ClusterIP   10.43.8.153   <none>        3306/TCP   108m   app.kubernetes.io/component=primary,app.kubernetes.io/instance=mysql,app.kubernetes.io/name=mysql,app.kubernetes.io/part-of=mysql
-mysql-headless   ClusterIP   None          <none>        3306/TCP   108m   app.kubernetes.io/component=primary,app.kubernetes.io/instance=mysql,app.kubernetes.io/name=mysql
+mysql            ClusterIP   10.43.8.153   <none>        3306/TCP   118m   app.kubernetes.io/component=primary,app.kubernetes.io/instance=mysql,app.kubernetes.io/name=mysql,app.kubernetes.io/part-of=mysql
+mysql-headless   ClusterIP   None          <none>        3306/TCP   118m   app.kubernetes.io/component=primary,app.kubernetes.io/instance=mysql,app.kubernetes.io/name=mysql
 ```
-</details>
 
-<details><summary>Ingresses</summary>
-
+### Ingresses
 ```bash
 + kubectl get ingress -n mysql-dev
 No resources found in mysql-dev namespace.
 ```
-</details>
 
-<details><summary>ConfigMaps</summary>
-
+### ConfigMaps
 ```bash
 + kubectl get configmap -n mysql-dev
 NAME               DATA   AGE
-kube-root-ca.crt   1      110m
-mysql              1      108m
-mysql-init         1      108m
+kube-root-ca.crt   1      120m
+mysql              1      118m
+mysql-init         1      118m
 ```
-</details>
 
-<details><summary>Secrets</summary>
-
+### Secrets
 ```bash
 + kubectl get secret -n mysql-dev
 NAME               TYPE     DATA   AGE
-mysql              Opaque   2      108m
-mysql-dev-secret   Opaque   5      109m
+mysql              Opaque   2      118m
+mysql-dev-secret   Opaque   5      120m
 ```
-</details>
 
-<details><summary>Horizontal Pod Autoscalers</summary>
-
+### Horizontal Pod Autoscalers
 ```bash
 + kubectl get hpa -n mysql-dev
 NAME        REFERENCE           TARGETS              MINPODS   MAXPODS   REPLICAS   AGE
-mysql-hpa   StatefulSet/mysql   cpu: <unknown>/70%   1         3         1          108m
+mysql-hpa   StatefulSet/mysql   cpu: <unknown>/70%   1         3         1          118m
 ```
-</details>
 
-<details><summary>Jobs</summary>
-
+### Jobs
 ```bash
 + kubectl get jobs -n mysql-dev
 NAME                    STATUS    COMPLETIONS   DURATION   AGE
-mysql-backup-29303690   Failed    0/1           6m39s      6m39s
-mysql-backup-29303695   Running   0/1           99s        99s
+mysql-backup-29303700   Failed    0/1           7m8s       7m8s
+mysql-backup-29303705   Running   0/1           2m8s       2m8s
 ```
-</details>
 
-<details><summary>CronJobs</summary>
-
+### CronJobs
 ```bash
 + kubectl get cronjobs -n mysql-dev
 NAME           SCHEDULE      TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE
-mysql-backup   */5 * * * *   <none>     False     1        99s             108m
+mysql-backup   */5 * * * *   <none>     False     1        2m8s            118m
 ```
-</details>
 
-<details><summary>PersistentVolumeClaims</summary>
-
+### PersistentVolumeClaims
 ```bash
 + kubectl get pvc -n mysql-dev
 NAME            STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
-data-mysql-0    Bound    pvc-5f1de3f4-2179-441a-9b61-f9fcb6bf8d20   8Gi        RWO            local-path     <unset>                 108m
-mysql-backups   Bound    pvc-f9127179-0feb-403b-85e2-2c0142b5e81a   2Gi        RWO            local-path     <unset>                 108m
+data-mysql-0    Bound    pvc-5f1de3f4-2179-441a-9b61-f9fcb6bf8d20   8Gi        RWO            local-path     <unset>                 118m
+mysql-backups   Bound    pvc-f9127179-0feb-403b-85e2-2c0142b5e81a   2Gi        RWO            local-path     <unset>                 118m
 ```
-</details>
 
-<details><summary>Recent Events</summary>
-
+### Recent Events
 ```bash
 + bash -lc set\ -o\ pipefail\;\ kubectl\ get\ events\ -n\ \"mysql-dev\"\ --sort-by=.metadata.creationTimestamp\ \|\ tail\ -n\ 20
-10m         Normal    Started                   pod/mysql-backup-29303685-6dtnw     Started container mysql-backup
-6m38s       Warning   BackOff                   pod/mysql-backup-29303685-6dtnw     Back-off restarting failed container mysql-backup in pod mysql-backup-29303685-6dtnw_mysql-dev(da1bc023-70eb-4c32-9feb-7ce694b3bf5f)
-10m         Normal    SuccessfulDelete          job/mysql-backup-29303680           Deleted pod: mysql-backup-29303680-7t6x4
-10m         Warning   BackoffLimitExceeded      job/mysql-backup-29303680           Job has reached the specified backoff limit
-6m41s       Normal    SuccessfulCreate          job/mysql-backup-29303690           Created pod: mysql-backup-29303690-7jhpj
-6m40s       Normal    Scheduled                 pod/mysql-backup-29303690-7jhpj     Successfully assigned mysql-dev/mysql-backup-29303690-7jhpj to k3d-vyking-dev-server-0
-5m5s        Normal    Pulled                    pod/mysql-backup-29303690-7jhpj     Container image "mysql:8.0" already present on machine
-5m5s        Normal    Created                   pod/mysql-backup-29303690-7jhpj     Created container mysql-backup
-5m5s        Normal    Started                   pod/mysql-backup-29303690-7jhpj     Started container mysql-backup
-91s         Warning   BackOff                   pod/mysql-backup-29303690-7jhpj     Back-off restarting failed container mysql-backup in pod mysql-backup-29303690-7jhpj_mysql-dev(2f8e96db-0cc0-4b58-ac28-72c8257e67f3)
-5m37s       Normal    SuccessfulDelete          job/mysql-backup-29303685           Deleted pod: mysql-backup-29303685-6dtnw
-5m34s       Warning   BackoffLimitExceeded      job/mysql-backup-29303685           Job has reached the specified backoff limit
-101s        Normal    SuccessfulCreate          job/mysql-backup-29303695           Created pod: mysql-backup-29303695-rm7gk
-100s        Normal    Scheduled                 pod/mysql-backup-29303695-rm7gk     Successfully assigned mysql-dev/mysql-backup-29303695-rm7gk to k3d-vyking-dev-server-0
-49s         Normal    Created                   pod/mysql-backup-29303695-rm7gk     Created container mysql-backup
-49s         Normal    Pulled                    pod/mysql-backup-29303695-rm7gk     Container image "mysql:8.0" already present on machine
-48s         Normal    Started                   pod/mysql-backup-29303695-rm7gk     Started container mysql-backup
-10s         Warning   BackOff                   pod/mysql-backup-29303695-rm7gk     Back-off restarting failed container mysql-backup in pod mysql-backup-29303695-rm7gk_mysql-dev(f03e5984-2d2b-4838-86b2-4938633fe9ec)
-33s         Normal    SuccessfulDelete          job/mysql-backup-29303690           Deleted pod: mysql-backup-29303690-7jhpj
-31s         Warning   BackoffLimitExceeded      job/mysql-backup-29303690           Job has reached the specified backoff limit
+10m         Normal    Started                   pod/mysql-backup-29303695-rm7gk     Started container mysql-backup
+7m7s        Warning   BackOff                   pod/mysql-backup-29303695-rm7gk     Back-off restarting failed container mysql-backup in pod mysql-backup-29303695-rm7gk_mysql-dev(f03e5984-2d2b-4838-86b2-4938633fe9ec)
+11m         Normal    SuccessfulDelete          job/mysql-backup-29303690           Deleted pod: mysql-backup-29303690-7jhpj
+10m         Warning   BackoffLimitExceeded      job/mysql-backup-29303690           Job has reached the specified backoff limit
+7m9s        Normal    SuccessfulCreate          job/mysql-backup-29303700           Created pod: mysql-backup-29303700-rtnp5
+7m9s        Normal    Scheduled                 pod/mysql-backup-29303700-rtnp5     Successfully assigned mysql-dev/mysql-backup-29303700-rtnp5 to k3d-vyking-dev-server-0
+5m38s       Normal    Pulled                    pod/mysql-backup-29303700-rtnp5     Container image "mysql:8.0" already present on machine
+5m38s       Normal    Created                   pod/mysql-backup-29303700-rtnp5     Created container mysql-backup
+5m37s       Normal    Started                   pod/mysql-backup-29303700-rtnp5     Started container mysql-backup
+114s        Warning   BackOff                   pod/mysql-backup-29303700-rtnp5     Back-off restarting failed container mysql-backup in pod mysql-backup-29303700-rtnp5_mysql-dev(0d04cba0-956f-481b-8980-219dab975411)
+5m59s       Normal    SuccessfulDelete          job/mysql-backup-29303695           Deleted pod: mysql-backup-29303695-rm7gk
+5m56s       Warning   BackoffLimitExceeded      job/mysql-backup-29303695           Job has reached the specified backoff limit
+2m9s        Normal    Scheduled                 pod/mysql-backup-29303705-tc6zf     Successfully assigned mysql-dev/mysql-backup-29303705-tc6zf to k3d-vyking-dev-server-0
+2m9s        Normal    SuccessfulCreate          job/mysql-backup-29303705           Created pod: mysql-backup-29303705-tc6zf
+34s         Normal    Created                   pod/mysql-backup-29303705-tc6zf     Created container mysql-backup
+33s         Normal    Started                   pod/mysql-backup-29303705-tc6zf     Started container mysql-backup
+34s         Normal    Pulled                    pod/mysql-backup-29303705-tc6zf     Container image "mysql:8.0" already present on machine
+6s          Warning   BackOff                   pod/mysql-backup-29303705-tc6zf     Back-off restarting failed container mysql-backup in pod mysql-backup-29303705-tc6zf_mysql-dev(ab848ebe-b0ee-40cd-abfb-56142dee6397)
+73s         Normal    SuccessfulDelete          job/mysql-backup-29303700           Deleted pod: mysql-backup-29303700-rtnp5
+71s         Warning   BackoffLimitExceeded      job/mysql-backup-29303700           Job has reached the specified backoff limit
 ```
-</details>
 
-<details><summary>Resource Usage (pods)</summary>
-
+### Resource Usage (pods)
 ```bash
 + kubectl top pods -n mysql-dev
-error: Metrics not available for pod mysql-dev/mysql-0, age: 1h48m23.839754367s
+error: Metrics not available for pod mysql-dev/mysql-0, age: 1h58m52.210591425s
 
 [command failed with exit code 1]
 ```
-</details>
 
 
 - **Service:** `mysql`
@@ -973,256 +815,275 @@ kubectl port-forward svc/mysql -n mysql-dev 3306:3306
 ```
 
 ## 🔐 Cert-Manager (`cert-manager`)
-<details><summary>Pods</summary>
-
+### Pods
 ```bash
 + kubectl get pods -n cert-manager -o wide
 NAME                                       READY   STATUS    RESTARTS   AGE    IP          NODE                     NOMINATED NODE   READINESS GATES
-cert-manager-55c69bf5cf-hgxp6              1/1     Running   0          110m   10.42.1.8   k3d-vyking-dev-agent-1   <none>           <none>
-cert-manager-cainjector-5765b5f544-j6b7r   1/1     Running   0          110m   10.42.0.6   k3d-vyking-dev-agent-0   <none>           <none>
-cert-manager-webhook-6b67444dc9-tdkfq      1/1     Running   0          110m   10.42.0.7   k3d-vyking-dev-agent-0   <none>           <none>
+cert-manager-55c69bf5cf-hgxp6              1/1     Running   0          120m   10.42.1.8   k3d-vyking-dev-agent-1   <none>           <none>
+cert-manager-cainjector-5765b5f544-j6b7r   1/1     Running   0          120m   10.42.0.6   k3d-vyking-dev-agent-0   <none>           <none>
+cert-manager-webhook-6b67444dc9-tdkfq      1/1     Running   0          120m   10.42.0.7   k3d-vyking-dev-agent-0   <none>           <none>
 ```
-</details>
 
-<details><summary>Deployments</summary>
-
+### Deployments
 ```bash
 + kubectl get deploy -n cert-manager -o wide
 NAME                      READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS                IMAGES                                             SELECTOR
-cert-manager              1/1     1            1           110m   cert-manager-controller   quay.io/jetstack/cert-manager-controller:v1.16.1   app.kubernetes.io/component=controller,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cert-manager
-cert-manager-cainjector   1/1     1            1           110m   cert-manager-cainjector   quay.io/jetstack/cert-manager-cainjector:v1.16.1   app.kubernetes.io/component=cainjector,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cainjector
-cert-manager-webhook      1/1     1            1           110m   cert-manager-webhook      quay.io/jetstack/cert-manager-webhook:v1.16.1      app.kubernetes.io/component=webhook,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=webhook
+cert-manager              1/1     1            1           120m   cert-manager-controller   quay.io/jetstack/cert-manager-controller:v1.16.1   app.kubernetes.io/component=controller,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cert-manager
+cert-manager-cainjector   1/1     1            1           120m   cert-manager-cainjector   quay.io/jetstack/cert-manager-cainjector:v1.16.1   app.kubernetes.io/component=cainjector,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cainjector
+cert-manager-webhook      1/1     1            1           120m   cert-manager-webhook      quay.io/jetstack/cert-manager-webhook:v1.16.1      app.kubernetes.io/component=webhook,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=webhook
 ```
-</details>
 
-<details><summary>StatefulSets</summary>
-
+### StatefulSets
 ```bash
 + kubectl get statefulset -n cert-manager -o wide
 No resources found in cert-manager namespace.
 ```
-</details>
 
-<details><summary>DaemonSets</summary>
-
+### DaemonSets
 ```bash
 + kubectl get daemonset -n cert-manager -o wide
 No resources found in cert-manager namespace.
 ```
-</details>
 
-<details><summary>Services</summary>
-
+### Services
 ```bash
 + kubectl get svc -n cert-manager -o wide
 NAME                      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)            AGE    SELECTOR
-cert-manager              ClusterIP   10.43.69.30    <none>        9402/TCP           110m   app.kubernetes.io/component=controller,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cert-manager
-cert-manager-cainjector   ClusterIP   10.43.231.41   <none>        9402/TCP           110m   app.kubernetes.io/component=cainjector,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cainjector
-cert-manager-webhook      ClusterIP   10.43.49.142   <none>        443/TCP,9402/TCP   110m   app.kubernetes.io/component=webhook,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=webhook
+cert-manager              ClusterIP   10.43.69.30    <none>        9402/TCP           120m   app.kubernetes.io/component=controller,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cert-manager
+cert-manager-cainjector   ClusterIP   10.43.231.41   <none>        9402/TCP           120m   app.kubernetes.io/component=cainjector,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cainjector
+cert-manager-webhook      ClusterIP   10.43.49.142   <none>        443/TCP,9402/TCP   120m   app.kubernetes.io/component=webhook,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=webhook
 ```
-</details>
 
-<details><summary>Ingresses</summary>
-
+### Ingresses
 ```bash
 + kubectl get ingress -n cert-manager
 No resources found in cert-manager namespace.
 ```
-</details>
 
-<details><summary>ConfigMaps</summary>
-
+### ConfigMaps
 ```bash
 + kubectl get configmap -n cert-manager
 NAME               DATA   AGE
-kube-root-ca.crt   1      110m
+kube-root-ca.crt   1      120m
 ```
-</details>
 
-<details><summary>Secrets</summary>
-
+### Secrets
 ```bash
 + kubectl get secret -n cert-manager
 NAME                                 TYPE                 DATA   AGE
-cert-manager-webhook-ca              Opaque               3      109m
-sh.helm.release.v1.cert-manager.v1   helm.sh/release.v1   1      110m
+cert-manager-webhook-ca              Opaque               3      120m
+sh.helm.release.v1.cert-manager.v1   helm.sh/release.v1   1      120m
 ```
-</details>
 
-<details><summary>Horizontal Pod Autoscalers</summary>
-
+### Horizontal Pod Autoscalers
 ```bash
 + kubectl get hpa -n cert-manager
 No resources found in cert-manager namespace.
 ```
-</details>
 
-<details><summary>Jobs</summary>
-
+### Jobs
 ```bash
 + kubectl get jobs -n cert-manager
 No resources found in cert-manager namespace.
 ```
-</details>
 
-<details><summary>CronJobs</summary>
-
+### CronJobs
 ```bash
 + kubectl get cronjobs -n cert-manager
 No resources found in cert-manager namespace.
 ```
-</details>
 
-<details><summary>PersistentVolumeClaims</summary>
-
+### PersistentVolumeClaims
 ```bash
 + kubectl get pvc -n cert-manager
 No resources found in cert-manager namespace.
 ```
-</details>
 
-<details><summary>Recent Events</summary>
-
+### Recent Events
 ```bash
 + bash -lc set\ -o\ pipefail\;\ kubectl\ get\ events\ -n\ \"cert-manager\"\ --sort-by=.metadata.creationTimestamp\ \|\ tail\ -n\ 20
 No resources found in cert-manager namespace.
 ```
-</details>
 
-<details><summary>Resource Usage (pods)</summary>
-
+### Resource Usage (pods)
 ```bash
 + kubectl top pods -n cert-manager
 NAME                                       CPU(cores)   MEMORY(bytes)   
-cert-manager-55c69bf5cf-hgxp6              3m           20Mi            
-cert-manager-cainjector-5765b5f544-j6b7r   4m           25Mi            
+cert-manager-55c69bf5cf-hgxp6              3m           22Mi            
+cert-manager-cainjector-5765b5f544-j6b7r   4m           26Mi            
 cert-manager-webhook-6b67444dc9-tdkfq      2m           11Mi            
 ```
-</details>
 
 
 ## 🔄 Sealed Secrets (`kube-system`)
-<details><summary>Sealed Secrets pods</summary>
-
+### Sealed Secrets pods
 ```bash
 + kubectl get pods -n kube-system -l name=sealed-secrets-controller -o wide
 NAME                                         READY   STATUS    RESTARTS   AGE    IP          NODE                     NOMINATED NODE   READINESS GATES
-sealed-secrets-controller-5655858cbc-48hb7   1/1     Running   0          121m   10.42.1.3   k3d-vyking-dev-agent-1   <none>           <none>
+sealed-secrets-controller-5655858cbc-48hb7   1/1     Running   0          131m   10.42.1.3   k3d-vyking-dev-agent-1   <none>           <none>
 ```
-</details>
 
-<details><summary>Sealed Secrets deployment</summary>
-
+### Sealed Secrets deployment
 ```bash
 + kubectl get deploy -n kube-system -l name=sealed-secrets-controller -o wide
 NAME                        READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS                  IMAGES                                               SELECTOR
-sealed-secrets-controller   1/1     1            1           121m   sealed-secrets-controller   docker.io/bitnami/sealed-secrets-controller:0.26.0   name=sealed-secrets-controller
+sealed-secrets-controller   1/1     1            1           131m   sealed-secrets-controller   docker.io/bitnami/sealed-secrets-controller:0.26.0   name=sealed-secrets-controller
 ```
-</details>
 
-<details><summary>Sealed Secrets service</summary>
-
+### Sealed Secrets service
 ```bash
 + kubectl get svc -n kube-system -l name=sealed-secrets-controller -o wide
 NAME                        TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE    SELECTOR
-sealed-secrets-controller   ClusterIP   10.43.90.203   <none>        8080/TCP   121m   name=sealed-secrets-controller
+sealed-secrets-controller   ClusterIP   10.43.90.203   <none>        8080/TCP   131m   name=sealed-secrets-controller
 ```
-</details>
 
-<details><summary>Recent kube-system events</summary>
-
+### Recent kube-system events
 ```bash
 + bash -lc set\ -o\ pipefail\;\ kubectl\ get\ events\ -n\ kube-system\ --sort-by=.metadata.creationTimestamp\ \|\ tail\ -n\ 40
 LAST SEEN   TYPE      REASON             OBJECT                                              MESSAGE
-5m52s       Warning   FailedScheduling   pod/svclb-ingress-nginx-controller-cfddc8d6-2vn82   0/3 nodes are available: 1 node(s) didn't have free ports for the requested pod ports. preemption: 0/3 nodes are available: 1 node(s) didn't have free ports for the requested pod ports, 2 Preemption is not helpful for scheduling.
-5m52s       Warning   FailedScheduling   pod/svclb-ingress-nginx-controller-cfddc8d6-4dfjw   0/3 nodes are available: 1 node(s) didn't have free ports for the requested pod ports. preemption: 0/3 nodes are available: 1 node(s) didn't have free ports for the requested pod ports, 2 Preemption is not helpful for scheduling.
-5m52s       Warning   FailedScheduling   pod/svclb-ingress-nginx-controller-cfddc8d6-lw6gv   0/3 nodes are available: 1 node(s) didn't have free ports for the requested pod ports. preemption: 0/3 nodes are available: 1 node(s) didn't have free ports for the requested pod ports, 2 Preemption is not helpful for scheduling.
+16m         Warning   FailedScheduling   pod/svclb-ingress-nginx-controller-cfddc8d6-2vn82   0/3 nodes are available: 1 node(s) didn't have free ports for the requested pod ports. preemption: 0/3 nodes are available: 1 node(s) didn't have free ports for the requested pod ports, 2 Preemption is not helpful for scheduling.
+16m         Warning   FailedScheduling   pod/svclb-ingress-nginx-controller-cfddc8d6-4dfjw   0/3 nodes are available: 1 node(s) didn't have free ports for the requested pod ports. preemption: 0/3 nodes are available: 1 node(s) didn't have free ports for the requested pod ports, 2 Preemption is not helpful for scheduling.
+16m         Warning   FailedScheduling   pod/svclb-ingress-nginx-controller-cfddc8d6-lw6gv   0/3 nodes are available: 1 node(s) didn't have free ports for the requested pod ports. preemption: 0/3 nodes are available: 1 node(s) didn't have free ports for the requested pod ports, 2 Preemption is not helpful for scheduling.
 ```
-</details>
 
 
 ## 🚀 Workload Rollouts
 ### Namespace `argocd-dev`
-<details><summary>Deployment argocd-applicationset-controller</summary>
-
+### Deployment argocd-applicationset-controller
 ```bash
 + kubectl rollout status deploy argocd-applicationset-controller -n argocd-dev --timeout=30s
 deployment "argocd-applicationset-controller" successfully rolled out
 ```
-</details>
 
-<details><summary>Deployment argocd-dex-server</summary>
-
+### Deployment argocd-dex-server
 ```bash
 + kubectl rollout status deploy argocd-dex-server -n argocd-dev --timeout=30s
 deployment "argocd-dex-server" successfully rolled out
 ```
-</details>
 
-<details><summary>Deployment argocd-notifications-controller</summary>
-
+### Deployment argocd-notifications-controller
 ```bash
 + kubectl rollout status deploy argocd-notifications-controller -n argocd-dev --timeout=30s
 deployment "argocd-notifications-controller" successfully rolled out
 ```
-</details>
 
-<details><summary>Deployment argocd-redis</summary>
-
+### Deployment argocd-redis
 ```bash
 + kubectl rollout status deploy argocd-redis -n argocd-dev --timeout=30s
 deployment "argocd-redis" successfully rolled out
 ```
-</details>
 
-<details><summary>Deployment argocd-repo-server</summary>
-
+### Deployment argocd-repo-server
 ```bash
 + kubectl rollout status deploy argocd-repo-server -n argocd-dev --timeout=30s
 deployment "argocd-repo-server" successfully rolled out
 ```
-</details>
 
-<details><summary>Deployment argocd-server</summary>
-
+### Deployment argocd-server
 ```bash
 + kubectl rollout status deploy argocd-server -n argocd-dev --timeout=30s
 deployment "argocd-server" successfully rolled out
 ```
-</details>
 
-<details><summary>StatefulSet argocd-application-controller</summary>
-
+### StatefulSet argocd-application-controller
 ```bash
 + kubectl rollout status statefulset argocd-application-controller -n argocd-dev --timeout=30s
 partitioned roll out complete: 1 new pods have been updated...
 ```
-</details>
 
 
 ### Namespace `frontend-dev`
-<details><summary>Deployment frontend-frontend</summary>
-
+### Deployment frontend-frontend
 ```bash
 + kubectl rollout status deploy frontend-frontend -n frontend-dev --timeout=30s
 deployment "frontend-frontend" successfully rolled out
 ```
-</details>
 
 
 ### Namespace `backend-dev`
-<details><summary>Deployment backend-backend</summary>
-
+### Deployment backend-backend
 ```bash
 + kubectl rollout status deploy backend-backend -n backend-dev --timeout=30s
 deployment "backend-backend" successfully rolled out
 ```
-</details>
 
 
 ### Namespace `mysql-dev`
-<details><summary>StatefulSet mysql</summary>
-
+### StatefulSet mysql
 ```bash
 + kubectl rollout status statefulset mysql -n mysql-dev --timeout=30s
 Waiting for 1 pods to be ready...
+error: timed out waiting for the condition
+
+[command failed with exit code 1]
+```
+
+
+### Namespace `cert-manager`
+### Deployment cert-manager
+```bash
++ kubectl rollout status deploy cert-manager -n cert-manager --timeout=30s
+deployment "cert-manager" successfully rolled out
+```
+
+### Deployment cert-manager-cainjector
+```bash
++ kubectl rollout status deploy cert-manager-cainjector -n cert-manager --timeout=30s
+deployment "cert-manager-cainjector" successfully rolled out
+```
+
+### Deployment cert-manager-webhook
+```bash
++ kubectl rollout status deploy cert-manager-webhook -n cert-manager --timeout=30s
+deployment "cert-manager-webhook" successfully rolled out
+```
+
+
+### Namespace `kube-system`
+### Deployment coredns
+```bash
++ kubectl rollout status deploy coredns -n kube-system --timeout=30s
+deployment "coredns" successfully rolled out
+```
+
+### Deployment local-path-provisioner
+```bash
++ kubectl rollout status deploy local-path-provisioner -n kube-system --timeout=30s
+deployment "local-path-provisioner" successfully rolled out
+```
+
+### Deployment metrics-server
+```bash
++ kubectl rollout status deploy metrics-server -n kube-system --timeout=30s
+deployment "metrics-server" successfully rolled out
+```
+
+### Deployment sealed-secrets-controller
+```bash
++ kubectl rollout status deploy sealed-secrets-controller -n kube-system --timeout=30s
+deployment "sealed-secrets-controller" successfully rolled out
+```
+
+### Deployment traefik
+```bash
++ kubectl rollout status deploy traefik -n kube-system --timeout=30s
+deployment "traefik" successfully rolled out
+```
+
+### DaemonSet svclb-ingress-nginx-controller-cfddc8d6
+```bash
++ kubectl rollout status daemonset svclb-ingress-nginx-controller-cfddc8d6 -n kube-system --timeout=30s
+Waiting for daemon set "svclb-ingress-nginx-controller-cfddc8d6" rollout to finish: 0 of 3 updated pods are available...
+error: timed out waiting for the condition
+
+[command failed with exit code 1]
+```
+
+### DaemonSet svclb-traefik-57d28a11
+```bash
++ kubectl rollout status daemonset svclb-traefik-57d28a11 -n kube-system --timeout=30s
+daemon set "svclb-traefik-57d28a11" successfully rolled out
+```
+
+
+✅ Tests complete.

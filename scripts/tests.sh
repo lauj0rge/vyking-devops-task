@@ -27,13 +27,12 @@ track_namespace() {
   NAMESPACES_FOR_ROLLOUT+=("$ns")
 }
 
-collapse() {
+run_cmd() {
   local title="$1"
   shift
   local -a cmd=("$@")
 
-  echo "<details><summary>${title}</summary>"
-  echo
+  echo "### ${title}"
   echo '```bash'
   printf '+'
   for arg in "${cmd[@]}"; do
@@ -52,7 +51,6 @@ collapse() {
   fi
 
   echo '```'
-  echo "</details>"
   echo
 }
 
@@ -67,21 +65,21 @@ namespace_overview() {
 
   track_namespace "$namespace"
 
-  collapse "Pods" kubectl get pods -n "$namespace" -o wide
-  collapse "Deployments" kubectl get deploy -n "$namespace" -o wide
-  collapse "StatefulSets" kubectl get statefulset -n "$namespace" -o wide
-  collapse "DaemonSets" kubectl get daemonset -n "$namespace" -o wide
-  collapse "Services" kubectl get svc -n "$namespace" -o wide
-  collapse "Ingresses" kubectl get ingress -n "$namespace"
-  collapse "ConfigMaps" kubectl get configmap -n "$namespace"
-  collapse "Secrets" kubectl get secret -n "$namespace"
-  collapse "Horizontal Pod Autoscalers" kubectl get hpa -n "$namespace"
-  collapse "Jobs" kubectl get jobs -n "$namespace"
-  collapse "CronJobs" kubectl get cronjobs -n "$namespace"
-  collapse "PersistentVolumeClaims" kubectl get pvc -n "$namespace"
+  run_cmd "Pods" kubectl get pods -n "$namespace" -o wide
+  run_cmd "Deployments" kubectl get deploy -n "$namespace" -o wide
+  run_cmd "StatefulSets" kubectl get statefulset -n "$namespace" -o wide
+  run_cmd "DaemonSets" kubectl get daemonset -n "$namespace" -o wide
+  run_cmd "Services" kubectl get svc -n "$namespace" -o wide
+  run_cmd "Ingresses" kubectl get ingress -n "$namespace"
+  run_cmd "ConfigMaps" kubectl get configmap -n "$namespace"
+  run_cmd "Secrets" kubectl get secret -n "$namespace"
+  run_cmd "Horizontal Pod Autoscalers" kubectl get hpa -n "$namespace"
+  run_cmd "Jobs" kubectl get jobs -n "$namespace"
+  run_cmd "CronJobs" kubectl get cronjobs -n "$namespace"
+  run_cmd "PersistentVolumeClaims" kubectl get pvc -n "$namespace"
   local events_cmd="set -o pipefail; kubectl get events -n \"$namespace\" --sort-by=.metadata.creationTimestamp | tail -n 20"
-  collapse "Recent Events" bash -lc "$events_cmd"
-  collapse "Resource Usage (pods)" kubectl top pods -n "$namespace"
+  run_cmd "Recent Events" bash -lc "$events_cmd"
+  run_cmd "Resource Usage (pods)" kubectl top pods -n "$namespace"
 
   echo
   return 0
@@ -138,15 +136,15 @@ print_rollout_statuses() {
     echo "### Namespace \`${ns}\`"
 
     for dep in "${deployments[@]}"; do
-      collapse "Deployment ${dep}" kubectl rollout status deploy "$dep" -n "$ns" --timeout=30s
+      run_cmd "Deployment ${dep}" kubectl rollout status deploy "$dep" -n "$ns" --timeout=30s
     done
 
     for sts in "${statefulsets[@]}"; do
-      collapse "StatefulSet ${sts}" kubectl rollout status statefulset "$sts" -n "$ns" --timeout=30s
+      run_cmd "StatefulSet ${sts}" kubectl rollout status statefulset "$sts" -n "$ns" --timeout=30s
     done
 
     for ds in "${daemonsets[@]}"; do
-      collapse "DaemonSet ${ds}" kubectl rollout status daemonset "$ds" -n "$ns" --timeout=30s
+      run_cmd "DaemonSet ${ds}" kubectl rollout status daemonset "$ds" -n "$ns" --timeout=30s
     done
 
     echo
@@ -260,36 +258,36 @@ print_argo_ui_details() {
 }
 
 echo "## 🧭 Access Checks"
-collapse "kubectl version --short" kubectl version --short
-collapse "Current context" kubectl config current-context
-collapse "Available contexts" kubectl config get-contexts
+run_cmd "kubectl version --short" kubectl version --short
+run_cmd "Current context" kubectl config current-context
+run_cmd "Available contexts" kubectl config get-contexts
 
 echo "## 🌐 Cluster Overview"
-collapse "Cluster info" kubectl cluster-info
-collapse "Nodes" kubectl get nodes -o wide
-collapse "Namespaces" kubectl get ns
-collapse "Pods (all namespaces)" kubectl get pods -A -o wide
-collapse "Services (all namespaces)" kubectl get svc -A -o wide
-collapse "Ingresses (all namespaces)" kubectl get ingress -A
-collapse "Deployments (all namespaces)" kubectl get deploy -A
-collapse "StatefulSets (all namespaces)" kubectl get statefulset -A
-collapse "DaemonSets (all namespaces)" kubectl get daemonset -A
-collapse "PersistentVolumeClaims (all namespaces)" kubectl get pvc -A
-collapse "PersistentVolumes" kubectl get pv
-collapse "StorageClasses" kubectl get storageclass
-collapse "Jobs (all namespaces)" kubectl get jobs -A
-collapse "CronJobs (all namespaces)" kubectl get cronjobs -A
-collapse "Horizontal Pod Autoscalers (all namespaces)" kubectl get hpa -A
-collapse "Resource usage (nodes)" kubectl top nodes
-collapse "Resource usage (pods, all namespaces)" kubectl top pods -A
+run_cmd "Cluster info" kubectl cluster-info
+run_cmd "Nodes" kubectl get nodes -o wide
+run_cmd "Namespaces" kubectl get ns
+run_cmd "Pods (all namespaces)" kubectl get pods -A -o wide
+run_cmd "Services (all namespaces)" kubectl get svc -A -o wide
+run_cmd "Ingresses (all namespaces)" kubectl get ingress -A
+run_cmd "Deployments (all namespaces)" kubectl get deploy -A
+run_cmd "StatefulSets (all namespaces)" kubectl get statefulset -A
+run_cmd "DaemonSets (all namespaces)" kubectl get daemonset -A
+run_cmd "PersistentVolumeClaims (all namespaces)" kubectl get pvc -A
+run_cmd "PersistentVolumes" kubectl get pv
+run_cmd "StorageClasses" kubectl get storageclass
+run_cmd "Jobs (all namespaces)" kubectl get jobs -A
+run_cmd "CronJobs (all namespaces)" kubectl get cronjobs -A
+run_cmd "Horizontal Pod Autoscalers (all namespaces)" kubectl get hpa -A
+run_cmd "Resource usage (nodes)" kubectl top nodes
+run_cmd "Resource usage (pods, all namespaces)" kubectl top pods -A
 cluster_events_cmd="set -o pipefail; kubectl get events -A --sort-by=.metadata.creationTimestamp | tail -n 40"
-collapse "Recent cluster events" bash -lc "$cluster_events_cmd"
+run_cmd "Recent cluster events" bash -lc "$cluster_events_cmd"
 
 echo "## 🚦 Argo CD (\`${ARGO_NS}\`)"
 if namespace_overview "$ARGO_NS"; then
-  collapse "Applications" kubectl get applications -n "$ARGO_NS"
-  collapse "ApplicationSets" kubectl get applicationsets -n "$ARGO_NS"
-  collapse "AppProjects" kubectl get appprojects -n "$ARGO_NS"
+  run_cmd "Applications" kubectl get applications -n "$ARGO_NS"
+  run_cmd "ApplicationSets" kubectl get applicationsets -n "$ARGO_NS"
+  run_cmd "AppProjects" kubectl get appprojects -n "$ARGO_NS"
   print_argo_ui_details "$ARGO_NS"
 fi
 
@@ -314,11 +312,11 @@ namespace_overview "cert-manager" || true
 echo "## 🔄 Sealed Secrets (\`kube-system\`)"
 if kubectl get ns kube-system >/dev/null 2>&1; then
   track_namespace "kube-system"
-  collapse "Sealed Secrets pods" kubectl get pods -n kube-system -l name=sealed-secrets-controller -o wide
-  collapse "Sealed Secrets deployment" kubectl get deploy -n kube-system -l name=sealed-secrets-controller -o wide
-  collapse "Sealed Secrets service" kubectl get svc -n kube-system -l name=sealed-secrets-controller -o wide
+  run_cmd "Sealed Secrets pods" kubectl get pods -n kube-system -l name=sealed-secrets-controller -o wide
+  run_cmd "Sealed Secrets deployment" kubectl get deploy -n kube-system -l name=sealed-secrets-controller -o wide
+  run_cmd "Sealed Secrets service" kubectl get svc -n kube-system -l name=sealed-secrets-controller -o wide
   kube_events_cmd="set -o pipefail; kubectl get events -n kube-system --sort-by=.metadata.creationTimestamp | tail -n 40"
-  collapse "Recent kube-system events" bash -lc "$kube_events_cmd"
+  run_cmd "Recent kube-system events" bash -lc "$kube_events_cmd"
   echo
 else
   echo "❌ Namespace \`kube-system\` not found."
