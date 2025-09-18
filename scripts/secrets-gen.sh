@@ -4,6 +4,7 @@ set -euo pipefail
 if [ -f .env ]; then
   export $(grep -v '^#' .env | xargs)
 fi
+ENVIRONMENT=${1:?Usage: $0 <dev|prod>}
 
 # -------------------------
 # 3. Generate SealedSecrets

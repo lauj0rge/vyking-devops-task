@@ -46,19 +46,21 @@ fi
 # -------------------------
 echo "==> Generating sealed secrets for $ENVIRONMENT"
 
-./scripts/secrets-gen.sh "$ENVIRONMENT"
+set -a
+source ./scripts/secrets.env
+set +a
 
 echo "✅ SealedSecrets generated for $ENVIRONMENT"
 
 # -------------------------
-# 4. Build & import images
-# -------------------------
-# -------------------------
+
  # 4. Build & import images
  # -------------------------
  echo "==> Building & importing images for $ENVIRONMENT"
 
+set -a
  ./scripts/images-build.sh "$ENVIRONMENT" "$CLUSTER_NAME"
+set +a
 
  echo "✅ Images ready for $ENVIRONMENT"
 
@@ -87,12 +89,15 @@ cd ..
 # -------------------------
 # 6. ArgoCD login info
 # -------------------------
-./scripts/argocd-login-info.sh "$ENVIRONMENT" "$ARGO_NS"
 
+set -a
+./scripts/argocd-login-info.sh "$ENVIRONMENT" "$ARGO_NS"
+set +a
 
 # -------------------------
 # 7. Ingress-NGINX port-forward
 # -------------------------
+
 echo "==> Setting up ingress-nginx port-forward"
 
 # Forward local 8443 -> ingress-nginx 443
@@ -105,29 +110,9 @@ echo "==> Stop port-forward: kill \$(cat /tmp/ingress-port-forward-${ENVIRONMENT
 # -------------------------
 # 8. MySQL Connection Info
 # -------------------------
-MYSQL_SECRET_NAME="mysql-${ENVIRONMENT}-secret"
-MYSQL_NS="mysql-${ENVIRONMENT}"
-
-echo "==> Resolving MySQL connection details..."
-
-MYSQL_USER=$(kubectl get secret $MYSQL_SECRET_NAME -n $MYSQL_NS -o jsonpath="{.data.username}" | base64 -d)
-MYSQL_PASS=$(kubectl get secret $MYSQL_SECRET_NAME -n $MYSQL_NS -o jsonpath="{.data.password}" | base64 -d)
-MYSQL_DB=$(kubectl get secret $MYSQL_SECRET_NAME -n $MYSQL_NS -o jsonpath="{.data.database}" | base64 -d)
-
-MYSQL_HOST="mysql-${ENVIRONMENT}.${MYSQL_NS}.svc.cluster.local"
-MYSQL_PORT=3306
-
-echo "✅ MySQL connection details resolved:"
-echo "    Host: $MYSQL_HOST"
-echo "    User: $MYSQL_USER"
-echo "    Database: $MYSQL_DB"
-echo ""
-echo "==> To connect, run:"
-echo "kubectl run -it --rm mysql-client --image=mysql:8.0 --restart=Never -- \
-  mysql -h $MYSQL_HOST -P $MYSQL_PORT -u$MYSQL_USER -p$MYSQL_PASS $MYSQL_DB"
-
-echo "=== ✅ Environment $ENVIRONMENT bootstrap completed ==="
-
+set -a
+./scripts/mysql-connection-info.sh "$ENVIRONMENT"
+set +a
 
 # -------------------------
 # 10. Run Tests & Save Report
