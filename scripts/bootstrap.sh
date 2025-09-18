@@ -287,6 +287,6 @@ echo "==> Running cluster tests..."
 TIMESTAMP=$(date '+%Y%m%d-%H%M%S')
 REPORT_FILE="tests-results-${ENVIRONMENT}-${TIMESTAMP}.md"
 
-./scripts/tests.sh "$ENVIRONMENT" > "$REPORT_FILE"
+./scripts/tests.sh "$ENVIRONMENT" > "$REPORT_FILE" 2>&1
 
 echo "✅ Test results written to $REPORT_FILE"

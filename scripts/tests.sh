@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! command -v kubectl >/dev/null 2>&1; then
-  echo "❌ 'kubectl' command not found. Please install kubectl and make sure it is in your PATH." >&2
-  exit 1
-fi
-
 ENVIRONMENT="${1:-dev}"
 CLUSTER_NAME="vyking-${ENVIRONMENT}"
 ARGO_NS="argocd-${ENVIRONMENT}"
