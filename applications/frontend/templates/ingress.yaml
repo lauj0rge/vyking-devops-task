@@ -5,6 +5,7 @@ metadata:
   name: {{ .Release.Name }}-frontend
   annotations:
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
+    argocd.argoproj.io/external-url: "https://frontend-{{ .Values.environment }}.local:8443/"
 spec:
   rules:
     {{- range .Values.ingress.hosts }}
