@@ -1,11 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
+chmod +x scripts/*.sh
+
 ENVIRONMENT=$1
 if [ -z "$ENVIRONMENT" ]; then
   echo "Usage: $0 <dev|prod>"
   exit 1
 fi
+
 CLUSTER_NAME="vyking-${ENVIRONMENT}"
 ARGO_NS="argocd-${ENVIRONMENT}"
 
