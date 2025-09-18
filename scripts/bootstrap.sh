@@ -48,6 +48,7 @@ echo "==> Generating sealed secrets for $ENVIRONMENT"
 
 set -a
 source ./scripts/secrets.env
+./scripts/secrets-gen.sh "$ENVIRONMENT"
 set +a
 
 echo "✅ SealedSecrets generated for $ENVIRONMENT"
