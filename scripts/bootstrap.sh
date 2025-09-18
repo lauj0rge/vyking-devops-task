@@ -43,19 +43,19 @@ fi
 # -------------------------
 echo "==> Generating sealed secrets for $ENVIRONMENT"
 
-./scripts/secrets.gen.sh "$ENVIRONMENT"
+./scripts/secrets-gen.sh "$ENVIRONMENT"
 
 echo "✅ SealedSecrets generated for $ENVIRONMENT"
 
 # -------------------------
 # 4. Build & import images
 # -------------------------
-N# -------------------------
+# -------------------------
  # 4. Build & import images
  # -------------------------
  echo "==> Building & importing images for $ENVIRONMENT"
 
- ./scripts/images.build.sh "$ENVIRONMENT" "$CLUSTER_NAME"
+ ./scripts/images-build.sh "$ENVIRONMENT" "$CLUSTER_NAME"
 
  echo "✅ Images ready for $ENVIRONMENT"
 
