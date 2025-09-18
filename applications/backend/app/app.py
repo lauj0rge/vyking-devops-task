@@ -1,8 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify
 import mysql.connector
 import os
+from datetime import datetime
 
 app = Flask(__name__)
+
 
 def get_env_var(key: str) -> str:
     """Fetch required environment variable or raise error if missing."""
@@ -10,6 +12,7 @@ def get_env_var(key: str) -> str:
     if not value:
         raise RuntimeError(f"❌ Missing required environment variable: {key}")
     return value
+
 
 # Database config from environment variables (provided by Kubernetes Secrets)
 db_config = {
@@ -20,19 +23,18 @@ db_config = {
     "database": get_env_var("MYSQL_DATABASE"),
 }
 
+
 def get_connection():
     try:
         return mysql.connector.connect(**db_config)
     except mysql.connector.Error as e:
         raise RuntimeError(f"❌ Database connection failed: {e}")
 
-# -------------------------
-# Endpoints
-# -------------------------
 
 @app.route("/health", methods=["GET"])
 def health():
     return {"status": "ok"}, 200
+
 
 @app.route("/readiness", methods=["GET"])
 def readiness():
@@ -47,42 +49,44 @@ def readiness():
         return {"status": "not ready", "details": str(e)}, 500
 
 
-@app.route("/todos", methods=["GET"])
-def get_todos():
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute(
-        "CREATE TABLE IF NOT EXISTS todos (id INT AUTO_INCREMENT PRIMARY KEY, task VARCHAR(255))"
+@app.route("/leaderboard", methods=["GET"])
+def get_leaderboard():
+    query = (
+        """
+        SELECT
+            player_id,
+            gamer_tag,
+            region,
+            player_level,
+            total_matches,
+            win_rate,
+            avg_session_length,
+            favorite_mode,
+            last_login
+        FROM player_leaderboard
+        ORDER BY win_rate DESC, total_matches DESC
+        LIMIT 15
+        """
     )
-    cursor.execute("SELECT * FROM todos")
-    todos = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return jsonify(todos)
 
-@app.route("/add", methods=["POST"])
-def add_todo():
-    data = request.json
-    task = data.get("task")
-    if not task:
-        return {"error": "Task is required"}, 400
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO todos (task) VALUES (%s)", (task,))
-    conn.commit()
-    cursor.close()
-    conn.close()
-    return {"message": "Task added"}, 201
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(query)
+        leaderboard = cursor.fetchall()
+        for row in leaderboard:
+            last_login = row.get("last_login")
+            if isinstance(last_login, datetime):
+                row["last_login"] = last_login.isoformat()
+        return jsonify(leaderboard), 200
+    except mysql.connector.Error as e:
+        return jsonify({"error": f"Failed to fetch leaderboard: {e}"}), 500
+    finally:
+        if "cursor" in locals():
+            cursor.close()
+        if "conn" in locals() and conn.is_connected():
+            conn.close()
 
-@app.route("/delete/<int:todo_id>", methods=["DELETE"])
-def delete_todo(todo_id):
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM todos WHERE id = %s", (todo_id,))
-    conn.commit()
-    cursor.close()
-    conn.close()
-    return {"message": "Task deleted"}
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8081))
