@@ -11,8 +11,6 @@ spec:
     - host: {{ .host }}
       http:
         paths:
-          - path: /
-            pathType: Prefix
           {{- if .paths }}
           {{- range .paths }}
           - path: {{ .path }}
@@ -31,10 +29,11 @@ spec:
                 name: {{ $.Release.Name }}-frontend
                 port:
                   number: {{ $.Values.service.port }}
-        { { - end } }
+        {{- end }}
+
     {{- end }}
   {{- if .Values.ingress.tls }}
   tls:
     {{- toYaml .Values.ingress.tls | nindent 4 }}
   {{- end }}
-{{- end }}
+  {{- end }}
