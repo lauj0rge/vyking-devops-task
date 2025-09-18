@@ -31,6 +31,10 @@ securityContext:
   capabilities:
     drop: ["ALL"]
 
+ingress:
+  enabled: false
+  host: ""
+
 probes:
   liveness:
     path: /health
@@ -57,3 +61,4 @@ hpa:
 labels:
   app.kubernetes.io/name: backend
   app.kubernetes.io/part-of: vyking-app
+

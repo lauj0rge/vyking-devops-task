@@ -11,6 +11,10 @@ service:
 mysql:
   secretName: mysql-credentials-dev
 
+ingress:
+  enabled: true
+  host: frontend-dev.local
+
 resources:
   requests:
     cpu: 100m
