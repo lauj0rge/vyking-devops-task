@@ -64,7 +64,6 @@ set +a
 
  echo "✅ Images ready for $ENVIRONMENT"
 
-
 # -------------------------
 # 5. Terraform apply with environment values
 # -------------------------
@@ -74,18 +73,29 @@ TFVARS_FILE="env/${ENVIRONMENT}.tfvars"
 
 terraform init -input=false
 
-terraform apply -var-file="$TFVARS_FILE" -target=module.argocd -auto-approve
+# 5.1 Infra + ingress (cluster-level bits)
+terraform apply -var-file="$TFVARS_FILE" \
+  -target=module.infra \
+  -target=module.ingress \
+  -auto-approve
+
+# 5.2 ArgoCD core (installs ArgoCD and its CRDs)
+terraform apply -var-file="$TFVARS_FILE" \
+  -target=module.argocd \
+  -auto-approve
 
 echo "==> Waiting for ArgoCD Application CRD"
 kubectl wait --for=condition=Established crd/applications.argoproj.io --timeout=120s || {
   echo "❌ Application CRD not ready, ArgoCD might have failed to install"
   exit 1
 }
-terraform apply -var-file="$TFVARS_FILE" -target=module.infra -auto-approve
-terraform apply -var-file="$TFVARS_FILE" -target=module.applications -auto-approve
+
+# 5.3 ArgoCD Applications (only after CRDs exist)
+terraform apply -var-file="$TFVARS_FILE" \
+  -target=module.applications \
+  -auto-approve
 
 cd ..
-
 # -------------------------
 # 6. ArgoCD login info
 # -------------------------
