@@ -3,7 +3,7 @@ mysql:
   database: devdb
   username: devuser
   persistence:
-    size: 8i
+    size: 8Gi
 
 resources:
   requests:

@@ -235,6 +235,10 @@ echo "==> Argo CD UI: http://localhost:8080"
 # 7. Ingress-NGINX port-forward
 # -------------------------
 echo "==> Setting up ingress-nginx port-forward"
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
 
 # Kill old port-forward if it exists
 if [[ -f "/tmp/ingress-port-forward-${ENVIRONMENT}.pid" ]]; then
