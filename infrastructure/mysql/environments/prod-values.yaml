@@ -4,13 +4,14 @@ mysql:
   username: produser
   persistence:
     size: 5Gi
+    enabled: true
 
 image:
   repository: vyking-mysql
   tag: prod
   pullPolicy: IfNotPresent
 init:
-  enabled: false
+  enabled: true
 
 resources:
   requests:

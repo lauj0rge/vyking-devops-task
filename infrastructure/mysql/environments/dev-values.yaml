@@ -4,12 +4,14 @@ mysql:
   username: devuser
   persistence:
     size: 1Gi
+    enabled: true
+
 image:
   repository: vyking-mysql
   tag: dev
   pullPolicy: IfNotPresent
 init:
-  enabled: false
+  enabled: true
 
 resources:
   requests:
