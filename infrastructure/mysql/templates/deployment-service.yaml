@@ -33,6 +33,12 @@ spec:
             - name: mysql-init
               mountPath: /docker-entrypoint-initdb.d
             {{- end }}
+      volumes:
+        {{- if .Values.init.enabled }}
+        - name: mysql-init
+          configMap:
+            name: mysql-init
+        {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: data
