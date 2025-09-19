@@ -15,11 +15,12 @@ spec:
                 - sh
                 - -c
                 - >
-                  mysqldump -h mysql.mysql-${ENVIRONMENT}.svc.cluster.local
+                  mysqldump -h mysql.${ENVIRONMENT}.svc.cluster.local
                   -uroot
                   -p${MYSQL_ROOT_PASSWORD}
                   ${MYSQL_DATABASE}
                   > /backup/db-$(date +\%F-\%H-\%M).sql
+
               env:
                 - name: ENVIRONMENT
                   valueFrom:
