@@ -33,7 +33,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       name: {{ .Values.auth.existingSecret }}
-                      key: password
+                      key: userPassword
                 - name: MYSQL_DATABASE
                   valueFrom:
                     secretKeyRef:

@@ -11,7 +11,7 @@ auth:
   secretKeys:
     rootPasswordKey: rootPassword
     usernameKey: username
-    passwordKey: password
+    passwordKey: userPassword
     databaseKey: database
 
 primary:
