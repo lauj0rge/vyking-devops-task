@@ -19,6 +19,7 @@ primary:
     enabled: true
     size: 1Gi
 
+
 initdbScripts:
   leaderboard.sql: |
     DROP TABLE IF EXISTS player_leaderboard;
@@ -33,3 +34,6 @@ initdbScripts:
       favorite_mode VARCHAR(40) NOT NULL,
       last_login DATETIME NOT NULL
     );
+  grants.sql: |
+    GRANT ALL PRIVILEGES ON devdb.* TO 'devuser'@'%' IDENTIFIED BY 'devpass123';
+    FLUSH PRIVILEGES;
