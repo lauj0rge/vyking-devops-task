@@ -3,7 +3,6 @@ image:
   tag: 8.0
   pullPolicy: IfNotPresent
 
-:
 auth:
   existingSecret: mysql-dev-secret
   username: devuser
