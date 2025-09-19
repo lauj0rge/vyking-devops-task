@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: mysql-backup
+  namespace: mysql-dev
 spec:
   schedule: "{{ .Values.backup.schedule }}"
   jobTemplate:
@@ -15,14 +16,18 @@ spec:
                 - sh
                 - -c
                 - >
-                  mysqldump -h mysql
+                  mysqldump
+                  -h {{ .Values.mysql.host }}
                   -u{{ .Values.mysql.username }}
                   -p"$MYSQL_PASSWORD"
                   {{ .Values.mysql.database }}
-                  > /backup/db-$(date +\%F-\%H-\%M).sql
-              envFrom:
-                - secretRef:
-                    name: {{ .Values.mysql.secretName }}
+                  > /backup/db-$(date +%%F-%%H-%%M).sql
+              env:
+                - name: MYSQL_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.mysql.secretName }}
+                      key: password
               volumeMounts:
                 - name: backup-storage
                   mountPath: /backup
