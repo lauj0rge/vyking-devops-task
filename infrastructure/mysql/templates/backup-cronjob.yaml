@@ -20,6 +20,7 @@ spec:
                   -p${MYSQL_PASSWORD}
                   ${MYSQL_DATABASE}
                   > /backup/db-$(date +\%F-\%H-\%M).sql
+
               env:
                 - name: ENVIRONMENT
                   valueFrom:
