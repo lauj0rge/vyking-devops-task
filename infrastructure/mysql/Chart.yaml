@@ -1,6 +1,6 @@
 apiVersion: v2
 name: mysql
-description: A Helm chart for MySQL setup (Bitnami wrapper + init scripts)
+description: Helm chart for deploying MySQL with backups
 type: application
 version: 0.1.0
-appVersion: "5.7.44"
+appVersion: "8.0"
