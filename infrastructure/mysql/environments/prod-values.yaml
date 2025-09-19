@@ -5,6 +5,11 @@ mysql:
   persistence:
     size: 5Gi
 
+image:
+  repository: vyking-mysql
+  tag: prod
+  pullPolicy: IfNotPresent
+
 resources:
   requests:
     cpu: 200m

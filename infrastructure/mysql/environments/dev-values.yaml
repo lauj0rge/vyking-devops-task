@@ -3,6 +3,11 @@ mysql:
   database: devdb
   username: devuser
 
+image:
+  repository: vyking-mysql
+  tag: dev
+  pullPolicy: IfNotPresent
+
 resources:
   requests:
     cpu: 100m
