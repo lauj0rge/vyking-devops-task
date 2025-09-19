@@ -1,29 +1,34 @@
-mysql:
-  secretName: mysql-prod-secret
-  database: proddb
-  username: produser
-
-persistence:
-    size: 5Gi
-    enabled: true
-
 image:
-  repository: vyking-mysql
-  tag: prod
+  repository: bitnami/mysql
+  tag: 8.0
   pullPolicy: IfNotPresent
 
-init:
-  enabled: false
+auth:
+  existingSecret: mysql-prod-secret
+  username: produser
+  database: proddb
+  secretKeys:
+    rootPasswordKey: rootPassword
+    usernameKey: username
+    passwordKey: password
+    databaseKey: database
 
-resources:
-  requests:
-    cpu: 200m
-    memory: 512Mi
-  limits:
-    cpu: 1
-    memory: 1Gi
+primary:
+  persistence:
+    enabled: true
+    size: 5Gi   # bigger disk for prod
 
-backup:
-  schedule: "0 */6 * * *"   # every 6 hours
-  image: mysql:8.0
-  pvc: mysql-backups
+initdbScripts:
+  leaderboard.sql: |
+    DROP TABLE IF EXISTS player_leaderboard;
+    CREATE TABLE player_leaderboard (
+      player_id INT AUTO_INCREMENT PRIMARY KEY,
+      gamer_tag VARCHAR(50) NOT NULL,
+      region VARCHAR(20) NOT NULL,
+      player_level INT NOT NULL,
+      total_matches INT NOT NULL,
+      win_rate DECIMAL(5,2) NOT NULL,
+      avg_session_length DECIMAL(4,1) NOT NULL,
+      favorite_mode VARCHAR(40) NOT NULL,
+      last_login DATETIME NOT NULL
+    );
