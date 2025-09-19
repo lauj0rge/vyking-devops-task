@@ -15,7 +15,7 @@ spec:
                 - sh
                 - -c
                 - >
-                  mysqldump -h mysql.${ENVIRONMENT}.svc.cluster.local
+                  mysqldump -h mysql.mysql-${ENVIRONMENT}.svc.cluster.local
                   -uroot
                   -p${MYSQL_ROOT_PASSWORD}
                   ${MYSQL_DATABASE}
