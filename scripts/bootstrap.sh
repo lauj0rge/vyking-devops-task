@@ -232,6 +232,10 @@ set +a
 # -------------------------
 # 7. Ingress-NGINX port-forward
 # -------------------------
+echo "==> Setting up argocd port-forward"
+
+kubectl port-forward svc/argocd-server -n "$ARGO_NS" 8080:443 >/dev/null 2>&1 &
+echo $! > "/tmp/argocd-port-forward-${ENVIRONMENT}.pid"
 
 echo "==> Setting up ingress-nginx port-forward"
 
