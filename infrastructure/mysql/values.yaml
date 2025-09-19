@@ -3,7 +3,7 @@ mysql:
 
   primary:
     persistence:
-      enabled: true
+      enabled: false
       size: 8Gi
 
   image:
