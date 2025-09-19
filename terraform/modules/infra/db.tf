@@ -34,8 +34,6 @@ resource "kubernetes_manifest" "mysql_sealed_secrets" {
 }
 
 resource "kubernetes_manifest" "mysql" {
-  depends_on = [kubernetes_manifest.mysql_sealed_secrets]
-
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"
