@@ -15,8 +15,10 @@ spec:
                 - sh
                 - -c
                 - >
-                  mysqldump -h {{ .Release.Name }}-mysql
-                  -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE)
+                  mysqldump -h mysql.{{ .Release.Namespace }}.svc.cluster.local
+                  -u${MYSQL_USER}
+                  -p${MYSQL_PASSWORD}
+                  ${MYSQL_DATABASE}
                   > /backup/db-$(date +\%F-\%H-\%M).sql
               env:
                 - name: MYSQL_USER
