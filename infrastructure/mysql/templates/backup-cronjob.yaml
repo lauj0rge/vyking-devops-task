@@ -16,26 +16,28 @@ spec:
                 - -c
                 - >
                   mysqldump -h mysql.mysql-${ENVIRONMENT}.svc.cluster.local
-                  -uroot
-                  -p${MYSQL_ROOT_PASSWORD}
+                  -u${MYSQL_USER}
+                  -p${MYSQL_PASSWORD}
                   ${MYSQL_DATABASE}
                   > /backup/db-$(date +\%F-\%H-\%M).sql
-
               env:
                 - name: ENVIRONMENT
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.namespace
-                - name: MYSQL_ROOT_PASSWORD
+                - name: MYSQL_USER
+                  value: devuser
+                - name: MYSQL_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: {{ .Values.auth.existingSecret }}
-                      key: rootPassword
+                      key: userPassword
                 - name: MYSQL_DATABASE
                   valueFrom:
                     secretKeyRef:
                       name: {{ .Values.auth.existingSecret }}
                       key: database
+
               volumeMounts:
                 - name: backup-storage
                   mountPath: /backup
