@@ -15,12 +15,21 @@ spec:
                 - sh
                 - -c
                 - >
-                  mysqldump -h mysql.{{ .Release.Namespace }}.svc.cluster.local
+                  mysqldump -h mysql.mysql-$(ENVIRONMENT).svc.cluster.local
                   -u${MYSQL_USER}
                   -p${MYSQL_PASSWORD}
                   ${MYSQL_DATABASE}
                   > /backup/db-$(date +\%F-\%H-\%M).sql
               env:
+                - name: ENVIRONMENT
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: MYSQL_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: { { .Values.auth.existingSecret } }
+                      key: username
                 - name: MYSQL_USER
                   valueFrom:
                     secretKeyRef:
