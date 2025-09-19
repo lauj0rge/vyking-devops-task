@@ -57,15 +57,19 @@ ENVIRONMENT=${1:?Usage: $0 <dev|prod>}
 # -------------------------
 # 3. Generate SealedSecrets
 # -------------------------
+# -------------------------
+# 3. Generate SealedSecrets
+# -------------------------
 echo "==> Generating sealed secrets for $ENVIRONMENT"
 
 mkdir -p infrastructure/sealed
 
-MYSQL_SECRET_NAME="mysql-${ENVIRONMENT}-secret"
-MYSQL_CRED_NAME="mysql-credentials-${ENVIRONMENT}"
+MYSQL_SECRET_NAME="mysql-${ENVIRONMENT}-secret"          # For MySQL itself (mysql namespace)
+MYSQL_CRED_NAME="mysql-credentials-${ENVIRONMENT}"       # For backend (backend namespace)
 
 case "$ENVIRONMENT" in
   dev)
+    # Backend secret: only app credentials
     kubectl create secret generic ${MYSQL_CRED_NAME} \
       -n backend-${ENVIRONMENT} \
       --from-literal=username=$DEV_DB_USER \
@@ -75,6 +79,7 @@ case "$ENVIRONMENT" in
       --from-literal=port=3306 \
       --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_CRED_NAME}.yaml
 
+    # MySQL secret: includes root password too
     kubectl create secret generic ${MYSQL_SECRET_NAME} \
       -n mysql-${ENVIRONMENT} \
       --from-literal=rootPassword=$DEV_DB_ROOT_PASS \
@@ -82,9 +87,11 @@ case "$ENVIRONMENT" in
       --from-literal=password=$DEV_DB_PASS \
       --from-literal=database=$DEV_DB_NAME \
       --from-literal=host=mysql.mysql-${ENVIRONMENT}.svc.cluster.local \
+      --from-literal=port=3306 \
       --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_SECRET_NAME}.yaml
     ;;
   prod)
+    # Backend secret: only app credentials
     kubectl create secret generic ${MYSQL_CRED_NAME} \
       -n backend-${ENVIRONMENT} \
       --from-literal=username=$PROD_DB_USER \
@@ -94,6 +101,7 @@ case "$ENVIRONMENT" in
       --from-literal=port=3306 \
       --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_CRED_NAME}.yaml
 
+    # MySQL secret: includes root password too
     kubectl create secret generic ${MYSQL_SECRET_NAME} \
       -n mysql-${ENVIRONMENT} \
       --from-literal=rootPassword=$PROD_DB_ROOT_PASS \
@@ -101,6 +109,7 @@ case "$ENVIRONMENT" in
       --from-literal=password=$PROD_DB_PASS \
       --from-literal=database=$PROD_DB_NAME \
       --from-literal=host=mysql.mysql-${ENVIRONMENT}.svc.cluster.local \
+      --from-literal=port=3306 \
       --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_SECRET_NAME}.yaml
     ;;
 esac

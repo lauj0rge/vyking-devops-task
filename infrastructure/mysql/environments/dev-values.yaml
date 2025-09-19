@@ -1,37 +1,35 @@
-mysql:
-  secretName: mysql-dev-secret
-  database: devdb
-  username: devuser
-
-persistence:
-    size: 1Gi
-    enabled: true
-
 image:
-  repository: vyking-mysql
-  tag: dev
+  repository: bitnami/mysql
+  tag: 8.0
   pullPolicy: IfNotPresent
 
-init:
-  enabled: false
+:
+auth:
+  existingSecret: mysql-dev-secret
+  username: devuser
+  database: devdb
+  secretKeys:
+    rootPasswordKey: rootPassword
+    usernameKey: username
+    passwordKey: password
+    databaseKey: database
 
-resources:
-  requests:
-    cpu: 100m
-    memory: 256Mi
-  limits:
-    cpu: 500m
-    memory: 512Mi
+primary:
+  persistence:
+    enabled: true
+    size: 1Gi
 
-service:
-  type: ClusterIP
-  port: 3306
-
-backup:
-  schedule: "0 */48 * * *"   # every 2 days
-  # schedule: "*/5 * * * *"      # every 5 minutes
-  image: vyking-mysql:dev
-  pvc: mysql-backups
-  envFromSecret:
-    name: mysql-dev-secret
-
+initdbScripts:
+  leaderboard.sql: |
+    DROP TABLE IF EXISTS player_leaderboard;
+    CREATE TABLE player_leaderboard (
+      player_id INT AUTO_INCREMENT PRIMARY KEY,
+      gamer_tag VARCHAR(50) NOT NULL,
+      region VARCHAR(20) NOT NULL,
+      player_level INT NOT NULL,
+      total_matches INT NOT NULL,
+      win_rate DECIMAL(5,2) NOT NULL,
+      avg_session_length DECIMAL(4,1) NOT NULL,
+      favorite_mode VARCHAR(40) NOT NULL,
+      last_login DATETIME NOT NULL
+    );

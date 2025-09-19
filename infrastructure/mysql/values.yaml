@@ -1,7 +1,0 @@
-mysql:
-  secretName: mysql-dev-secret
-
-  image:
-    repository: vyking-mysql
-    tag: latest
-
