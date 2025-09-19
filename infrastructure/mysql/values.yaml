@@ -7,5 +7,5 @@ mysql:
       size: 8Gi
 
   image:
-    repository: mysql
+    repository: vyking-mysql
     tag: latest
