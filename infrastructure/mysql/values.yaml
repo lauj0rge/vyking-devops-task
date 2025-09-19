@@ -4,3 +4,4 @@ mysql:
   image:
     repository: vyking-mysql
     tag: latest
+

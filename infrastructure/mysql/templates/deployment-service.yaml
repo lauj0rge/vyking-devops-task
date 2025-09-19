@@ -22,7 +22,25 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: {{ .Values.rootPassword | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mysql.secretName }}
+                  key: rootPassword
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mysql.secretName }}
+                  key: database
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mysql.secretName }}
+                  key: username
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mysql.secretName }}
+                  key: password
           ports:
             - name: mysql
               containerPort: 3306
