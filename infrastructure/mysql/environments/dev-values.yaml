@@ -22,6 +22,10 @@ resources:
     cpu: 500m
     memory: 512Mi
 
+service:
+  type: ClusterIP
+  port: 3306
+
 backup:
   schedule: "0 */48 * * *"   # every 2 days
   # schedule: "*/5 * * * *"      # every 5 minutes
