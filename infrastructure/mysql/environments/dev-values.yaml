@@ -2,12 +2,6 @@ mysql:
   secretName: mysql-dev-secret
   database: devdb
   username: devuser
-  persistence:
-    size: 8Gi
-  image:
-    registry: docker.io
-    repository: bitnami/mysql
-    tag: 8.0.39-debian-12-r1
 
 resources:
   requests:

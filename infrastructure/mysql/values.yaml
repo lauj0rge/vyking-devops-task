@@ -5,3 +5,7 @@ mysql:
     persistence:
       enabled: true
       size: 8Gi
+
+  image:
+    repository: mysql
+    tag: latest
