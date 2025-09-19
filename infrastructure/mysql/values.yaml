@@ -1,16 +1,7 @@
 mysql:
-  auth:
-    rootPassword: rootpass123
-    database: devdb
-    username: devuser
-    password: devpass123
+  secretName: mysql-dev-secret
 
   primary:
     persistence:
       enabled: true
       size: 8Gi
-
-  image:
-    registry: docker.io
-    repository: bitnami/mysql
-    tag: 8.0.39-debian-12-r1
