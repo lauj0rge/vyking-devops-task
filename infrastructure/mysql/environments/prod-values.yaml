@@ -2,7 +2,8 @@ mysql:
   secretName: mysql-prod-secret
   database: proddb
   username: produser
-  persistence:
+
+persistence:
     size: 5Gi
     enabled: true
 
