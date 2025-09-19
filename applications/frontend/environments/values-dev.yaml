@@ -1,4 +1,5 @@
 replicaCount: 1
+environment: dev
 
 image:
   repository: vyking-frontend
@@ -19,8 +20,14 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+          backend:
+            serviceName: frontend-frontend
+            servicePort: 8080
         - path: /api
           pathType: Prefix
+          backend:
+            serviceName: backend-backend
+            servicePort: 8081
   tls:
     - secretName: frontend-tls-dev
       hosts:
