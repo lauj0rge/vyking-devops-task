@@ -4,3 +4,6 @@ mysql:
   image:
     repository: vyking-mysql
     tag: latest
+  persistence:
+    enabled: true
+    size: 1Gi
