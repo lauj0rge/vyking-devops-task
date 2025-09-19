@@ -7,6 +7,8 @@ image:
   repository: vyking-mysql
   tag: dev
   pullPolicy: IfNotPresent
+init:
+  enabled: false
 
 resources:
   requests:

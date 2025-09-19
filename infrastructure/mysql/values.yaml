@@ -1,11 +1,6 @@
 mysql:
   secretName: mysql-dev-secret
 
-  primary:
-    persistence:
-      enabled: false
-      size: 8Gi
-
   image:
     repository: vyking-mysql
     tag: latest
