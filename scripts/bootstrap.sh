@@ -57,9 +57,6 @@ ENVIRONMENT=${1:?Usage: $0 <dev|prod>}
 # -------------------------
 # 3. Generate SealedSecrets
 # -------------------------
-# -------------------------
-# 3. Generate SealedSecrets
-# -------------------------
 echo "==> Generating sealed secrets for $ENVIRONMENT"
 
 mkdir -p infrastructure/sealed
@@ -73,7 +70,7 @@ case "$ENVIRONMENT" in
     kubectl create secret generic ${MYSQL_CRED_NAME} \
       -n backend-${ENVIRONMENT} \
       --from-literal=username=$DEV_DB_USER \
-      --from-literal=password=$DEV_DB_PASS \
+      --from-literal=userPassword=$DEV_DB_PASS \
       --from-literal=database=$DEV_DB_NAME \
       --from-literal=host=mysql.mysql-${ENVIRONMENT}.svc.cluster.local \
       --from-literal=port=3306 \
@@ -84,7 +81,7 @@ case "$ENVIRONMENT" in
       -n mysql-${ENVIRONMENT} \
       --from-literal=rootPassword=$DEV_DB_ROOT_PASS \
       --from-literal=username=$DEV_DB_USER \
-      --from-literal=password=$DEV_DB_PASS \
+      --from-literal=userPassword=$DEV_DB_PASS \
       --from-literal=database=$DEV_DB_NAME \
       --from-literal=host=mysql.mysql-${ENVIRONMENT}.svc.cluster.local \
       --from-literal=port=3306 \
@@ -95,7 +92,7 @@ case "$ENVIRONMENT" in
     kubectl create secret generic ${MYSQL_CRED_NAME} \
       -n backend-${ENVIRONMENT} \
       --from-literal=username=$PROD_DB_USER \
-      --from-literal=password=$PROD_DB_PASS \
+      --from-literal=userPassword=$PROD_DB_PASS \
       --from-literal=database=$PROD_DB_NAME \
       --from-literal=host=mysql.mysql-${ENVIRONMENT}.svc.cluster.local \
       --from-literal=port=3306 \
@@ -106,7 +103,7 @@ case "$ENVIRONMENT" in
       -n mysql-${ENVIRONMENT} \
       --from-literal=rootPassword=$PROD_DB_ROOT_PASS \
       --from-literal=username=$PROD_DB_USER \
-      --from-literal=password=$PROD_DB_PASS \
+      --from-literal=userPassword=$PROD_DB_PASS \
       --from-literal=database=$PROD_DB_NAME \
       --from-literal=host=mysql.mysql-${ENVIRONMENT}.svc.cluster.local \
       --from-literal=port=3306 \

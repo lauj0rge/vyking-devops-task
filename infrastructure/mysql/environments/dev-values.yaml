@@ -35,5 +35,6 @@ initdbScripts:
       last_login DATETIME NOT NULL
     );
   grants.sql: |
-    GRANT ALL PRIVILEGES ON devdb.* TO 'devuser'@'%' IDENTIFIED BY 'devpass123';
+    CREATE USER IF NOT EXISTS 'devuser'@'%' IDENTIFIED BY 'devpass123';
+    GRANT ALL PRIVILEGES ON devdb.* TO 'devuser'@'%';
     FLUSH PRIVILEGES;
