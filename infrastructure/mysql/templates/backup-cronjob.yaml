@@ -14,14 +14,7 @@ spec:
               command:
                 - sh
                 - -c
-                - >
-                  mysqldump -h mysql.${ENVIRONMENT}.svc.cluster.local
-                  
-                  -u${MYSQL_USER}
-                  -p${MYSQL_PASSWORD}
-                  ${MYSQL_DATABASE}
-                  > /backup/db-$(date +\%F-\%H-\%M).sql
-
+                - "mysqldump -h mysql.${ENVIRONMENT}.svc.cluster.local -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} > /backup/db-$(date +%F-%H-%M).sql"
               env:
                 - name: ENVIRONMENT
                   valueFrom:
@@ -39,7 +32,6 @@ spec:
                     secretKeyRef:
                       name: {{ .Values.auth.existingSecret }}
                       key: database
-
               volumeMounts:
                 - name: backup-storage
                   mountPath: /backup
