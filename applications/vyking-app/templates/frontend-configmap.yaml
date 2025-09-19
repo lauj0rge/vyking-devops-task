@@ -1,0 +1,33 @@
+{{- if .Values.frontend.enabled }}
+{{- $backendNamespace := .Values.backend.namespace | default .Release.Namespace }}
+{{- $backendServiceName := include "vyking.backend.fullname" . }}
+{{- $backendHost := default (printf "%s.%s.svc.cluster.local" $backendServiceName $backendNamespace) .Values.frontend.backendService.host }}
+{{- $backendPort := default .Values.backend.service.port .Values.frontend.backendService.port }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "vyking.frontend.fullname" . }}-nginx-config
+  namespace: {{ .Values.frontend.namespace | default .Release.Namespace }}
+  labels:
+{{ include "vyking.componentLabels" (dict "root" . "component" "frontend" "values" .Values.frontend) | indent 4 }}
+data:
+  default.conf: |
+    server {
+      listen 80;
+
+      location / {
+        root   /usr/share/nginx/html;
+        index  index.html;
+        try_files $uri /index.html;
+      }
+
+      location /api/ {
+        proxy_pass http://{{ $backendHost }}:{{ $backendPort }}/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection keep-alive;
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+      }
+    }
+{{- end }}

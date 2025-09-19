@@ -37,26 +37,25 @@ Argo CD continuously reconciles the `applications/*` Helm charts and `infrastruc
 | Path | Description | Primary responsibilities |
 | ---- | ----------- | ------------------------ |
 | `applications/backend/app` | Flask Todo API and Dockerfile. | Implements health/readiness endpoints and CRUD handlers that read/write to MySQL using environment variables sourced from Kubernetes Secrets.【F:applications/backend/app/app.py†L1-L83】 |
-| `applications/backend/templates` | Backend Helm chart templates. | Deploys the API Deployment/Service, wires database credentials from a SealedSecret-sourced Secret, and optionally enables an HPA.【F:applications/backend/templates/deployment-service.yaml†L1-L63】【F:applications/backend/templates/hpa.yaml†L1-L30】 |
 | `applications/frontend/app` | Static frontend assets and container build. | Renders the Todo UI, proxies `/api` calls to the backend, and ships in an NGINX image.【F:applications/frontend/app/index.html†L1-L82】【F:applications/frontend/app/app.js†L1-L39】 |
-| `applications/frontend/templates` | Frontend Helm chart templates. | Publishes the static site, injects backend routing via ConfigMap, exposes a Service/Ingress, and can scale with an HPA.【F:applications/frontend/templates/deployment-service.yaml†L1-L52】【F:applications/frontend/templates/configmap.yaml†L1-L25】【F:applications/frontend/templates/ingress.yaml†L1-L23】 |
+| `applications/vyking-app` | Unified Helm chart for frontend and backend workloads. | Creates the NGINX ConfigMap, Deployments, Services, HPAs, and ingress resources needed to ship the full stack together.【F:applications/vyking-app/templates/frontend-deployment.yaml†L1-L34】【F:applications/vyking-app/templates/backend-deployment.yaml†L1-L35】 |
 | `infrastructure/mysql` | Helm chart wrapper around Bitnami MySQL. | Supplies init SQL, PVCs, HPA, and a CronJob backup schedule customised per environment values file.【F:infrastructure/mysql/templates/mysql-init.sql†L1-L11】【F:infrastructure/mysql/templates/backup-cronjob.yaml†L1-L28】 |
 | `infrastructure/cert-manager` | cert-manager manifests. | Creates a self-signed cluster issuer and per-environment TLS certificates for the frontend ingress.【F:infrastructure/cert-manager/selfsigned-issuer.yaml†L1-L7】【F:infrastructure/cert-manager/certificate-dev.yaml†L1-L14】 |
 | `infrastructure/sealed` | Pre-generated SealedSecrets. | Holds sealed MySQL credentials that Argo CD applies before workloads start, keeping plaintext secrets out of git.【F:infrastructure/sealed/mysql-credentials-dev.yaml†L1-L33】 |
 | `terraform/` | Terraform root module. | Wires providers and composes the Argo CD, infrastructure, and application modules for GitOps reconciliation.【F:terraform/main.tf†L1-L26】 |
 | `terraform/modules/argocd` | Argo CD bootstrap. | Installs the Argo CD Helm chart and registers the git repository as a read-only source for Applications.【F:terraform/modules/argocd/argocd.tf†L1-L24】 |
 | `terraform/modules/infra` | Cluster services GitOps. | Creates namespaces and Argo CD Applications for sealed secrets and MySQL, plus installs cert-manager via Helm.【F:terraform/modules/infra/db.tf†L1-L52】【F:terraform/modules/infra/cert-manager.tf†L1-L13】 |
-| `terraform/modules/applications` | Frontend & backend GitOps. | Defines namespaces, TLS assets, and Argo CD Applications for each workload with environment-specific Helm values.【F:terraform/modules/applications/fe.tf†L1-L55】【F:terraform/modules/applications/be.tf†L1-L30】 |
+| `terraform/modules/applications` | Frontend & backend GitOps. | Creates the frontend/backend namespaces, TLS assets, and a single Argo CD `Application` that deploys both services from the unified Helm chart.【F:terraform/modules/applications/fe.tf†L1-L54】【F:terraform/modules/applications/fe.tf†L69-L103】 |
 | `scripts/` | Automation helpers. | Provide end-to-end workflow scripts for dependency setup, cluster bootstrap, smoke tests, and teardown.【F:scripts/setup-tools.sh†L1-L36】【F:scripts/bootstrap.sh†L1-L153】【F:scripts/tests.sh†L1-L94】【F:scripts/cleanup.sh†L1-L40】 |
 | `terraform/env/*.tfvars` | Environment definitions. | Store per-environment namespaces, git branches, and ingress hosts consumed by Terraform modules.【F:terraform/env/dev.tfvars†L1-L9】 |
 
-## Application charts
+## Application chart
 
-Both application charts follow a similar pattern:
+The unified Helm chart exposes shared knobs for both workloads:
 
-- **Configurable container images** via `.Values.image` so CI can push dev/prod tags.【F:applications/backend/values.yaml†L1-L19】【F:applications/frontend/values.yaml†L1-L14】
-- **Health probes and resource policies** tuned per environment with overrides in `environments/values-*.yaml` files.【F:applications/backend/values.yaml†L21-L41】【F:applications/backend/environments/values-dev.yaml†L1-L30】【F:applications/frontend/environments/values-prod.yaml†L1-L29】
-- **HorizontalPodAutoscaler manifests** gated behind `.Values.hpa.enabled` to allow autoscaling when desired.【F:applications/backend/templates/hpa.yaml†L1-L30】【F:applications/frontend/templates/hpa.yaml†L1-L24】
+- **Configurable container images** via `.Values.frontend.image` and `.Values.backend.image` so CI can push dev/prod tags.【F:applications/vyking-app/values.yaml†L7-L19】【F:applications/vyking-app/values.yaml†L41-L53】
+- **Health probes and resource policies** tuned per environment with overrides in `environments/values-*.yaml` files.【F:applications/vyking-app/values.yaml†L21-L40】【F:applications/vyking-app/values.yaml†L55-L83】【F:applications/vyking-app/environments/values-dev.yaml†L1-L48】【F:applications/vyking-app/environments/values-prod.yaml†L1-L42】
+- **HorizontalPodAutoscaler manifests** gated behind `.Values.frontend.hpa.enabled` and `.Values.backend.hpa.enabled` to allow autoscaling when desired.【F:applications/vyking-app/values.yaml†L31-L38】【F:applications/vyking-app/values.yaml†L74-L83】【F:applications/vyking-app/templates/frontend-hpa.yaml†L1-L23】【F:applications/vyking-app/templates/backend-hpa.yaml†L1-L23】
 
 ## Infrastructure building blocks
 
@@ -86,7 +85,7 @@ All scripts default to the `dev` environment when no argument is provided and re
 
 ## Environment configuration
 
-Each environment is described once in Terraform (`terraform/env/*.tfvars`) and once in Helm chart value overlays (`applications/*/environments/values-*.yaml`). This keeps namespaces, docker tags, ingress hosts, and resource requests consistent across tooling.【F:applications/frontend/environments/values-dev.yaml†L1-L36】【F:applications/backend/environments/values-prod.yaml†L1-L25】
+Each environment is described once in Terraform (`terraform/env/*.tfvars`) and once in Helm chart value overlays (`applications/vyking-app/environments/values-*.yaml`). This keeps namespaces, docker tags, ingress hosts, and resource requests consistent across tooling.【F:applications/vyking-app/environments/values-dev.yaml†L1-L48】【F:applications/vyking-app/environments/values-prod.yaml†L1-L42】
 
 SealedSecrets names follow the pattern `mysql-credentials-<env>` (backend namespace) and `mysql-<env>-secret` (database namespace). The bootstrap script regenerates them from local `.env` values and commits updates safely when git remotes are configured.【F:scripts/bootstrap.sh†L35-L112】
 
@@ -102,6 +101,6 @@ SealedSecrets names follow the pattern `mysql-credentials-<env>` (backend namesp
 
 - Argo CD UI: forwarded to http://localhost:8080 for `dev` and 8080/8443 load balancer bindings in prod clusters.【F:scripts/cluster.sh†L5-L20】【F:scripts/bootstrap.sh†L142-L168】
 - Frontend Ingress: reachable via the ingress-nginx port-forward started by the bootstrap script at `https://frontend-<env>.local:8443`.【F:scripts/bootstrap.sh†L170-L183】
-- Backend API: available inside the cluster at the `backend` Service (default `ClusterIP` on port 8081) with `/health`, `/readiness`, and `/leaderboard` routes exposing the mock player leaderboard dataset.【F:applications/backend/templates/deployment-service.yaml†L20-L63】【F:applications/backend/app/app.py†L27-L94】
+- Backend API: available inside the cluster at the `backend` Service (default `ClusterIP` on port 8081) with `/health`, `/readiness`, and `/leaderboard` routes exposing the mock player leaderboard dataset.【F:applications/vyking-app/templates/backend-deployment.yaml†L21-L44】【F:applications/backend/app/app.py†L27-L94】
 
 With this README you can quickly identify where each concern lives in the codebase and how to operate the full deployment workflow end to end.

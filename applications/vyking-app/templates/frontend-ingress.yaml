@@ -1,0 +1,41 @@
+{{- if and .Values.frontend.enabled .Values.frontend.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "vyking.frontend.fullname" . }}
+  namespace: {{ .Values.frontend.namespace | default .Release.Namespace }}
+  {{- with .Values.frontend.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.frontend.ingress.className }}
+  ingressClassName: {{ .Values.frontend.ingress.className }}
+  {{- end }}
+  rules:
+    {{- $root := . -}}
+    {{- range .Values.frontend.ingress.hosts }}
+    - host: {{ .host }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType | default "Prefix" }}
+            backend:
+              service:
+                name: {{ .service.name | default (include "vyking.componentServiceName" (dict "root" $root "component" (.service.component | default "frontend"))) }}
+                port:
+                  number: {{ .service.port | default (include "vyking.componentServicePort" (dict "root" $root "component" (.service.component | default "frontend"))) }}
+          {{- end }}
+    {{- end }}
+  {{- if .Values.frontend.ingress.tls }}
+  tls:
+    {{- range .Values.frontend.ingress.tls }}
+    - secretName: {{ .secretName }}
+      hosts:
+        {{- range .hosts }}
+        - {{ . }}
+        {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}

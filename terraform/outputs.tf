@@ -13,14 +13,9 @@ output "mysql_name" {
   value       = module.infra.mysql_app_name
 }
 
-output "frontend_app_name" {
+output "vyking_app_name" {
   description = "Name of the Argo CD Application resource for applications"
-  value       = module.applications.frontend_app_name
-}
-
-output "backend_app_name" {
-  description = "Name of the Argo CD Application resource for applications"
-  value       = module.applications.backend_app_name
+  value       = module.applications.vyking_app_name
 }
 
 output "repo_url" {

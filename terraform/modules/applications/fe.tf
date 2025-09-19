@@ -4,18 +4,28 @@ resource "kubernetes_namespace" "frontend" {
   }
 }
 
-resource "kubernetes_manifest" "frontend_app" {
-  depends_on = [kubernetes_namespace.frontend]
+resource "kubernetes_namespace" "backend" {
+  metadata {
+    name = var.backend_namespace
+  }
+}
+
+resource "kubernetes_manifest" "vyking_app" {
+  depends_on = [
+    kubernetes_namespace.frontend,
+    kubernetes_namespace.backend,
+  ]
+
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"
     metadata = {
-      name      = "frontend"
+      name      = "vyking-app"
       namespace = var.argocd_namespace
       labels = {
         environment = var.environment
-        part_of     = "vyking-fe-app"
-        component   = "frontend"
+        part_of     = "vyking-app"
+        component   = "application"
       }
     }
     spec = {
@@ -23,9 +33,10 @@ resource "kubernetes_manifest" "frontend_app" {
       source = {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
-        path           = "applications/frontend"
+        path           = "applications/vyking-app"
         helm = {
-          valueFiles = ["environments/values-${var.environment}.yaml"]
+          releaseName = "vyking-app"
+          valueFiles  = ["environments/values-${var.environment}.yaml"]
         }
       }
       destination = {
@@ -55,7 +66,6 @@ resource "kubernetes_manifest" "selfsigned_issuer" {
   }
 }
 
-
 resource "kubernetes_manifest" "frontend_cert" {
   manifest = {
     apiVersion = "cert-manager.io/v1"
@@ -65,9 +75,9 @@ resource "kubernetes_manifest" "frontend_cert" {
       namespace = var.frontend_namespace
     }
     spec = {
-      secretName = "frontend-tls-${var.environment}"
-      duration   = "2160h"  # 90 days
-      renewBefore = "360h" # 15 days
+      secretName  = "frontend-tls-${var.environment}"
+      duration    = "2160h"  # 90 days
+      renewBefore = "360h"   # 15 days
       issuerRef = {
         name = "selfsigned-issuer"
         kind = "ClusterIssuer"
@@ -78,11 +88,12 @@ resource "kubernetes_manifest" "frontend_cert" {
     }
   }
 }
+
 resource "helm_release" "ingress_nginx" {
-  name       = "ingress-nginx"
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  chart      = "ingress-nginx"
-  namespace  = "ingress-nginx"
+  name             = "ingress-nginx"
+  repository       = "https://kubernetes.github.io/ingress-nginx"
+  chart            = "ingress-nginx"
+  namespace        = "ingress-nginx"
   create_namespace = true
 
   set {

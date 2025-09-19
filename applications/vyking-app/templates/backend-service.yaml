@@ -1,0 +1,17 @@
+{{- if .Values.backend.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "vyking.backend.fullname" . }}
+  namespace: {{ .Values.backend.namespace | default .Release.Namespace }}
+  labels:
+{{ include "vyking.componentLabels" (dict "root" . "component" "backend" "values" .Values.backend) | indent 4 }}
+spec:
+  type: {{ .Values.backend.service.type }}
+  selector:
+{{ include "vyking.componentSelectorLabels" (dict "root" . "component" "backend" "values" .Values.backend) | indent 4 }}
+  ports:
+    - port: {{ .Values.backend.service.port }}
+      targetPort: {{ .Values.backend.service.port }}
+      protocol: TCP
+{{- end }}
