@@ -2,7 +2,8 @@ mysql:
   secretName: mysql-dev-secret
   database: devdb
   username: devuser
-
+  persistence:
+    size: 1Gi
 image:
   repository: vyking-mysql
   tag: dev
