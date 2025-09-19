@@ -57,14 +57,3 @@ spec:
       targetPort: 3306
   selector:
     app: {{ .Chart.Name }}
----
-  {{- if .Values.init.enabled }}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: mysql-init
-  namespace: {{ .Release.Namespace }}
-data:
-  mysql-init.sql: |
-  {{ .Values.init.script | indent 4 }}
-  {{- end }}
