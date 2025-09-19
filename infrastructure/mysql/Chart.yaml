@@ -1,6 +1,11 @@
 apiVersion: v2
 name: mysql
-description: Helm chart for deploying MySQL with backups
+description: Custom Helm chart for MySQL with init script and backups
 type: application
 version: 0.1.0
 appVersion: "8.0"
+
+dependencies:
+  - name: mysql
+    version: 12.2.4
+    repository: https://charts.bitnami.com/bitnami
