@@ -27,17 +27,3 @@ docker build --no-cache \
 
 echo "==> Importing into k3d cluster: $CLUSTER_NAME"
 k3d image import -c "$CLUSTER_NAME" "$FE_IMAGE" "$BE_IMAGE" --keep-tools
-
-MYSQL_BASE="mysql:latest"
-MYSQL_IMAGE="vyking-mysql:${ENVIRONMENT}"
-
-echo "==> Pulling MySQL base image"
-docker pull "$MYSQL_BASE"
-
-echo "==> Building MySQL image"
-docker build --no-cache \
-  --build-arg BASE_IMAGE="$MYSQL_BASE" \
-  -t "$MYSQL_IMAGE" ./infrastructure/mysql/templates
-
-echo "==> Importing MySQL image into k3d cluster: $CLUSTER_NAME"
-k3d image import -c "$CLUSTER_NAME" "$MYSQL_IMAGE" --keep-tools
