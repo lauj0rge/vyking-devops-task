@@ -16,7 +16,7 @@ auth:
 primary:
   persistence:
     enabled: true
-    size: 5Gi   # bigger disk for prod
+    size: 5Gi
 
 initdbScripts:
   leaderboard.sql: |

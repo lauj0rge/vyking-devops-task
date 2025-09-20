@@ -20,9 +20,12 @@ spec:
           ports:
             - containerPort: 3306
               name: mysql
-          envFrom:
-            - secretRef:
-                name: {{ .Values.auth.existingSecret }}
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials-dev
+                  key: rootPassword
           volumeMounts:
             - name: data
               mountPath: /var/lib/mysql
