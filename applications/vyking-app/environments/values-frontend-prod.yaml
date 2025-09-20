@@ -7,7 +7,7 @@ frontend:
   image:
     repository: vyking-frontend
     tag: prod
-    pullPolicy: IfNotPresent
+    pullPolicy: never
   service:
     port: 8080
     targetPort: 80

@@ -11,7 +11,7 @@ backend:
   image:
     repository: vyking-backend
     tag: dev
-    pullPolicy: IfNotPresent
+    pullPolicy: never
   mysql:
     secretName: mysql-credentials-dev
   ingress:

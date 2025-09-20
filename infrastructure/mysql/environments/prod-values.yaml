@@ -1,10 +1,10 @@
 auth:
   existingSecret: mysql-prod-secret
   secretKeys:
-    rootPassword: "mysql-root-password"
-    username: "mysql-username"
-    password: "mysql-password"
-    database: "mysql-database"
+    rootPassword: mysql-root-password
+    username: mysql-username
+    password: mysql-password
+    database: mysql-database
 
 resources:
   requests:
@@ -15,7 +15,7 @@ resources:
     memory: 1Gi
 
 backup:
-  schedule: "0 */6 * * *"   # every 6 hours
+  schedule: "0 */6 * * *"
   image: mysql:8.0
   pvc: mysql-backups
 

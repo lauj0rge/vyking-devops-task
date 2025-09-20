@@ -1,10 +1,11 @@
 auth:
   existingSecret: mysql-dev-secret
   secretKeys:
-    rootPassword: "mysql-root-password"
-    username: "mysql-username"
-    password: "mysql-password"
-    database: "mysql-database"
+    rootPassword: mysql-root-password
+    username: mysql-username
+    password: mysql-password
+    database: mysql-database
+
 backup:
   schedule: "0 */48 * * *"   # every 2 days
   pvc: mysql-backups
