@@ -1,9 +1,9 @@
-mysql:
-  secretName: mysql-prod-secret
-  database: proddb
+auth:
+  existingSecret: mysql-dev-secret
+  rootPassword: rootPassword
   username: produser
-  persistence:
-    size: 5Gi
+  password: prodpass123
+  database: proddb
 
 resources:
   requests:
@@ -19,6 +19,8 @@ backup:
   pvc: mysql-backups
 
 primary:
+  persistence:
+    size: 8Gi
   startupProbe:
     enabled: true
     initialDelaySeconds: 60

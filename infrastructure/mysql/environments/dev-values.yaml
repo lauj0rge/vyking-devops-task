@@ -1,13 +1,9 @@
-mysql:
-  secretName: mysql-dev-secret
-  database: devdb
+auth:
+  existingSecret: mysql-dev-secret
+  rootPassword: rootPassword
   username: devuser
-  persistence:
-    size: 8Gi
-  image:
-    repository: bitnami/mysql
-    tag: 8.0.39-debian-12-r1
-    pullPolicy: IfNotPresent
+  password: devpass123
+  database: devdb
 
 backup:
   schedule: "0 */48 * * *"   # every 2 days
@@ -24,6 +20,8 @@ resources:
     memory: 512Mi
 
 primary:
+  persistence:
+    size: 8Gi
   startupProbe:
     enabled: true
     initialDelaySeconds: 60
