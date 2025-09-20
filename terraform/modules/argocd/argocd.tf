@@ -10,13 +10,7 @@ resource "helm_release" "argocd" {
   wait             = true
   timeout          = 600
 }
-resource "null_resource" "wait_for_argocd_crd" {
-  depends_on = [helm_release.argocd]
 
-  provisioner "local-exec" {
-    command = "kubectl wait --for=condition=Established crd/applications.argoproj.io --timeout=120s"
-  }
-}
 resource "kubernetes_secret" "git_repo" {
   depends_on = [helm_release.argocd]
 
@@ -32,35 +26,10 @@ resource "kubernetes_secret" "git_repo" {
     type = "git"
   }
 }
-resource "kubernetes_manifest" "vyking_app" {
-  depends_on = [kubernetes_secret.git_repo]
-  manifest = {
-    apiVersion = "argoproj.io/v1alpha1"
-    kind       = "Application"
-    metadata = {
-      name      = "vyking-app"
-      namespace = var.argocd_namespace
-    }
-    spec = {
-      project = "default"
-      source = {
-        repoURL        = var.repo_url
-        targetRevision = var.environment
-        path           = "applications/vyking-app"
-        helm = {
-          valueFiles = ["environments/values-${var.environment}.yaml"]
-        }
-      }
-      destination = {
-        server    = "https://kubernetes.default.svc"
-        namespace = "vyking-${var.environment}"
-      }
-      syncPolicy = {
-        automated = {
-          prune    = true
-          selfHeal = true
-        }
-      }
-    }
+resource "null_resource" "wait_for_argocd_crd" {
+  depends_on = [helm_release.argocd]
+
+  provisioner "local-exec" {
+    command = "kubectl wait --for=condition=Established crd/applications.argoproj.io --timeout=120s"
   }
 }

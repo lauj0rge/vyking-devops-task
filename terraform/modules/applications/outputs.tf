@@ -1,12 +1,3 @@
-output "frontend_app_name" {
-  description = "Name of the Argo CD Application resource for applications"
-  value       = kubernetes_manifest.frontend_app.manifest.metadata.name
-}
-
-output "backend_app_name" {
-  description = "Name of the Argo CD Application resource for applications"
-  value       = kubernetes_manifest.backend_app.manifest.metadata.name
-}
 
 output "repo_url" {
   description = "Git repository URL used by Argo CD Applications"

@@ -7,4 +7,3 @@ frontend_namespace = "frontend-prod"
 backend_namespace  = "backend-prod"
 mysql_namespace    = "mysql-prod"
 frontend_host      = "frontend-dev.local"
-

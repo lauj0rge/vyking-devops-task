@@ -2,19 +2,18 @@ module "argocd" {
   source           = "./modules/argocd"
   argocd_namespace = var.argocd_namespace
   repo_url         = var.repo_url
-  environment      = var.environment
 }
 
 module "infra" {
-  source            = "./modules/infra"
-  repo_url          = var.repo_url
-  repo_branch       = var.repo_branch
-  environment       = var.environment
-  mysql_namespace   = var.mysql_namespace
-  backend_namespace = var.backend_namespace
-  argocd_namespace  = var.argocd_namespace
+  source             = "./modules/infra"
+  repo_url           = var.repo_url
+  repo_branch        = var.repo_branch
+  environment        = var.environment
+  mysql_namespace    = var.mysql_namespace
+  backend_namespace  = var.backend_namespace
+  argocd_namespace   = var.argocd_namespace
 
-  depends_on = [module.argocd]
+  depends_on         = [module.argocd]
 }
 
 module "applications" {
