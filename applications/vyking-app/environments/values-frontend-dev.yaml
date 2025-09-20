@@ -8,7 +8,7 @@ frontend:
   image:
     repository: vyking-frontend
     tag: dev
-    pullPolicy: never
+    pullPolicy: Never
   service:
     port: 8080
     targetPort: 80
