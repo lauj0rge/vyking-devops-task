@@ -23,7 +23,7 @@ resource "kubernetes_manifest" "backend_app" {
       source = {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
-        path           = "applications/backend"
+        path           = "applications/vyking-app"
         helm = {
           valueFiles = ["environments/values-${var.environment}.yaml"]
         }

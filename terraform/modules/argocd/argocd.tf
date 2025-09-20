@@ -25,3 +25,35 @@ resource "kubernetes_secret" "git_repo" {
     type = "git"
   }
 }
+resource "kubernetes_manifest" "vyking_app" {
+  depends_on = [kubernetes_secret.git_repo]
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind       = "Application"
+    metadata = {
+      name      = "vyking-app"
+      namespace = var.argocd_namespace
+    }
+    spec = {
+      project = "default"
+      source = {
+        repoURL        = var.repo_url
+        targetRevision = var.environment
+        path           = "applications/vyking-app"
+        helm = {
+          valueFiles = ["environments/values-${var.environment}.yaml"]
+        }
+      }
+      destination = {
+        server    = "https://kubernetes.default.svc"
+        namespace = "vyking-${var.environment}"
+      }
+      syncPolicy = {
+        automated = {
+          prune    = true
+          selfHeal = true
+        }
+      }
+    }
+  }
+}
