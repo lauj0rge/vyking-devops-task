@@ -4,8 +4,24 @@ resource "kubernetes_namespace" "frontend" {
   }
 }
 
+resource "kubernetes_namespace" "backend" {
+  metadata {
+    name = var.backend_namespace
+  }
+}
+
+resource "helm_release" "ingress_nginx" {
+  name       = "ingress-nginx"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+  version    = "4.11.1"
+
+  namespace        = "ingress-nginx"
+  create_namespace = true
+}
+
 resource "kubernetes_manifest" "vyking_app" {
-  depends_on = [kubernetes_namespace.frontend, kubernetes_namespace.backend]
+  depends_on = [kubernetes_namespace.frontend]
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"

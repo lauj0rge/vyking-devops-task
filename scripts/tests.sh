@@ -258,7 +258,7 @@ print_argo_ui_details() {
 }
 
 echo "## 🧭 Access Checks"
-run_cmd "kubectl version --short" kubectl version --short
+run_cmd "kubectl version" kubectl version
 run_cmd "Current context" kubectl config current-context
 run_cmd "Available contexts" kubectl config get-contexts
 

@@ -15,9 +15,9 @@ spec:
                 - sh
                 - -c
                 - >
-                  mysqldump -h mysql
+                  MYSQL_PWD="$MYSQL_PASSWORD" mysqldump
+                  -h mysql
                   -u{{ .Values.mysql.username }}
-                  -p"$MYSQL_PASSWORD"
                   {{ .Values.mysql.database }}
                   > /backup/db-$(date +\%F-\%H-\%M).sql
               envFrom:
