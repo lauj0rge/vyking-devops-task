@@ -22,7 +22,7 @@ spec:
                   > /backup/db-$(date +\%F-\%H-\%M).sql
               envFrom:
                 - secretRef:
-                    name: {{ .Values.mysql.secretName }}
+                    name: {{ .Values.auth.existingSecret }}
               volumeMounts:
                 - name: backup-storage
                   mountPath: /backup
