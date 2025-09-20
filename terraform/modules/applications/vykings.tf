@@ -23,18 +23,20 @@ resource "helm_release" "ingress_nginx" {
     value = "ClusterIP"
   }
 }
-resource "kubernetes_manifest" "vyking_app" {
+
+resource "kubernetes_manifest" "frontend_app" {
   depends_on = [kubernetes_namespace.frontend]
+
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"
     metadata = {
-      name      = "vyking-app"
+      name      = "frontend"
       namespace = var.argocd_namespace
       labels = {
         environment = var.environment
         part_of     = "vyking-app"
-        component   = "fullstack"
+        component   = "frontend"
       }
     }
     spec = {
@@ -42,15 +44,55 @@ resource "kubernetes_manifest" "vyking_app" {
       source = {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
-        path           = "applications/vyking-app"
+        path           = "applications/frontend"
         helm = {
-          releaseName = "vyking-app"
-          valueFiles = ["environments/values-${var.environment}.yaml"]
+          releaseName = "frontend"
+          valueFiles  = ["environments/values-${var.environment}.yaml"]
         }
       }
       destination = {
         server    = "https://kubernetes.default.svc"
         namespace = var.frontend_namespace
+      }
+      syncPolicy = {
+        automated = {
+          prune    = true
+          selfHeal = true
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_manifest" "backend_app" {
+  depends_on = [kubernetes_namespace.backend]
+
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind       = "Application"
+    metadata = {
+      name      = "backend"
+      namespace = var.argocd_namespace
+      labels = {
+        environment = var.environment
+        part_of     = "vyking-app"
+        component   = "backend"
+      }
+    }
+    spec = {
+      project = "default"
+      source = {
+        repoURL        = var.repo_url
+        targetRevision = var.repo_branch
+        path           = "applications/backend"
+        helm = {
+          releaseName = "backend"
+          valueFiles  = ["environments/values-${var.environment}.yaml"]
+        }
+      }
+      destination = {
+        server    = "https://kubernetes.default.svc"
+        namespace = var.backend_namespace
       }
       syncPolicy = {
         automated = {
