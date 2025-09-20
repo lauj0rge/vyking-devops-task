@@ -7,7 +7,7 @@ frontend:
     tag: dev
   service:
     port: 8080
-    targetPort: 80
+    targetPort: 8081
   ingress:
     enabled: true
     className: nginx
