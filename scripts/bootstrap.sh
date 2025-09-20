@@ -175,9 +175,30 @@ fi
  # -------------------------
  echo "==> Building & importing images for $ENVIRONMENT"
 
- ./scripts/images-build.sh "$ENVIRONMENT" "$CLUSTER_NAME"
+NGINX_BASE="nginx:1.25-alpine"
+PYTHON_BASE="python:3.11-slim-bullseye"
 
- echo "✅ Images ready for $ENVIRONMENT"
+FE_IMAGE="vyking-frontend:${ENVIRONMENT}"
+BE_IMAGE="vyking-backend:${ENVIRONMENT}"
+
+echo "==> Pulling base images"
+docker pull "$NGINX_BASE"
+docker pull "$PYTHON_BASE"
+
+echo "==> Building images"
+docker build --no-cache \
+  --build-arg BASE_IMAGE="$NGINX_BASE" \
+  --build-arg ENVIRONMENT="$ENVIRONMENT" \
+  -t "$FE_IMAGE" ./applications/frontend/app
+
+docker build --no-cache \
+  --build-arg BASE_IMAGE="$PYTHON_BASE" \
+  --build-arg ENVIRONMENT="$ENVIRONMENT" \
+  -t "$BE_IMAGE" ./applications/backend/app
+
+echo "==> Importing into k3d cluster: $CLUSTER_NAME"
+k3d image import -c "$CLUSTER_NAME" "$FE_IMAGE" "$BE_IMAGE" --keep-tools
+echo "✅ Images ready for $ENVIRONMENT"
 
 
 # -------------------------
