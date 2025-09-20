@@ -9,7 +9,6 @@ resource "kubernetes_namespace" "backend" {
     name = var.backend_namespace
   }
 }
-
 resource "helm_release" "ingress_nginx" {
   name       = "ingress-nginx"
   repository = "https://kubernetes.github.io/ingress-nginx"
@@ -18,8 +17,12 @@ resource "helm_release" "ingress_nginx" {
 
   namespace        = "ingress-nginx"
   create_namespace = true
-}
 
+  set {
+    name  = "controller.service.type"
+    value = "ClusterIP"
+  }
+}
 resource "kubernetes_manifest" "vyking_app" {
   depends_on = [kubernetes_namespace.frontend]
   manifest = {
