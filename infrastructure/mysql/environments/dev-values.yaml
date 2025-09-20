@@ -24,12 +24,6 @@ primary:
   initdbScriptsConfigMap: mysql-init
   persistence:
     size: 8Gi
-  startupProbe:
-    enabled: false
-  livenessProbe:
-    enabled: false
-  readinessProbe:
-    enabled: false
   configuration: |-
     [mysqld]
     skip-grant-tables
