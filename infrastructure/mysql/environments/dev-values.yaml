@@ -18,25 +18,5 @@ resources:
 primary:
   persistence:
     size: 8Gi
-  startupProbe:
-    enabled: true
-    initialDelaySeconds: 60
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 15
-
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 60
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 60
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
 
 
