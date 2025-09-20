@@ -9,9 +9,10 @@ backend:
   namespace: backend-dev
   replicaCount: 1
   image:
-    repository: vyking-backend
+    repository: k3d-vyking-dev.localhost:5000/vyking-backend
     tag: dev
     pullPolicy: Never
+
   mysql:
     secretName: mysql-credentials-dev
   ingress:
