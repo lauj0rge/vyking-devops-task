@@ -44,7 +44,7 @@ resource "kubernetes_manifest" "frontend_app" {
       source = {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
-        path           = "applications/frontend"
+        path           = "applications/vyking-app"
         helm = {
           releaseName = "frontend"
           valueFiles  = ["environments/values-${var.environment}.yaml"]
@@ -84,7 +84,7 @@ resource "kubernetes_manifest" "backend_app" {
       source = {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
-        path           = "applications/backend"
+        path           = "applications/vyking-app"
         helm = {
           releaseName = "backend"
           valueFiles  = ["environments/values-${var.environment}.yaml"]
@@ -103,7 +103,6 @@ resource "kubernetes_manifest" "backend_app" {
     }
   }
 }
-
 resource "kubernetes_manifest" "selfsigned_issuer" {
   manifest = {
     apiVersion = "cert-manager.io/v1"
