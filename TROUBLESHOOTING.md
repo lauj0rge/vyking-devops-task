@@ -48,19 +48,19 @@ Events highlight scheduling issues, failed mounts, or webhook rejections.
     - Image reference pointing to a non-existing tag.
 - **How to fix:**
   ```bash
-  kubectl logs deployment/frontend-frontend -n frontend-dev
-  kubectl get deploy frontend-frontend -n frontend-dev -o yaml | grep image:
+  kubectl logs deployment/vyking-app-frontend -n frontend-dev
+  kubectl get deploy vyking-app-frontend -n frontend-dev -o yaml | grep image:
   ```
-    - Validate `frontend/templates/configmap.yaml` for syntax errors.
-    - Confirm `values.yaml` uses a published image tag.
-    - Re-deploy with `argocd app sync frontend -n argocd-dev` after fixes.
+    - Validate `applications/vyking-app/templates/frontend/configmap.yaml` for syntax errors.
+    - Confirm the chart values reference a published image tag.
+    - Re-deploy with `argocd app sync vyking-app -n argocd-dev` after fixes.
 
 ### Ingress Not Accessible
 - **Symptoms:** `curl`/browser timeout, ingress stuck in `Pending`.
 - **Troubleshooting steps:**
   ```bash
   kubectl get ingress -n frontend-dev
-  kubectl describe ingress frontend-frontend -n frontend-dev
+  kubectl describe ingress vyking-app-frontend -n frontend-dev
   kubectl get svc -n ingress-nginx
   ```
     - If `EXTERNAL-IP` is `<pending>` in a local cluster, port-forward the controller:
@@ -77,8 +77,8 @@ Events highlight scheduling issues, failed mounts, or webhook rejections.
     - Confirm ingress annotations include the rewrite/forwarding rules required for `/api`.
     - Check ConfigMap/Environment variables injected into the deployment:
       ```bash
-      kubectl describe configmap frontend-config -n frontend-dev
-      kubectl exec deploy/frontend-frontend -n frontend-dev -- env | grep -i api
+      kubectl describe configmap vyking-app-frontend-nginx-config -n frontend-dev
+      kubectl exec deploy/vyking-app-frontend -n frontend-dev -- env | grep -i api
       ```
     - Update the backend ingress to allow correct CORS headers (`Access-Control-Allow-Origin`, etc.).
 
@@ -95,23 +95,23 @@ Events highlight scheduling issues, failed mounts, or webhook rejections.
 - Usually indicates Helm value drift or missing Kubernetes objects.
 - Investigate with:
   ```bash
-  argocd app diff backend -n argocd-dev
+  argocd app diff vyking-app -n argocd-dev
   kubectl get events -n backend-dev --sort-by=.lastTimestamp | tail -20
   ```
-- Update `values.yaml` or secrets to reflect the desired state, then `argocd app sync backend -n argocd-dev`.
+- Update `values.yaml` or secrets to reflect the desired state, then `argocd app sync vyking-app -n argocd-dev`.
 
 ### Pod Cannot Reach MySQL
 - **Symptoms:** Application logs contain `ECONNREFUSED` or connection timeout to `mysql:3306`.
 - **Steps:**
   ```bash
-  kubectl logs deployment/backend-backend -n backend-dev
+  kubectl logs deployment/vyking-app-backend -n backend-dev
   kubectl get svc mysql -n mysql-dev
   ```
     - Ensure database host resolves to `mysql.mysql-dev.svc.cluster.local` and credentials match the Secret.
     - Confirm network policies (if any) allow traffic from backend to MySQL.
     - Run an exec test:
       ```bash
-      kubectl exec deploy/backend-backend -n backend-dev -- nc -zv mysql.mysql-dev.svc.cluster.local 3306
+      kubectl exec deploy/vyking-app-backend -n backend-dev -- nc -zv mysql.mysql-dev.svc.cluster.local 3306
       ```
 
 ### Image Pull or Start Failures
@@ -123,7 +123,7 @@ Events highlight scheduling issues, failed mounts, or webhook rejections.
 ### API Returns 500 Errors
 - Inspect application logs and recent releases:
   ```bash
-  kubectl logs deployment/backend-backend -n backend-dev --tail=200
+  kubectl logs deployment/vyking-app-backend -n backend-dev --tail=200
   ```
 - Validate ConfigMaps and Secrets (e.g., JWT keys, third-party API tokens).
 - Confirm database migrations have run (check the migration job or init container status).
@@ -195,7 +195,7 @@ kubectl -n argocd-dev get secret argocd-initial-admin-secret \
 ### HPA Not Scaling
 ```bash
 kubectl get hpa -A
-kubectl describe hpa frontend-frontend -n frontend-dev
+kubectl describe hpa vyking-app-frontend -n frontend-dev
 ```
 - Install or troubleshoot `metrics-server` if metrics are missing:
   ```bash

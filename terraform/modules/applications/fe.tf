@@ -4,18 +4,18 @@ resource "kubernetes_namespace" "frontend" {
   }
 }
 
-resource "kubernetes_manifest" "frontend_app" {
-  depends_on = [kubernetes_namespace.frontend]
+resource "kubernetes_manifest" "vyking_app" {
+  depends_on = [kubernetes_namespace.frontend, kubernetes_namespace.backend]
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"
     metadata = {
-      name      = "frontend"
+      name      = "vyking-app"
       namespace = var.argocd_namespace
       labels = {
         environment = var.environment
-        part_of     = "vyking-fe-app"
-        component   = "frontend"
+        part_of     = "vyking-app"
+        component   = "fullstack"
       }
     }
     spec = {
@@ -23,8 +23,9 @@ resource "kubernetes_manifest" "frontend_app" {
       source = {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
-        path           = "applications/frontend"
+        path           = "applications/vyking-app"
         helm = {
+          releaseName = "vyking-app"
           valueFiles = ["environments/values-${var.environment}.yaml"]
         }
       }
