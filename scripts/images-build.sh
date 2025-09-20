@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ENVIRONMENT=${1:-dev}
-CLUSTER_NAME=${2:-vyking-dev}
+CLUSTER_NAME="vyking-$ENVIRONMENT"
 
 NGINX_BASE="nginx:1.25-alpine"
 PYTHON_BASE="python:3.11-slim-bullseye"
