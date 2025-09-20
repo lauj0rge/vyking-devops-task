@@ -16,7 +16,6 @@ resources:
     memory: 512Mi
 
 primary:
-  extraFlags: "--default-authentication-plugin=mysql_native_password"
   initdbScriptsConfigMap: mysql-init
   persistence:
     size: 8Gi
