@@ -1,9 +1,5 @@
 auth:
   existingSecret: mysql-dev-secret
-  rootPassword: rootPassword
-  username: devuser
-  password: devpass123
-  database: devdb
 
 backup:
   schedule: "0 */48 * * *"   # every 2 days

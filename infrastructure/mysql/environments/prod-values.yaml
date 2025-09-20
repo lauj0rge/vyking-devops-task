@@ -1,9 +1,5 @@
 auth:
   existingSecret: mysql-dev-secret
-  rootPassword: rootPassword
-  username: produser
-  password: prodpass123
-  database: proddb
 
 resources:
   requests:

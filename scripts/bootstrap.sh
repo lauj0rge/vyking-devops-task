@@ -65,22 +65,22 @@ case "$ENVIRONMENT" in
 
     kubectl create secret generic ${MYSQL_SECRET_NAME} \
       -n mysql-${ENVIRONMENT} \
-      --from-literal=rootPassword=$DEV_DB_ROOT_PASS \
-      --from-literal=username=$DEV_DB_USER \
-      --from-literal=password=$DEV_DB_PASS \
-      --from-literal=database=$DEV_DB_NAME \
+      --from-literal=mysql-root-password=$DEV_DB_ROOT_PASS \
+      --from-literal=mysql-username=$DEV_DB_USER \
+      --from-literal=mysql-password=$DEV_DB_PASS \
+      --from-literal=mysql-database=$DEV_DB_NAME \
       --from-literal=host=mysql.mysql-${ENVIRONMENT}.svc.cluster.local \
       --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_SECRET_NAME}.yaml
     ;;
   prod)
-    kubectl create secret generic ${MYSQL_CRED_NAME} \
-      -n backend-${ENVIRONMENT} \
-      --from-literal=username=$PROD_DB_USER \
-      --from-literal=password=$PROD_DB_PASS \
-      --from-literal=database=$PROD_DB_NAME \
+    kubectl create secret generic ${MYSQL_SECRET_NAME} \
+      -n mysql-${ENVIRONMENT} \
+      --from-literal=mysql-root-password=$DEV_DB_ROOT_PASS \
+      --from-literal=mysql-username=$DEV_DB_USER \
+      --from-literal=mysql-password=$DEV_DB_PASS \
+      --from-literal=mysql-database=$DEV_DB_NAME \
       --from-literal=host=mysql.mysql-${ENVIRONMENT}.svc.cluster.local \
-      --from-literal=port=3306 \
-      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_CRED_NAME}.yaml
+      --dry-run=client -o yaml | kubeseal -o yaml > infrastructure/sealed/${MYSQL_SECRET_NAME}.yaml
 
     kubectl create secret generic ${MYSQL_SECRET_NAME} \
       -n mysql-${ENVIRONMENT} \
