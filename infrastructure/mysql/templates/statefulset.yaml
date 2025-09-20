@@ -33,10 +33,11 @@ spec:
           configMap:
             name: {{ .Release.Name }}-initdb
   volumeClaimTemplates:
-      - metadata:
+    - metadata:
         name: data
-        spec:
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 1Gi
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size | default "1Gi" }}
+        storageClassName: local-path
