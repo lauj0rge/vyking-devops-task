@@ -1,0 +1,33 @@
+{{- if and .Values.frontend.enabled .Values.frontend.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "vyking.frontend.fullname" . }}
+  namespace: {{ .Values.frontend.namespace | default .Release.Namespace }}
+  labels:
+  {{ include "vyking.componentLabels" (dict "root" . "component" "frontend" "values" .Values.frontend) | indent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "vyking.frontend.fullname" . }}
+  minReplicas: {{ .Values.frontend.hpa.minReplicas }}
+  maxReplicas: {{ .Values.frontend.hpa.maxReplicas }}
+  metrics:
+  {{- if .Values.frontend.hpa.cpuUtilization }}
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.frontend.hpa.cpuUtilization }}
+  {{- end }}
+  {{- if .Values.frontend.hpa.memoryUtilization }}
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.frontend.hpa.memoryUtilization }}
+  {{- end }}
+  {{- end }}

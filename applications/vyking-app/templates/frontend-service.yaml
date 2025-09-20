@@ -1,0 +1,17 @@
+{{- if .Values.frontend.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "vyking.frontend.fullname" . }}
+  namespace: {{ .Values.frontend.namespace | default .Release.Namespace }}
+  labels:
+  {{ include "vyking.componentLabels" (dict "root" . "component" "frontend" "values" .Values.frontend) | indent 4 }}
+spec:
+  type: {{ .Values.frontend.service.type }}
+  selector:
+  {{ include "vyking.componentSelectorLabels" (dict "root" . "component" "frontend" "values" .Values.frontend) | indent 4 }}
+ports:
+  - port: {{ .Values.frontend.service.port }}
+    targetPort: {{ .Values.frontend.service.targetPort }}
+    protocol: TCP
+  {{- end }}
