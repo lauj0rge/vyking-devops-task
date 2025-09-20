@@ -33,7 +33,7 @@ frontend:
 
 backend:
   namespace: backend-dev
-  replicaCount: 2
+  replicaCount: 1
   image:
     tag: dev
   mysql:
