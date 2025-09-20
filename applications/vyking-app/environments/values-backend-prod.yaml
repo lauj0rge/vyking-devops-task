@@ -1,0 +1,52 @@
+global:
+  environment: prod
+
+frontend:
+  enabled: false
+
+backend:
+  enabled: true
+  namespace: backend-prod
+  replicaCount: 2
+  image:
+    repository: vyking-backend
+    tag: prod
+    pullPolicy: IfNotPresent
+  mysql:
+    secretName: mysql-credentials-prod
+  ingress:
+    enabled: true
+    host: frontend.local   # should match your prod frontend host
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
+  probes:
+    liveness:
+      path: /health
+      port: 8081
+      initialDelaySeconds: 10
+      periodSeconds: 15
+      timeoutSeconds: 3
+      failureThreshold: 3
+    readiness:
+      path: /health
+      port: 8081
+      initialDelaySeconds: 20
+      periodSeconds: 10
+      timeoutSeconds: 3
+      failureThreshold: 5
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 6
+    cpuUtilization: 70
+    memoryUtilization: 80
+
+  labels:
+    app.kubernetes.io/name: backend
+    app.kubernetes.io/part-of: vyking-app
+    environment: prod

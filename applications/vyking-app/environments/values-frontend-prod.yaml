@@ -1,0 +1,36 @@
+global:
+  environment: prod
+
+frontend:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: vyking-frontend
+    tag: prod
+    pullPolicy: IfNotPresent
+  service:
+    port: 8080
+    targetPort: 80
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: frontend-prod.local
+        paths:
+          - path: /
+            pathType: Prefix
+          - path: /api
+            pathType: Prefix
+    tls:
+      - secretName: frontend-tls-prod
+        hosts:
+          - frontend-prod.local
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    cpuUtilization: 70
+    memoryUtilization: 80
+backend:
+  enabled: false
