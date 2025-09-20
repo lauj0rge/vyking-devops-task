@@ -9,7 +9,7 @@ backend:
   namespace: backend-dev
   replicaCount: 1
   image:
-    repository: k3d-vyking-dev.localhost:5000/vyking-backend
+    repository: vyking-backend
     tag: dev
     pullPolicy: IfNotPresent
 

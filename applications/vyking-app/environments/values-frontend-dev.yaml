@@ -6,7 +6,7 @@ frontend:
   namespace: frontend-dev
   replicaCount: 1
   image:
-    repository: k3d-vyking-dev.localhost:5000/vyking-frontend
+    repository: vyking-frontend
     tag: dev
     pullPolicy: IfNotPresent
   service:
