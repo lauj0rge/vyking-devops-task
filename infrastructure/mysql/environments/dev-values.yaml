@@ -5,9 +5,15 @@ mysql:
   persistence:
     size: 8Gi
   image:
-    registry: docker.io
     repository: bitnami/mysql
     tag: 8.0.39-debian-12-r1
+    pullPolicy: IfNotPresent
+
+backup:
+  schedule: "0 */48 * * *"   # every 2 days
+  pvc: mysql-backups
+  envFromSecret:
+    name: mysql-dev-secret
 
 resources:
   requests:
@@ -17,11 +23,5 @@ resources:
     cpu: 500m
     memory: 512Mi
 
-backup:
-  # schedule: "0 */48 * * *"   # every 2 days
-  schedule: "*/5 * * * *"      # every 5 minutes
-  image: mysql:8.0
-  pvc: mysql-backups
-  envFromSecret:
-    name: mysql-dev-secret
+
 
