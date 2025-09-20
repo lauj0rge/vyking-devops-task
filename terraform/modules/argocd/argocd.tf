@@ -1,3 +1,4 @@
+
 resource "helm_release" "argocd" {
   name             = "argocd"
   repository       = "https://argoproj.github.io/argo-helm"
@@ -9,7 +10,13 @@ resource "helm_release" "argocd" {
   wait             = true
   timeout          = 600
 }
+resource "null_resource" "wait_for_argocd_crd" {
+  depends_on = [helm_release.argocd]
 
+  provisioner "local-exec" {
+    command = "kubectl wait --for=condition=Established crd/applications.argoproj.io --timeout=120s"
+  }
+}
 resource "kubernetes_secret" "git_repo" {
   depends_on = [helm_release.argocd]
 

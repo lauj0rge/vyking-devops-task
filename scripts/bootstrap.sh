@@ -25,17 +25,17 @@ fi
 
 echo "=== 🚀 Bootstrapping environment: $ENVIRONMENT ==="
 echo "DEBUG: ENVIRONMENT is set to: $ENVIRONMENT"
-
-# -------------------------
-# 0. Verify dependencies
-# -------------------------
-for cmd in docker kubectl k3d helm terraform kubeseal git; do
-  if ! command -v $cmd &> /dev/null; then
-    echo "❌ $cmd is not installed. Please run ./scripts/setup-tools.sh first."
-    exit 1
-  fi
-done
-echo "✅ All dependencies found"
+#
+## -------------------------
+## 0. Verify dependencies
+## -------------------------
+#for cmd in docker kubectl k3d helm terraform kubeseal git; do
+#  if ! command -v $cmd &> /dev/null; then
+#    echo "❌ $cmd is not installed. Please run ./scripts/setup-tools.sh first."
+#    exit 1
+#  fi
+#done
+#echo "✅ All dependencies found"
 
 # -------------------------
 # 2. Create cluster (with SealedSecrets)
