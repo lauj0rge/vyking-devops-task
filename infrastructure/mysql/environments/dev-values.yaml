@@ -19,7 +19,6 @@ primary:
     enabled: true
     size: 1Gi
 
-
 initdbScripts:
   leaderboard.sql: |
     DROP TABLE IF EXISTS player_leaderboard;
@@ -34,6 +33,15 @@ initdbScripts:
       favorite_mode VARCHAR(40) NOT NULL,
       last_login DATETIME NOT NULL
     );
+
+    INSERT INTO player_leaderboard
+      (gamer_tag, region, player_level, total_matches, win_rate, avg_session_length, favorite_mode, last_login)
+    VALUES
+      ('ShadowNinja', 'EU', 45, 320, 58.75, 42.5, 'Battle Royale', '2025-09-20 10:15:00'),
+      ('DragonSlayer', 'NA', 60, 540, 64.20, 38.2, 'Arena', '2025-09-19 23:47:00'),
+      ('PixelMage', 'ASIA', 28, 150, 47.00, 29.7, 'Capture the Flag', '2025-09-18 14:02:00'),
+      ('IronFist', 'EU', 35, 210, 52.10, 33.1, 'Deathmatch', '2025-09-20 01:20:00'),
+      ('CyberWolf', 'SA', 50, 400, 61.35, 40.8, 'Survival', '2025-09-17 19:10:00');
   grants.sql: |
     CREATE USER IF NOT EXISTS 'devuser'@'%' IDENTIFIED BY 'devpass123';
     GRANT ALL PRIVILEGES ON devdb.* TO 'devuser'@'%';

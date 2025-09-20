@@ -12,6 +12,17 @@ fi
 CLUSTER_NAME="vyking-${ENVIRONMENT}"
 ARGO_NS="argocd-${ENVIRONMENT}"
 
+ENV_FILE="$(dirname "$0")/secrets.env"
+
+if [ -f "$ENV_FILE" ]; then
+  set -a
+  source "$ENV_FILE"
+  set +a
+else
+  echo "❌ Missing $ENV_FILE"
+  exit 1
+fi
+
 echo "=== 🚀 Bootstrapping environment: $ENVIRONMENT ==="
 echo "DEBUG: ENVIRONMENT is set to: $ENVIRONMENT"
 
@@ -36,16 +47,6 @@ echo "✅ All dependencies found"
 # -------------------------
 echo "==> Generating sealed secrets for $ENVIRONMENT"
 
-ENV_FILE="$(dirname "$0")/secrets.env"
-
-if [ -f "$ENV_FILE" ]; then
-  set -a
-  source "$ENV_FILE"
-  set +a
-else
-  echo "❌ Missing $ENV_FILE"
-  exit 1
-fi
 mkdir -p infrastructure/sealed
 
 MYSQL_SECRET_NAME="mysql-${ENVIRONMENT}-secret"
