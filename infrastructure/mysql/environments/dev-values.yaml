@@ -1,8 +1,9 @@
----
-image:
-  repository: bitnami/mysql
-  tag: 8.0
-  pullPolicy: IfNotPresent
+mysql:
+  fullnameOverride: mysql
+  image:
+    repository: bitnami/mysql
+    tag: 8.0
+    pullPolicy: IfNotPresent
 
 auth:
   existingSecret: mysql-dev-secret
