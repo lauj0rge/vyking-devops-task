@@ -27,32 +27,9 @@ done
 echo "✅ All dependencies found"
 
 # -------------------------
-# 1. Load secrets file
-# -------------------------
-if [[ -f "./scripts/secrets.env" ]]; then
-  source ./scripts/secrets.env
-else
-  echo "❌ ./scripts/secrets.env not found. Please create it first."
-  exit 1
-fi
-
-# -------------------------
 # 2. Create cluster (with SealedSecrets)
 # -------------------------
 ./scripts/cluster.sh "$ENVIRONMENT"
-
-# -------------------------
-# 3. Generate SealedSecrets
-# -------------------------
-echo "==> Generating sealed secrets for $ENVIRONMENT"
-
-#!/usr/bin/env bash
-set -euo pipefail
-
-if [ -f .env ]; then
-  export $(grep -v '^#' .env | xargs)
-fi
-ENVIRONMENT=${1:?Usage: $0 <dev|prod>}
 
 # -------------------------
 # 3. Generate SealedSecrets
