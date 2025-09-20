@@ -4,6 +4,7 @@ set -euo pipefail
 ENVIRONMENT="${1:-dev}"
 CLUSTER_NAME="vyking-${ENVIRONMENT}"
 ARGO_NS="argocd-${ENVIRONMENT}"
+INGRESS_NS="ingress-nginx"
 TIMESTAMP="$(date '+%Y-%m-%d %H:%M:%S %Z')"
 
 echo "# 🧪 Cluster Test Results for \`${ENVIRONMENT}\`"
@@ -13,6 +14,7 @@ echo "- **Generated:** ${TIMESTAMP}"
 echo "- **Environment:** \`${ENVIRONMENT}\`"
 echo "- **Cluster Name:** \`${CLUSTER_NAME}\`"
 echo "- **Argo CD Namespace:** \`${ARGO_NS}\`"
+echo "- **Ingress Namespace:** \`${INGRESS_NS}\`"
 echo
 
 declare -a NAMESPACES_FOR_ROLLOUT=()
@@ -236,6 +238,35 @@ print_mysql_connection() {
   echo
 }
 
+print_ingress_controller_access() {
+  local namespace="$1"
+  local service_name="ingress-nginx-controller"
+  local local_port=8443
+  local remote_port=443
+  local https_host="frontend-${ENVIRONMENT}.local"
+
+  if ! kubectl get ns "$namespace" >/dev/null 2>&1; then
+    return
+  fi
+
+  if ! kubectl get svc "$service_name" -n "$namespace" >/dev/null 2>&1; then
+    echo "❌ Service \`${service_name}\` not found in \`${namespace}\`."
+    echo
+    return
+  fi
+
+  echo "- **Service:** \`${service_name}\`"
+  echo "- **Namespace:** \`${namespace}\`"
+  echo "- **HTTPS host (via port-forward):** https://${https_host}:${local_port}"
+  echo "- **Remote port:** \`${remote_port}\`"
+  echo
+  echo "**Port-forward command:**"
+  echo '```bash'
+  echo "kubectl port-forward -n ${namespace} svc/${service_name} ${local_port}:${remote_port}"
+  echo '```'
+  echo
+}
+
 print_argo_ui_details() {
   local namespace="$1"
   if ! kubectl get ns "$namespace" >/dev/null 2>&1; then
@@ -249,16 +280,16 @@ print_argo_ui_details() {
     local_port=9090
   fi
 
-  echo "**UI:** [http://localhost:${local_port}](http://localhost:${local_port})"
+  echo "**UI:** [https://localhost:${local_port}](https://localhost:${local_port})"
   echo "**Port-forward command:**"
   echo '```bash'
-  echo "kubectl port-forward svc/argocd-server -n ${namespace} ${local_port}:80"
+  echo "kubectl port-forward svc/argocd-server -n ${namespace} ${local_port}:443"
   echo '```'
   echo
 }
 
 echo "## 🧭 Access Checks"
-run_cmd "kubectl version --short" kubectl version --short
+run_cmd "kubectl version" kubectl version --output=yaml
 run_cmd "Current context" kubectl config current-context
 run_cmd "Available contexts" kubectl config get-contexts
 
@@ -289,6 +320,11 @@ if namespace_overview "$ARGO_NS"; then
   run_cmd "ApplicationSets" kubectl get applicationsets -n "$ARGO_NS"
   run_cmd "AppProjects" kubectl get appprojects -n "$ARGO_NS"
   print_argo_ui_details "$ARGO_NS"
+fi
+
+echo "## 🌉 Ingress Controller (\`${INGRESS_NS}\`)"
+if namespace_overview "$INGRESS_NS"; then
+  print_ingress_controller_access "$INGRESS_NS"
 fi
 
 echo "## 🎨 Frontend (\`frontend-${ENVIRONMENT}\`)"
