@@ -15,5 +15,13 @@ backup:
   pvc: mysql-backups
 
 primary:
+  extraFlags: "--default-authentication-plugin=mysql_native_password"
+  configuration: |
+    [mysqld]
+    skip-name-resolve
+    default_authentication_plugin=mysql_native_password
+    # Allow root from outside localhost
+    [client]
+    host=%
   persistence:
     size: 8Gi
