@@ -16,7 +16,7 @@ backend:
     secretName: mysql-credentials-prod
   ingress:
     enabled: true
-    host: frontend.local   # should match your prod frontend host
+    host: frontend.local
   resources:
     requests:
       cpu: 200m
