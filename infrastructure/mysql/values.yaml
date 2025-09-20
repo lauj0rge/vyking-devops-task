@@ -1,0 +1,16 @@
+image:
+  repository: bitnami/mysql
+  tag: 8.0
+  pullPolicy: IfNotPresent
+
+auth:
+  existingSecret: mysql-dev-secret
+  secretKeys:
+    rootPasswordKey: rootPassword
+    usernameKey: username
+    passwordKey: userPassword
+    databaseKey: database
+
+persistence:
+  enabled: true
+  size: 1Gi
