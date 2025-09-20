@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: "{{ $backend.image.repository }}:{{ $backend.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ $backend.image.pullPolicy }}
           ports:
             - containerPort: {{ $backend.service.port }}

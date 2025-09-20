@@ -5,7 +5,9 @@ frontend:
   namespace: frontend-dev
   replicaCount: 1
   image:
+    repository: vyking-frontend
     tag: dev
+    pullPolicy: IfNotPresent
   service:
     port: 8080
     targetPort: 80
@@ -35,7 +37,9 @@ backend:
   namespace: backend-dev
   replicaCount: 1
   image:
+    repository: vyking-backend
     tag: dev
+    pullPolicy: IfNotPresent
   mysql:
     secretName: mysql-credentials-dev
   ingress:
@@ -74,3 +78,5 @@ backend:
     app.kubernetes.io/name: backend
     app.kubernetes.io/part-of: vyking-app
     environment: dev
+
+
