@@ -5,14 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   mysql-init.sql: |
-    -- Ensure database exists
     CREATE DATABASE IF NOT EXISTS devdb;
-
-    -- Ensure root is usable remotely
-    ALTER USER 'root'@'%' IDENTIFIED BY 'Batman1';
-    GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
-
-    -- Ensure devuser exists with privileges on devdb
     CREATE USER IF NOT EXISTS 'devuser'@'%' IDENTIFIED BY 'devpass123';
     GRANT ALL PRIVILEGES ON devdb.* TO 'devuser'@'%';
 

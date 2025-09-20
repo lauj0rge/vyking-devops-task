@@ -30,5 +30,23 @@ primary:
     enabled: false
   readinessProbe:
     enabled: false
-
+  configuration: |-
+    [mysqld]
+    skip-grant-tables
+    skip-networking
+  extraInitContainers: |
+    - name: reset-root-password
+      image: docker.io/bitnami/mysql:8.0.36
+      command:
+        - /bin/bash
+        - -c
+        - |
+          # Wait for MySQL to start with skip-grant-tables
+          sleep 30
+          # Connect without password and set root password
+          mysql -uroot <<EOF
+          FLUSH PRIVILEGES;
+          ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+          FLUSH PRIVILEGES;
+          EOF
 
