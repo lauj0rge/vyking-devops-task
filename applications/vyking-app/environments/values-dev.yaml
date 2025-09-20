@@ -63,6 +63,13 @@ backend:
       periodSeconds: 10
       timeoutSeconds: 3
       failureThreshold: 5
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    cpuUtilization: 70
+    memoryUtilization: 80
+
   labels:
     app.kubernetes.io/name: backend
     app.kubernetes.io/part-of: vyking-app

@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
             - name: mysql-backup
-              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              image: docker.io/bitnami/mysql:8.0.39-debian-12-r1
               command:
                 - sh
                 - -c
