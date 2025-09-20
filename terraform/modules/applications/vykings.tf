@@ -47,7 +47,7 @@ resource "kubernetes_manifest" "frontend_app" {
         path           = "applications/vyking-app"
         helm = {
           releaseName = "frontend"
-          valueFiles  = ["environments/values-${var.environment}.yaml"]
+          valueFiles  = ["environments/values-frontend-${var.environment}.yaml"]
         }
       }
       destination = {
@@ -87,7 +87,7 @@ resource "kubernetes_manifest" "backend_app" {
         path           = "applications/vyking-app"
         helm = {
           releaseName = "backend"
-          valueFiles  = ["environments/values-${var.environment}.yaml"]
+          valueFiles  = ["environments/values-backend-${var.environment}.yaml"]
         }
       }
       destination = {
