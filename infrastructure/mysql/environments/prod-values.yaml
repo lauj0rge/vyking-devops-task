@@ -6,19 +6,21 @@ auth:
     password: mysql-password
     database: mysql-database
 
+backup:
+  schedule: "0 */48 * * *"   # every 2 days
+  pvc: mysql-backups
+  envFromSecret:
+    name: mysql-prod-secret
+
 resources:
   requests:
-    cpu: 200m
-    memory: 512Mi
+    cpu: 100m
+    memory: 256Mi
   limits:
-    cpu: 1
-    memory: 1Gi
-
-backup:
-  schedule: "0 */6 * * *"
-  image: mysql:8.0
-  pvc: mysql-backups
+    cpu: 500m
+    memory: 512Mi
 
 primary:
+  initdbScriptsConfigMap: mysql-init
   persistence:
     size: 8Gi
