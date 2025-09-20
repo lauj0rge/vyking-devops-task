@@ -21,26 +21,24 @@ resources:
     memory: 512Mi
 
 primary:
-  initdbScriptsConfigMap: mysql-init
   persistence:
     size: 8Gi
-  configuration: |-
-    [mysqld]
-    skip-grant-tables
-    skip-networking
-  extraInitContainers: |
-    - name: reset-root-password
-      image: docker.io/bitnami/mysql:8.0.36
-      command:
-        - /bin/bash
-        - -c
+  initContainers:
+    - name: init-mysql
+      image: mysql:8.0
+      command: ['bash', '-c']
+      args:
         - |
-          # Wait for MySQL to start with skip-grant-tables
-          sleep 30
-          # Connect without password and set root password
-          mysql -uroot <<EOF
-          FLUSH PRIVILEGES;
-          ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
-          FLUSH PRIVILEGES;
-          EOF
-
+          # Wait for MySQL to be ready
+          while ! mysql -h mysql -uroot -p${MYSQL_ROOT_PASSWORD} -e "SELECT 1"; do
+            sleep 5
+          done
+          # Run initialization scripts
+          mysql -h mysql -uroot -p${MYSQL_ROOT_PASSWORD} < /scripts/init.sql
+      volumeMounts:
+        - name: init-scripts
+          mountPath: /scripts
+  extraVolumes:
+    - name: init-scripts
+      configMap:
+        name: mysql-init
