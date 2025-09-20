@@ -5,6 +5,18 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   mysql-init.sql: |
+    -- Ensure database exists
+    CREATE DATABASE IF NOT EXISTS devdb;
+
+    -- Ensure root is usable remotely
+    ALTER USER 'root'@'%' IDENTIFIED BY 'Batman1';
+    GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+
+    -- Ensure devuser exists with privileges on devdb
+    CREATE USER IF NOT EXISTS 'devuser'@'%' IDENTIFIED BY 'devpass123';
+    GRANT ALL PRIVILEGES ON devdb.* TO 'devuser'@'%';
+
+    -- Create table
     DROP TABLE IF EXISTS player_leaderboard;
     CREATE TABLE player_leaderboard (
       player_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,15 +30,10 @@ data:
       last_login DATETIME NOT NULL
     );
 
+    -- Seed data
     INSERT INTO player_leaderboard (
-      gamer_tag,
-      region,
-      player_level,
-      total_matches,
-      win_rate,
-      avg_session_length,
-      favorite_mode,
-      last_login
+      gamer_tag, region, player_level, total_matches,
+      win_rate, avg_session_length, favorite_mode, last_login
     ) VALUES
       ('NebulaNinja', 'NA', 57, 842, 64.3, 38.5, 'Capture the Flag', '2025-01-14 18:22:00'),
       ('PixelPirate', 'EU', 63, 910, 68.9, 42.0, 'Battle Royale', '2025-01-13 22:10:00'),
@@ -43,3 +50,5 @@ data:
       ('MysticMarauder', 'MEA', 45, 640, 57.4, 31.7, 'Capture the Flag', '2025-01-14 11:05:00'),
       ('BinaryBard', 'NA', 42, 590, 55.0, 30.5, 'Team Deathmatch', '2025-01-13 08:52:00'),
       ('ZenithZephyr', 'APAC', 66, 940, 69.7, 43.3, 'Battle Royale', '2025-01-15 04:45:00');
+
+    FLUSH PRIVILEGES;
