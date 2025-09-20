@@ -11,7 +11,7 @@ backend:
   image:
     repository: k3d-vyking-dev.localhost:5000/vyking-backend
     tag: dev
-    pullPolicy: Never
+    pullPolicy: IfNotPresent
 
   mysql:
     secretName: mysql-credentials-dev

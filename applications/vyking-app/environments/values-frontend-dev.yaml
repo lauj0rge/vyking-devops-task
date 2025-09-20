@@ -6,9 +6,9 @@ frontend:
   namespace: frontend-dev
   replicaCount: 1
   image:
-    repository: vyking-frontend
+    repository: k3d-vyking-dev.localhost:5000/vyking-frontend
     tag: dev
-    pullPolicy: Never
+    pullPolicy: IfNotPresent
   service:
     port: 8080
     targetPort: 80
