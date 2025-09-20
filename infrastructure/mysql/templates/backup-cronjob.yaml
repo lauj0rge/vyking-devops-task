@@ -21,9 +21,12 @@ spec:
                     fieldRef:
                       fieldPath: metadata.namespace
                 - name: MYSQL_USER
-                  value: devuser
+                  value: root
                 - name: MYSQL_PASSWORD
-                  value: devpass123
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.auth.existingSecret }}
+                      key: rootPassword
                 - name: MYSQL_DATABASE
                   valueFrom:
                     secretKeyRef:
