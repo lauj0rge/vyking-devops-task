@@ -36,10 +36,20 @@ echo "✅ All dependencies found"
 # -------------------------
 echo "==> Generating sealed secrets for $ENVIRONMENT"
 
+ENV_FILE="$(dirname "$0")/secrets.env"
+
+if [ -f "$ENV_FILE" ]; then
+  set -a
+  source "$ENV_FILE"
+  set +a
+else
+  echo "❌ Missing $ENV_FILE"
+  exit 1
+fi
 mkdir -p infrastructure/sealed
 
-MYSQL_SECRET_NAME="mysql-${ENVIRONMENT}-secret"          # For MySQL itself (mysql namespace)
-MYSQL_CRED_NAME="mysql-credentials-${ENVIRONMENT}"       # For backend (backend namespace)
+MYSQL_SECRET_NAME="mysql-${ENVIRONMENT}-secret"
+MYSQL_CRED_NAME="mysql-credentials-${ENVIRONMENT}"
 
 case "$ENVIRONMENT" in
   dev)
