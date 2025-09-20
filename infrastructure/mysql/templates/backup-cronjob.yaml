@@ -23,10 +23,7 @@ spec:
                 - name: MYSQL_USER
                   value: devuser
                 - name: MYSQL_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ .Values.auth.existingSecret }}
-                      key: userPassword
+                  value: devpass123
                 - name: MYSQL_DATABASE
                   valueFrom:
                     secretKeyRef:
