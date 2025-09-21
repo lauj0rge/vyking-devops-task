@@ -6,8 +6,55 @@ resource "helm_release" "argocd" {
   create_namespace = true
   version          = "8.3"
   values           = [file("${path.module}/values.yaml")]
-  wait             = true
+  skip_crds        = false
   timeout          = 1200
+
+  set {
+    name  = "server.service.type"
+    value = "ClusterIP"
+  }
+
+  set {
+    name  = "controller.args.appResyncPeriod"
+    value = "30"
+  }
+
+  # Add these settings to reduce resource usage for local development
+  set {
+    name  = "server.autoscale.enabled"
+    value = "false"
+  }
+
+  set {
+    name  = "repoServer.autoscale.enabled"
+    value = "false"
+  }
+
+  set {
+    name  = "controller.replicas"
+    value = "1"
+  }
+
+  set {
+    name  = "server.replicas"
+    value = "1"
+  }
+
+  set {
+    name  = "repoServer.replicas"
+    value = "1"
+  }
+
+  # Disable HA for local development
+  set {
+    name  = "redis.enabled"
+    value = "false"
+  }
+
+  set {
+    name  = "controller.enableStatefulSet"
+    value = "false"
+  }
 }
 
 resource "kubernetes_secret" "git_repo" {
