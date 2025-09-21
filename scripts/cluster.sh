@@ -33,7 +33,8 @@ kubectl get nodes -o wide
 # Install SealedSecrets
 # -------------------------
 echo "==> Installing SealedSecrets controller"
-kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.26.0/controller.yaml
+SEALED_TAG="v0.27.1"
+kubectl apply -f "https://github.com/bitnami-labs/sealed-secrets/releases/download/${SEALED_TAG}/controller.yaml"
 
 echo "==> Waiting for SealedSecrets controller to be ready..."
 kubectl rollout status deployment sealed-secrets-controller \
