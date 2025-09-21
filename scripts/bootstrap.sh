@@ -182,7 +182,7 @@ FE_IMAGE="vyking-frontend:${ENVIRONMENT}"
 BE_IMAGE="vyking-backend:${ENVIRONMENT}"
 
 echo "==> Building images with exact names for ArgoCD"
-docker build -\
+docker build \
   --build-arg BASE_IMAGE="$NGINX_BASE" \
   --build-arg ENVIRONMENT="$ENVIRONMENT" \
   -t "$FE_IMAGE" ./applications/frontend/app
@@ -250,7 +250,6 @@ kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8443:443 >/de
 echo $! > "/tmp/ingress-port-forward-${ENVIRONMENT}.pid"
 
 echo "✅ Ingress-NGINX available at https://frontend-${ENVIRONMENT}.local:8443"
-echo "==> Stop port-forward: kill \$(cat /tmp/ingress-port-forward-${ENVIRONMENT}.pid)"
 
 # -------------------------
 # 8. MySQL Connection Info
