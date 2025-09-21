@@ -7,7 +7,7 @@ resource "helm_release" "argocd" {
   version          = "8.3"
   values           = [file("${path.module}/values.yaml")]
   wait             = true
-  timeout          = 600
+  timeout          = 1200
 }
 
 resource "kubernetes_secret" "git_repo" {

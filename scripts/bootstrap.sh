@@ -285,11 +285,11 @@ echo "=== ✅ Environment $ENVIRONMENT bootstrap completed ==="
 
 echo "==> Running cluster tests..."
 TIMESTAMP=$(date '+%Y-%m-%d-%H-%M-%S')  #
-REPORT_FILE="tests-results-${ENVIRONMENT}-${TIMESTAMP}.md"
+REPORT_FILE="tests-results-${ENVIRONMENT}-${TIMESTAMP}"
 TEST_RESULTS_DIR="test-results"
 
 mkdir -p "$TEST_RESULTS_DIR"
 
-./scripts/tests.sh "$ENVIRONMENT" > "${TEST_RESULTS_DIR}/${REPORT_FILE}" 2>&1
+./scripts/tests.sh "$ENVIRONMENT" 2>&1 | tee "${TEST_RESULTS_DIR}/${REPORT_FILE}.txt" > "${TEST_RESULTS_DIR}/${REPORT_FILE}.md"
 
 echo "✅ Test results written to ${TEST_RESULTS_DIR}/${REPORT_FILE}"
