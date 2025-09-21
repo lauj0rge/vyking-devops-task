@@ -207,6 +207,12 @@ kubectl patch deployment frontend-${ENVIRONMENT} -n frontend-${ENVIRONMENT} \
 
 echo "✅ Image pull policies set to IfNotPresent"
 
+echo "==> Restarting deployments to pick up new local images"
+
+kubectl rollout restart deployment backend-${ENVIRONMENT} -n backend-${ENVIRONMENT} || true
+kubectl rollout restart deployment frontend-${ENVIRONMENT} -n frontend-${ENVIRONMENT} || true
+
+echo "✅ Deployments restarted in namespace(s) ${ENVIRONMENT}"
 # -------------------------
 # 5. Terraform apply with environment values
 # -------------------------
