@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ENVIRONMENT="${1:-dev}"
-CLUSTER_NAME="vyking-${ENVIRONMENT}"
-ARGO_NS="argocd-${ENVIRONMENT}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=./lib/common.sh
+source "${SCRIPT_DIR}/lib/common.sh"
+
+bootstrap::require_environment "${1:-}" "dev"
+
 TIMESTAMP="$(date '+%Y-%m-%d %H:%M:%S %Z')"
 
 echo "# 🧪 Cluster Test Results for \`${ENVIRONMENT}\`"

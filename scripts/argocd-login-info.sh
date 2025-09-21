@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ENVIRONMENT=${1:-dev}
-ARGO_NS=${2:-argocd-dev}
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=./lib/common.sh
+source "${SCRIPT_DIR}/lib/common.sh"
 
-echo "==> Argo CD username: admin"
-echo -n "==> Argo CD admin password: "
-kubectl -n "$ARGO_NS" get secret argocd-initial-admin-secret \
-  -o jsonpath="{.data.password}" | base64 -d && echo
+bootstrap::require_environment "${1:-}" "dev"
 
-# port-forward to local 8080
-kubectl port-forward svc/argocd-server -n "$ARGO_NS" 8080:443 >/dev/null 2>&1 &
-echo $! > "/tmp/argocd-port-forward-${ENVIRONMENT}.pid"
+if [[ -n "${2:-}" ]]; then
+  ARGO_NS="${2}"
+fi
 
-echo "=== ✅ Environment $ENVIRONMENT ready ==="
-echo "==> Argo CD UI: http://localhost:8080"
+bootstrap::argocd_login_info "${ENVIRONMENT}" "${ARGO_NS}"

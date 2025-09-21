@@ -1,29 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ENVIRONMENT=${1:-dev}
-CLUSTER_NAME="vyking-$ENVIRONMENT"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=./lib/common.sh
+source "${SCRIPT_DIR}/lib/common.sh"
 
-NGINX_BASE="nginx:1.25-alpine"
-PYTHON_BASE="python:3.11-slim-bullseye"
+bootstrap::require_environment "${1:-}" "dev"
+bootstrap::ensure_dependencies docker k3d kubectl
 
-FE_IMAGE="vyking-frontend:${ENVIRONMENT}"
-BE_IMAGE="vyking-backend:${ENVIRONMENT}"
-
-echo "==> Pulling base images"
-docker pull "$NGINX_BASE"
-docker pull "$PYTHON_BASE"
-
-echo "==> Building images"
-docker build --no-cache \
-  --build-arg BASE_IMAGE="$NGINX_BASE" \
-  --build-arg ENVIRONMENT="$ENVIRONMENT" \
-  -t "$FE_IMAGE" ./applications/frontend/app
-
-docker build --no-cache \
-  --build-arg BASE_IMAGE="$PYTHON_BASE" \
-  --build-arg ENVIRONMENT="$ENVIRONMENT" \
-  -t "$BE_IMAGE" ./applications/backend/app
-
-echo "==> Importing into k3d cluster: $CLUSTER_NAME"
-k3d image import -c "$CLUSTER_NAME" "$FE_IMAGE" "$BE_IMAGE" --keep-tools
+bootstrap::build_and_import_images "${ENVIRONMENT}" "${CLUSTER_NAME}"
