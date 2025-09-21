@@ -19,11 +19,6 @@ k3d cluster create "$CLUSTER_NAME" \
   --agents 2 \
   "${PORTS[@]}"
 
-helm install sealed-secrets sealed-secrets/sealed-secrets \
-  --namespace kube-system \
-  --version 2.13.2 \
-  --wait
-
 echo "==> Exporting kubeconfig to ~/.kube/${CLUSTER_NAME}-config"
 mkdir -p ~/.kube
 k3d kubeconfig get "$CLUSTER_NAME" > ~/.kube/${CLUSTER_NAME}-config
