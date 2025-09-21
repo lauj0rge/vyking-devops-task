@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   data.sql: |
-    -- Create table
+    USE devdb;
     DROP TABLE IF EXISTS player_leaderboard;
     CREATE TABLE player_leaderboard (
       player_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -39,4 +39,3 @@ data:
       ('BinaryBard', 'NA', 42, 590, 55.0, 30.5, 'Team Deathmatch', '2025-01-13 08:52:00'),
       ('ZenithZephyr', 'APAC', 66, 940, 69.7, 43.3, 'Battle Royale', '2025-01-15 04:45:00');
 
-    FLUSH PRIVILEGES;

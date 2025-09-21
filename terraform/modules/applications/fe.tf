@@ -104,9 +104,7 @@ resource "kubernetes_manifest" "frontend_cert" {
         name = "selfsigned-issuer"
         kind = "ClusterIssuer"
       }
-      dnsNames = var.environment == "dev" ?
-        ["frontend-dev.local"] :
-        ["frontend-prod.local"]
+      dnsNames = "frontend-${var.environment}.local"
     }
   }
 }
