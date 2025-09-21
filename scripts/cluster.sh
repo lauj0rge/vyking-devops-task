@@ -32,9 +32,17 @@ kubectl get nodes -o wide
 # -------------------------
 # Install SealedSecrets
 # -------------------------
-echo "==> Installing SealedSecrets controller"
-SEALED_TAG="v0.27.1"
-kubectl apply -f "https://github.com/bitnami-labs/sealed-secrets/releases/download/${SEALED_TAG}/controller.yaml"
+SEALED_TAG="0.27.1"
+SEALED_IMAGE="bitnami/sealed-secrets-controller:${SEALED_TAG}"
+
+echo "==> Pre-pulling SealedSecrets image: ${SEALED_IMAGE}"
+docker pull "${SEALED_IMAGE}"
+
+echo "==> Importing SealedSecrets image into k3d cluster: ${CLUSTER_NAME}"
+k3d image import -c "${CLUSTER_NAME}" "${SEALED_IMAGE}" --keep-tools
+
+echo "==> Installing SealedSecrets controller (${SEALED_TAG})"
+kubectl apply -f "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${SEALED_TAG}/controller.yaml"
 
 echo "==> Waiting for SealedSecrets controller to be ready..."
 kubectl rollout status deployment sealed-secrets-controller \
