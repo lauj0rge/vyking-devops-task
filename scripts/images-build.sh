@@ -15,12 +15,12 @@ docker pull "$NGINX_BASE"
 docker pull "$PYTHON_BASE"
 
 echo "==> Building images"
-docker build --no-cache \
+docker build  \
   --build-arg BASE_IMAGE="$NGINX_BASE" \
   --build-arg ENVIRONMENT="$ENVIRONMENT" \
   -t "$FE_IMAGE" ./applications/frontend/app
 
-docker build --no-cache \
+docker build  \
   --build-arg BASE_IMAGE="$PYTHON_BASE" \
   --build-arg ENVIRONMENT="$ENVIRONMENT" \
   -t "$BE_IMAGE" ./applications/backend/app
