@@ -7,7 +7,7 @@ resource "helm_release" "argocd" {
   version          = "8.3"
   values           = [file("${path.module}/values.yaml")]
   skip_crds        = false
-  timeout          = 1200
+  timeout          = 1800
 
   set {
     name  = "server.service.type"
