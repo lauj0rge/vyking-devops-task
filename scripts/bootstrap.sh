@@ -181,11 +181,7 @@ PYTHON_BASE="python:3.11-slim-bullseye"
 FE_IMAGE="vyking-frontend:${ENVIRONMENT}"
 BE_IMAGE="vyking-backend:${ENVIRONMENT}"
 
-echo "==> Pulling base images"
-docker pull "$NGINX_BASE"
-docker pull "$PYTHON_BASE"
-
-echo "==> Building images"
+echo "==> Building images with exact names for ArgoCD"
 docker build --no-cache \
   --build-arg BASE_IMAGE="$NGINX_BASE" \
   --build-arg ENVIRONMENT="$ENVIRONMENT" \
@@ -198,8 +194,18 @@ docker build --no-cache \
 
 echo "==> Importing into k3d cluster: $CLUSTER_NAME"
 k3d image import -c "$CLUSTER_NAME" "$FE_IMAGE" "$BE_IMAGE" --keep-tools
-echo "✅ Images ready for $ENVIRONMENT"
+echo "✅ Images imported to k3d with names: $FE_IMAGE, $BE_IMAGE"
 
+echo "==> Ensuring pods use local images with IfNotPresent policy"
+
+# Patch deployments to enforce local image usage
+kubectl patch deployment backend-${ENVIRONMENT} -n backend-${ENVIRONMENT} \
+  -p '{"spec":{"template":{"spec":{"containers":[{"name":"backend","imagePullPolicy":"IfNotPresent"}]}}}}' || true
+
+kubectl patch deployment frontend-${ENVIRONMENT} -n frontend-${ENVIRONMENT} \
+  -p '{"spec":{"template":{"spec":{"containers":[{"name":"frontend","imagePullPolicy":"IfNotPresent"}]}}}}' || true
+
+echo "✅ Image pull policies set to IfNotPresent"
 
 # -------------------------
 # 5. Terraform apply with environment values

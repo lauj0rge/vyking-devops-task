@@ -4,11 +4,6 @@ resource "kubernetes_namespace" "frontend" {
   }
 }
 
-resource "kubernetes_namespace" "backend" {
-  metadata {
-    name = var.backend_namespace
-  }
-}
 resource "helm_release" "ingress_nginx" {
   name       = "ingress-nginx"
   repository = "https://kubernetes.github.io/ingress-nginx"
@@ -48,6 +43,20 @@ resource "kubernetes_manifest" "frontend_app" {
         helm = {
           releaseName = "frontend"
           valueFiles  = ["environments/values-frontend-${var.environment}.yaml"]
+          parameters = [
+            {
+              name  = "frontend.image.repository"
+              value = "vyking-frontend"
+            },
+            {
+              name  = "frontend.image.tag"
+              value = var.environment
+            },
+            {
+              name  = "frontend.image.pullPolicy"
+              value = "IfNotPresent"
+            }
+          ]
         }
       }
       destination = {
@@ -64,45 +73,6 @@ resource "kubernetes_manifest" "frontend_app" {
   }
 }
 
-resource "kubernetes_manifest" "backend_app" {
-  depends_on = [kubernetes_namespace.backend]
-
-  manifest = {
-    apiVersion = "argoproj.io/v1alpha1"
-    kind       = "Application"
-    metadata = {
-      name      = "backend"
-      namespace = var.argocd_namespace
-      labels = {
-        environment = var.environment
-        part_of     = "vyking-app"
-        component   = "backend"
-      }
-    }
-    spec = {
-      project = "default"
-      source = {
-        repoURL        = var.repo_url
-        targetRevision = var.repo_branch
-        path           = "applications/vyking-app"
-        helm = {
-          releaseName = "backend"
-          valueFiles  = ["environments/values-backend-${var.environment}.yaml"]
-        }
-      }
-      destination = {
-        server    = "https://kubernetes.default.svc"
-        namespace = var.backend_namespace
-      }
-      syncPolicy = {
-        automated = {
-          prune    = true
-          selfHeal = true
-        }
-      }
-    }
-  }
-}
 resource "kubernetes_manifest" "selfsigned_issuer" {
   manifest = {
     apiVersion = "cert-manager.io/v1"
@@ -118,6 +88,7 @@ resource "kubernetes_manifest" "selfsigned_issuer" {
 
 
 resource "kubernetes_manifest" "frontend_cert" {
+  depends_on = [kubernetes_manifest.selfsigned_issuer]
   manifest = {
     apiVersion = "cert-manager.io/v1"
     kind       = "Certificate"
@@ -133,9 +104,9 @@ resource "kubernetes_manifest" "frontend_cert" {
         name = "selfsigned-issuer"
         kind = "ClusterIssuer"
       }
-      dnsNames = [
-        var.frontend_host
-      ]
+      dnsNames = var.environment == "dev" ?
+        ["frontend-dev.local"] :
+        ["frontend-prod.local"]
     }
   }
 }
