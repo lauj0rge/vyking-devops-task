@@ -45,7 +45,6 @@ resource "helm_release" "argocd" {
     value = "1"
   }
 
-  # Disable HA for local development
   set {
     name  = "redis.enabled"
     value = "false"
