@@ -182,12 +182,12 @@ FE_IMAGE="vyking-frontend:${ENVIRONMENT}"
 BE_IMAGE="vyking-backend:${ENVIRONMENT}"
 
 echo "==> Building images with exact names for ArgoCD"
-docker build --no-cache \
+docker build -\
   --build-arg BASE_IMAGE="$NGINX_BASE" \
   --build-arg ENVIRONMENT="$ENVIRONMENT" \
   -t "$FE_IMAGE" ./applications/frontend/app
 
-docker build --no-cache \
+docker build  \
   --build-arg BASE_IMAGE="$PYTHON_BASE" \
   --build-arg ENVIRONMENT="$ENVIRONMENT" \
   -t "$BE_IMAGE" ./applications/backend/app
