@@ -3,6 +3,11 @@
 {{- $backend := $root.Values.backend -}}
 {{- $name := include "vyking-app.backendFullname" $root -}}
 {{- $namespace := default $root.Release.Namespace $backend.namespace -}}
+{{- $pathPrefix := default "/api" $backend.ingress.path -}}
+{{- $pathType := default "ImplementationSpecific" $backend.ingress.pathType -}}
+{{- $cleanPath := trimSuffix "/" $pathPrefix -}}
+{{- $normalizedPath := ternary "/" $cleanPath (eq $cleanPath "") -}}
+{{- $renderedPath := ternary $normalizedPath (printf "%s(/|$)(.*)" $normalizedPath) (eq $pathType "Prefix") -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -17,8 +22,8 @@ spec:
     - host: {{ $backend.ingress.host }}
       http:
         paths:
-          - path: /api/?(.*)
-            pathType: Prefix
+          - path: {{ $renderedPath }}
+            pathType: {{ $pathType }}
             backend:
               service:
                 name: {{ $name }}
