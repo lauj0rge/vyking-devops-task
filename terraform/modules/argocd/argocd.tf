@@ -16,7 +16,7 @@ resource "helm_release" "argocd" {
 
   set {
     name  = "global.image.tag"
-    value = "v2.13.3"
+    value = "v3.1.5"
   }
 
   set {
@@ -54,10 +54,6 @@ resource "helm_release" "argocd" {
     value = "true"
   }
 
-  set {
-    name  = "repoServer.extraArgs[0]"
-    value = "--enable-shallow-clone"
-  }
 }
 
 resource "kubernetes_secret" "git_repo" {
