@@ -58,6 +58,10 @@ resource "helm_release" "argocd" {
     name  = "repoServer.extraArgs[0]"
     value = "--repo-server-timeout-seconds=300"
   }
+  set {
+    name  = "repoServer.extraArgs[0]"
+    value = "--enable-shallow-clone"
+  }
 }
 
 resource "kubernetes_secret" "git_repo" {

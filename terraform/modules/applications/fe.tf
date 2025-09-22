@@ -12,7 +12,7 @@ resource "helm_release" "ingress_nginx" {
 
   namespace        = "ingress-nginx"
   create_namespace = true
-  timeout = 1200
+  timeout          = 1200
 
   set {
     name  = "controller.service.type"
@@ -41,7 +41,6 @@ resource "kubernetes_manifest" "frontend_app" {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
         path           = "applications/vyking-app"
-        shallowClone: true
         helm = {
           releaseName = "frontend"
           valueFiles  = ["environments/values-frontend-${var.environment}.yaml"]
@@ -98,9 +97,9 @@ resource "kubernetes_manifest" "frontend_cert" {
       namespace = var.frontend_namespace
     }
     spec = {
-      secretName = "frontend-tls-${var.environment}"
-      duration   = "2160h"  # 90 days
-      renewBefore = "360h" # 15 days
+      secretName  = "frontend-tls-${var.environment}"
+      duration    = "2160h" # 90 days
+      renewBefore = "360h"  # 15 days
       issuerRef = {
         name = "selfsigned-issuer"
         kind = "ClusterIssuer"
