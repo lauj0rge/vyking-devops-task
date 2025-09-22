@@ -15,11 +15,15 @@ resource "helm_release" "argocd" {
   }
 
   set {
+    name  = "global.image.tag"
+    value = "v2.13.3"
+  }
+
+  set {
     name  = "controller.args.appResyncPeriod"
     value = "30"
   }
 
-  # Add these settings to reduce resource usage for local development
   set {
     name  = "server.autoscale.enabled"
     value = "false"
@@ -50,14 +54,6 @@ resource "helm_release" "argocd" {
     value = "true"
   }
 
-  set {
-    name  = "controller.enableStatefulSet"
-    value = "false"
-  }
-  set {
-    name  = "repoServer.extraArgs[0]"
-    value = "--repo-server-timeout-seconds=300"
-  }
   set {
     name  = "repoServer.extraArgs[0]"
     value = "--enable-shallow-clone"
