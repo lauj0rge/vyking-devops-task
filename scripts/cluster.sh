@@ -17,8 +17,8 @@ echo "==> Creating new cluster: $CLUSTER_NAME"
 k3d cluster create "$CLUSTER_NAME" \
   --servers 1 \
   --agents 2 \
-  "${PORTS[@]}"
-
+  "${PORTS[@]}" \
+  --k3s-arg "--disable=traefik@server:0"
 echo "==> Exporting kubeconfig to ~/.kube/${CLUSTER_NAME}-config"
 mkdir -p ~/.kube
 k3d kubeconfig get "$CLUSTER_NAME" > ~/.kube/${CLUSTER_NAME}-config
