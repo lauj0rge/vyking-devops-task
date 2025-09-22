@@ -103,3 +103,5 @@ backend:
     cpuUtilization: 70
     memoryUtilization: 70
   labels: {}
+redis:
+  enabled: true

@@ -6,3 +6,5 @@
     persistence:
       enabled: true
       size: 8Gi
+  redis:
+    enabled: true
