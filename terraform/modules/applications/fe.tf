@@ -41,6 +41,7 @@ resource "kubernetes_manifest" "frontend_app" {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
         path           = "applications/vyking-app"
+        shallowClone: true
         helm = {
           releaseName = "frontend"
           valueFiles  = ["environments/values-frontend-${var.environment}.yaml"]

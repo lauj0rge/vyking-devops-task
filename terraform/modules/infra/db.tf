@@ -18,6 +18,7 @@ resource "kubernetes_manifest" "mysql_sealed_secrets" {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
         path           = "infrastructure/sealed"
+        shallowClone: true
       }
       destination = {
         server    = "https://kubernetes.default.svc"
@@ -49,6 +50,7 @@ resource "kubernetes_manifest" "mysql" {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
         path           = "infrastructure/mysql"
+        shallowClone: true
         helm = {
           valueFiles = ["environments/${var.environment}-values.yaml"]
         }
