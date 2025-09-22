@@ -47,7 +47,7 @@ resource "helm_release" "argocd" {
 
   set {
     name  = "redis.enabled"
-    value = "false"
+    value = "true"
   }
 
   set {
