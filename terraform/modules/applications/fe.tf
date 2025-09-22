@@ -86,7 +86,6 @@ resource "kubernetes_manifest" "selfsigned_issuer" {
   }
 }
 
-
 resource "kubernetes_manifest" "frontend_cert" {
   depends_on = [kubernetes_manifest.selfsigned_issuer]
   manifest = {
