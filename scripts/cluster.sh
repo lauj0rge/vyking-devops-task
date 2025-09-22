@@ -49,3 +49,11 @@ kubectl rollout status deployment sealed-secrets-controller \
   -n kube-system --timeout=120s
 
 echo "==> Cluster ${CLUSTER_NAME} is ready with SealedSecrets installed."
+
+echo "==> Syncing kube-root-ca.crt into all namespaces..."
+for ns in $(kubectl get ns --no-headers -o custom-columns=":metadata.name"); do
+  echo "   -> Updating in $ns"
+  kubectl get cm kube-root-ca.crt -n kube-system -o yaml | \
+    sed "s/namespace: kube-system/namespace: $ns/" | \
+    kubectl apply -f -
+done
