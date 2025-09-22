@@ -54,6 +54,10 @@ resource "helm_release" "argocd" {
     name  = "controller.enableStatefulSet"
     value = "false"
   }
+  set {
+    name  = "repoServer.extraArgs[0]"
+    value = "--repo-server-timeout-seconds=300"
+  }
 }
 
 resource "kubernetes_secret" "git_repo" {
