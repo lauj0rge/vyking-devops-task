@@ -28,12 +28,14 @@ export KUBECONFIG=$HOME/.kube/${CLUSTER_NAME}-config
 echo "==> Cluster info:"
 kubectl cluster-info
 kubectl get nodes -o wide
+
 # -------------------------
 # Preload Images
 # -------------------------
 IMAGES=(
   "rancher/mirrored-coredns-coredns:1.12.0"
   "rancher/local-path-provisioner:v0.0.30"
+  "rancher/mirrored-metrics-server:v0.7.2"
   "registry.k8s.io/ingress-nginx/controller:v1.11.1"
   "registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.4.1"
   "nginx:1.25-alpine"
@@ -46,8 +48,9 @@ echo "==> Pulling and importing base images into $CLUSTER_NAME"
 for IMAGE in "${IMAGES[@]}"; do
   echo "   -> $IMAGE"
   docker pull "$IMAGE"
-  k3d image import -c "$CLUSTER_NAME" "$IMAGE" --keep-tools
+  k3d image import "$IMAGE" -c "$CLUSTER_NAME" --keep-tools
 done
+
 
 # -------------------------
 # Install SealedSecrets

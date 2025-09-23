@@ -171,49 +171,6 @@ else
 fi
 
 # -------------------------
- # 4. Build & import images
- # -------------------------
- echo "==> Building & importing images for $ENVIRONMENT"
-
-NGINX_BASE="nginx:1.25-alpine"
-PYTHON_BASE="python:3.11-slim-bullseye"
-
-FE_IMAGE="vyking-frontend:${ENVIRONMENT}"
-BE_IMAGE="vyking-backend:${ENVIRONMENT}"
-
-echo "==> Building images with exact names for ArgoCD"
-docker build \
-  --build-arg BASE_IMAGE="$NGINX_BASE" \
-  --build-arg ENVIRONMENT="$ENVIRONMENT" \
-  -t "$FE_IMAGE" ./applications/frontend/app
-
-docker build  \
-  --build-arg BASE_IMAGE="$PYTHON_BASE" \
-  --build-arg ENVIRONMENT="$ENVIRONMENT" \
-  -t "$BE_IMAGE" ./applications/backend/app
-
-echo "==> Importing into k3d cluster: $CLUSTER_NAME"
-k3d image import -c "$CLUSTER_NAME" "$FE_IMAGE" "$BE_IMAGE" --keep-tools
-echo "✅ Images imported to k3d with names: $FE_IMAGE, $BE_IMAGE"
-
-echo "==> Ensuring pods use local images with IfNotPresent policy"
-
-# Patch deployments to enforce local image usage
-kubectl patch deployment backend-${ENVIRONMENT} -n backend-${ENVIRONMENT} \
-  -p '{"spec":{"template":{"spec":{"containers":[{"name":"backend","imagePullPolicy":"IfNotPresent"}]}}}}' || true
-
-kubectl patch deployment frontend-${ENVIRONMENT} -n frontend-${ENVIRONMENT} \
-  -p '{"spec":{"template":{"spec":{"containers":[{"name":"frontend","imagePullPolicy":"IfNotPresent"}]}}}}' || true
-
-echo "✅ Image pull policies set to IfNotPresent"
-
-echo "==> Restarting deployments to pick up new local images"
-
-kubectl rollout restart deployment backend-${ENVIRONMENT} -n backend-${ENVIRONMENT} || true
-kubectl rollout restart deployment frontend-${ENVIRONMENT} -n frontend-${ENVIRONMENT} || true
-
-echo "✅ Deployments restarted in namespace(s) ${ENVIRONMENT}"
-# -------------------------
 # 5. Terraform apply with environment values
 # -------------------------
 cd terraform
@@ -237,8 +194,8 @@ cd ..
 # -------------------------
 # 6. ArgoCD login info
 # -------------------------
-./scripts/argocd-login-info.sh "$ENVIRONMENT" "$ARGO_NS"
 
+./scripts/argocd-login-info.sh "$ENVIRONMENT" "$ARGO_NS"
 
 # -------------------------
 # 7. Ingress-NGINX port-forward
