@@ -94,6 +94,6 @@ TEST_RESULTS_DIR="test-results"
 
 mkdir -p "$TEST_RESULTS_DIR"
 
-./scripts/tests.sh "$ENVIRONMENT" 2>&1 | tee "${TEST_RESULTS_DIR}/${REPORT_FILE}.md"
+./scripts/tests.sh "$ENVIRONMENT" > "${TEST_RESULTS_DIR}/${REPORT_FILE}.md" 2>&1 &
 
 echo "✅ Test results written to ${TEST_RESULTS_DIR}/${REPORT_FILE}"
