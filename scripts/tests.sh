@@ -69,6 +69,7 @@ EOF
 echo
 
 echo "## 🧭 Access Checks"
+run_cmd "kubectl version" kubectl version
 run_cmd "Current context" kubectl config current-context
 run_cmd "Available contexts" kubectl config get-contexts
 
@@ -76,7 +77,9 @@ echo "## 🌐 Cluster Overview"
 for kind in cluster-info nodes ns pv storageclass; do
   run_cmd "$kind" kubectl get $kind ${kind/cluster-info/}
 done
-
+for kind in pods svc ingress deploy statefulset daemonset pvc jobs cronjobs hpa; do
+  run_cmd "$kind (all namespaces)" kubectl get "$kind" -A -o wide
+done
 run_cmd "Resource usage (nodes)" kubectl top nodes
 run_cmd "Resource usage (pods, all namespaces)" kubectl top pods -A
 run_cmd "Recent cluster events" kubectl get events -A --sort-by=.metadata.creationTimestamp | tail -n 40
