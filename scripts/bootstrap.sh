@@ -69,8 +69,8 @@ cd ..
 # -------------------------
 # 6. ArgoCD login info
 # -------------------------
-./scripts/argocd-login-info.sh "$ENVIRONMENT" "$ARGO_NS"
 
+./scripts/argocd-login-info.sh "$ENVIRONMENT" "$ARGO_NS"
 
 # -------------------------
 # 7. Ingress-NGINX port-forward
@@ -94,6 +94,6 @@ TEST_RESULTS_DIR="test-results"
 
 mkdir -p "$TEST_RESULTS_DIR"
 
-./scripts/tests.sh "$ENVIRONMENT" 2>&1 | tee "${TEST_RESULTS_DIR}/${REPORT_FILE}.txt" > "${TEST_RESULTS_DIR}/${REPORT_FILE}.md"
+./scripts/tests.sh "$ENVIRONMENT" 2>&1 | tee "${TEST_RESULTS_DIR}/${REPORT_FILE}.md"
 
 echo "✅ Test results written to ${TEST_RESULTS_DIR}/${REPORT_FILE}"
