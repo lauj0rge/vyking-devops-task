@@ -42,6 +42,7 @@ IMAGES=(
   "redis:7.2.8-alpine"
   "bitnami/mysql:8.0.39-debian-12-r1"
   "quay.io/jetstack/cert-manager-cainjector:v1.16.1"
+  "python:3.11-slim-bullseye"
 )
 
 echo "==> Pulling and importing base images into $CLUSTER_NAME"

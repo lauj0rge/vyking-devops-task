@@ -194,8 +194,8 @@ cd ..
 # -------------------------
 # 6. ArgoCD login info
 # -------------------------
-
 ./scripts/argocd-login-info.sh "$ENVIRONMENT" "$ARGO_NS"
+
 
 # -------------------------
 # 7. Ingress-NGINX port-forward
