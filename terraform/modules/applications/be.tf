@@ -30,15 +30,15 @@ resource "kubernetes_manifest" "backend_app" {
           valueFiles  = ["environments/values-backend-${var.environment}.yaml"]
           parameters = [
             {
-              name  = "image.repository"
+              name  = "backend.image.repository"
               value = "vyking-backend"
             },
             {
-              name  = "image.tag"
+              name  = "backend.image.tag"
               value = var.environment
             },
             {
-              name  = "image.pullPolicy"
+              name  = "backend.image.pullPolicy"
               value = "IfNotPresent"
             }
           ]
