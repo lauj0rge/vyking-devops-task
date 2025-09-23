@@ -68,6 +68,8 @@ The platform is intentionally split into clearly defined components so that each
                 │ - Terraform Code    │
                 └─────────────────────┘
 ```
+All Kubernetes objects represented in the diagram are rendered by the shared Helm chart at `applications/vyking-app`. The chart emits dedicated Deployments, Services, optional Ingress resources, and HPAs for both the frontend and backend so that they can be managed together while still supporting environment-specific overrides.
+
 Argo CD continuously reconciles the `applications/*` Helm charts and `infrastructure/*` components from this Git repository into the target cluster. Terraform modules provision Argo CD itself and register every application as an Argo CD `Application` resource, ensuring a fully GitOps-managed workflow.
 
 ## Repository layout & component responsibilities
@@ -77,8 +79,9 @@ Argo CD continuously reconciles the `applications/*` Helm charts and `infrastruc
 | `applications/backend/app`        | Flask Todo API and Dockerfile.              | Implements health/readiness endpoints and CRUD handlers that read/write to MySQL using environment variables sourced from Kubernetes Secrets.   |                                                                                                                   
 | `applications/backend/templates`  | Backend Helm chart templates.               | Deploys the API Deployment/Service, wires database credentials from a SealedSecret-sourced Secret, and optionally enables an HPA.  |                                                   
 | `applications/frontend/app`       | Static frontend assets and container build. | Renders the Todo UI, proxies `/api` calls to the backend, and ships in an NGINX image. |  
-| `applications/frontend/templates` | Frontend Helm chart templates.              | Publishes the static site, injects backend routing via ConfigMap, exposes a Service/Ingress, and can scale with an HPA. |  
-| `infrastructure/mysql`            | Helm chart wrapper around Bitnami MySQL.    | Supplies init SQL, PVCs, HPA, and a CronJob backup schedule customised per environment values file. |  
+| `applications/frontend/templates` | Frontend Helm chart templates.              | Publishes the static site, injects backend routing via ConfigMap, exposes a Service/Ingress, and can scale with an HPA. |
+| `applications/vyking-app`         | Umbrella Helm chart for app workloads.      | Coordinates the frontend and backend from one values file, exposing shared configuration plus optional Ingress and HPA resources for each component. |
+| `infrastructure/mysql`            | Helm chart wrapper around Bitnami MySQL.    | Supplies init SQL, PVCs, HPA, and a CronJob backup schedule customised per environment values file. |
 | `infrastructure/cert-manager`     | cert-manager manifests.                     | Creates a self-signed cluster issuer and per-environment TLS certificates for the frontend ingress. |  
 | `infrastructure/sealed`           | Pre-generated SealedSecrets.                | Holds sealed MySQL credentials that Argo CD applies before workloads start, keeping plaintext secrets out of git.|  
 | `terraform/`                      | Terraform root module.                      | Wires providers and composes the Argo CD, infrastructure, and application modules for GitOps reconciliation. |  
@@ -90,11 +93,13 @@ Argo CD continuously reconciles the `applications/*` Helm charts and `infrastruc
 
 ## Application charts
 
-Both application charts follow a similar pattern:
+The frontend and backend workloads are delivered through the umbrella Helm chart located at `applications/vyking-app`. It renders both Deployments and Services from a single values file so the components can be versioned together while still letting you enable or disable either workload per environment.
 
-- **Configurable container images** via `.Values.image` so CI can push dev/prod tags.
-- **Health probes and resource policies** tuned per environment with overrides in `environments/values-*.yaml` files.
-- **HorizontalPodAutoscaler manifests** gated behind `.Values.hpa.enabled` to allow autoscaling when desired.
+Key capabilities include:
+
+- **Configurable container images and resources** via the `frontend.*` and `backend.*` value blocks so CI can push dev/prod tags and override CPU/memory requests.
+- **Ingress and autoscaling controls** surfaced through `.frontend.ingress`, `.backend.ingress`, `.frontend.hpa`, and `.backend.hpa`, letting you activate HTTP entry points or HPAs with a boolean switch and tune their thresholds.
+- **Shared service wiring** such as the frontend ConfigMap that proxies `/api` calls to the backend service and the backend's MySQL secret references, all annotated with the global environment label from `global.environment`.
 
 ## Infrastructure building blocks
 
