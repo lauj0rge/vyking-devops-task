@@ -32,6 +32,8 @@ kubectl get nodes -o wide
 # Preload Images
 # -------------------------
 IMAGES=(
+  "rancher/mirrored-coredns-coredns:1.12.0"
+  "rancher/local-path-provisioner:v0.0.30"
   "registry.k8s.io/ingress-nginx/controller:v1.11.1"
   "registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.4.1"
   "nginx:1.25-alpine"
