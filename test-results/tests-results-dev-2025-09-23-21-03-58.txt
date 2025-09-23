@@ -627,3 +627,371 @@ No resources found in backend-dev namespace.
 
 
 ## 🛢️ MySQL (`mysql-dev`)
+### Pods
+```bash
++ kubectl get pods -n mysql-dev -o wide
+No resources found in mysql-dev namespace.
+```
+
+### Deployments
+```bash
++ kubectl get deploy -n mysql-dev -o wide
+No resources found in mysql-dev namespace.
+```
+
+### StatefulSets
+```bash
++ kubectl get statefulset -n mysql-dev -o wide
+No resources found in mysql-dev namespace.
+```
+
+### DaemonSets
+```bash
++ kubectl get daemonset -n mysql-dev -o wide
+No resources found in mysql-dev namespace.
+```
+
+### Services
+```bash
++ kubectl get svc -n mysql-dev -o wide
+No resources found in mysql-dev namespace.
+```
+
+### Ingresses
+```bash
++ kubectl get ingress -n mysql-dev
+No resources found in mysql-dev namespace.
+```
+
+### ConfigMaps
+```bash
++ kubectl get configmap -n mysql-dev
+NAME               DATA   AGE
+kube-root-ca.crt   1      8m50s
+```
+
+### Secrets
+```bash
++ kubectl get secret -n mysql-dev
+No resources found in mysql-dev namespace.
+```
+
+### Horizontal Pod Autoscalers
+```bash
++ kubectl get hpa -n mysql-dev
+No resources found in mysql-dev namespace.
+```
+
+### Jobs
+```bash
++ kubectl get jobs -n mysql-dev
+No resources found in mysql-dev namespace.
+```
+
+### CronJobs
+```bash
++ kubectl get cronjobs -n mysql-dev
+No resources found in mysql-dev namespace.
+```
+
+### PersistentVolumeClaims
+```bash
++ kubectl get pvc -n mysql-dev
+No resources found in mysql-dev namespace.
+```
+
+### Recent Events
+```bash
++ bash -lc set\ -o\ pipefail\;\ kubectl\ get\ events\ -n\ \"mysql-dev\"\ --sort-by=.metadata.creationTimestamp\ \|\ tail\ -n\ 20
+No resources found in mysql-dev namespace.
+```
+
+### Resource Usage (pods)
+```bash
++ kubectl top pods -n mysql-dev
+No resources found in mysql-dev namespace.
+```
+
+
+❌ No MySQL service found in `mysql-dev`.
+
+## 🔐 Cert-Manager (`cert-manager`)
+### Pods
+```bash
++ kubectl get pods -n cert-manager -o wide
+NAME                                       READY   STATUS    RESTARTS   AGE     IP          NODE                      NOMINATED NODE   READINESS GATES
+cert-manager-55c69bf5cf-9vz7r              1/1     Running   0          7m49s   10.42.0.7   k3d-vyking-dev-agent-0    <none>           <none>
+cert-manager-cainjector-5765b5f544-vnh5h   1/1     Running   0          7m49s   10.42.1.7   k3d-vyking-dev-agent-1    <none>           <none>
+cert-manager-webhook-6b67444dc9-tqs4s      1/1     Running   0          7m49s   10.42.2.7   k3d-vyking-dev-server-0   <none>           <none>
+```
+
+### Deployments
+```bash
++ kubectl get deploy -n cert-manager -o wide
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS                IMAGES                                             SELECTOR
+cert-manager              1/1     1            1           7m50s   cert-manager-controller   quay.io/jetstack/cert-manager-controller:v1.16.1   app.kubernetes.io/component=controller,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cert-manager
+cert-manager-cainjector   1/1     1            1           7m50s   cert-manager-cainjector   quay.io/jetstack/cert-manager-cainjector:v1.16.1   app.kubernetes.io/component=cainjector,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cainjector
+cert-manager-webhook      1/1     1            1           7m50s   cert-manager-webhook      quay.io/jetstack/cert-manager-webhook:v1.16.1      app.kubernetes.io/component=webhook,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=webhook
+```
+
+### StatefulSets
+```bash
++ kubectl get statefulset -n cert-manager -o wide
+No resources found in cert-manager namespace.
+```
+
+### DaemonSets
+```bash
++ kubectl get daemonset -n cert-manager -o wide
+No resources found in cert-manager namespace.
+```
+
+### Services
+```bash
++ kubectl get svc -n cert-manager -o wide
+NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)            AGE     SELECTOR
+cert-manager              ClusterIP   10.43.216.51    <none>        9402/TCP           7m52s   app.kubernetes.io/component=controller,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cert-manager
+cert-manager-cainjector   ClusterIP   10.43.150.232   <none>        9402/TCP           7m52s   app.kubernetes.io/component=cainjector,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=cainjector
+cert-manager-webhook      ClusterIP   10.43.95.235    <none>        443/TCP,9402/TCP   7m52s   app.kubernetes.io/component=webhook,app.kubernetes.io/instance=cert-manager,app.kubernetes.io/name=webhook
+```
+
+### Ingresses
+```bash
++ kubectl get ingress -n cert-manager
+No resources found in cert-manager namespace.
+```
+
+### ConfigMaps
+```bash
++ kubectl get configmap -n cert-manager
+NAME               DATA   AGE
+kube-root-ca.crt   1      7m56s
+```
+
+### Secrets
+```bash
++ kubectl get secret -n cert-manager
+NAME                                 TYPE                 DATA   AGE
+cert-manager-webhook-ca              Opaque               3      7m43s
+sh.helm.release.v1.cert-manager.v1   helm.sh/release.v1   1      7m55s
+```
+
+### Horizontal Pod Autoscalers
+```bash
++ kubectl get hpa -n cert-manager
+No resources found in cert-manager namespace.
+```
+
+### Jobs
+```bash
++ kubectl get jobs -n cert-manager
+No resources found in cert-manager namespace.
+```
+
+### CronJobs
+```bash
++ kubectl get cronjobs -n cert-manager
+No resources found in cert-manager namespace.
+```
+
+### PersistentVolumeClaims
+```bash
++ kubectl get pvc -n cert-manager
+No resources found in cert-manager namespace.
+```
+
+### Recent Events
+```bash
++ bash -lc set\ -o\ pipefail\;\ kubectl\ get\ events\ -n\ \"cert-manager\"\ --sort-by=.metadata.creationTimestamp\ \|\ tail\ -n\ 20
+7m52s       Normal   SuccessfulCreate    replicaset/cert-manager-55c69bf5cf              Created pod: cert-manager-55c69bf5cf-9vz7r
+7m51s       Normal   Scheduled           pod/cert-manager-cainjector-5765b5f544-vnh5h    Successfully assigned cert-manager/cert-manager-cainjector-5765b5f544-vnh5h to k3d-vyking-dev-agent-1
+7m51s       Normal   Scheduled           pod/cert-manager-55c69bf5cf-9vz7r               Successfully assigned cert-manager/cert-manager-55c69bf5cf-9vz7r to k3d-vyking-dev-agent-0
+7m51s       Normal   Scheduled           pod/cert-manager-webhook-6b67444dc9-tqs4s       Successfully assigned cert-manager/cert-manager-webhook-6b67444dc9-tqs4s to k3d-vyking-dev-server-0
+7m49s       Normal   Pulled              pod/cert-manager-cainjector-5765b5f544-vnh5h    Container image "quay.io/jetstack/cert-manager-cainjector:v1.16.1" already present on machine
+7m49s       Normal   Created             pod/cert-manager-cainjector-5765b5f544-vnh5h    Created container cert-manager-cainjector
+7m49s       Normal   Pulled              pod/cert-manager-55c69bf5cf-9vz7r               Container image "quay.io/jetstack/cert-manager-controller:v1.16.1" already present on machine
+7m49s       Normal   Created             pod/cert-manager-55c69bf5cf-9vz7r               Created container cert-manager-controller
+7m48s       Normal   Started             pod/cert-manager-55c69bf5cf-9vz7r               Started container cert-manager-controller
+7m48s       Normal   Created             pod/cert-manager-webhook-6b67444dc9-tqs4s       Created container cert-manager-webhook
+7m48s       Normal   Pulled              pod/cert-manager-webhook-6b67444dc9-tqs4s       Container image "quay.io/jetstack/cert-manager-webhook:v1.16.1" already present on machine
+7m47s       Normal   Started             pod/cert-manager-webhook-6b67444dc9-tqs4s       Started container cert-manager-webhook
+7m47s       Normal   Started             pod/cert-manager-cainjector-5765b5f544-vnh5h    Started container cert-manager-cainjector
+7m33s       Normal   SuccessfulCreate    job/cert-manager-startupapicheck                Created pod: cert-manager-startupapicheck-fbxs5
+7m32s       Normal   Scheduled           pod/cert-manager-startupapicheck-fbxs5          Successfully assigned cert-manager/cert-manager-startupapicheck-fbxs5 to k3d-vyking-dev-server-0
+7m31s       Normal   Pulling             pod/cert-manager-startupapicheck-fbxs5          Pulling image "quay.io/jetstack/cert-manager-startupapicheck:v1.16.1"
+2m49s       Normal   Started             pod/cert-manager-startupapicheck-fbxs5          Started container cert-manager-startupapicheck
+2m49s       Normal   Created             pod/cert-manager-startupapicheck-fbxs5          Created container cert-manager-startupapicheck
+2m49s       Normal   Pulled              pod/cert-manager-startupapicheck-fbxs5          Successfully pulled image "quay.io/jetstack/cert-manager-startupapicheck:v1.16.1" in 4m42.343s (4m42.343s including waiting). Image size: 14095526 bytes.
+2m44s       Normal   Completed           job/cert-manager-startupapicheck                Job completed
+```
+
+### Resource Usage (pods)
+```bash
++ kubectl top pods -n cert-manager
+NAME                                       CPU(cores)   MEMORY(bytes)   
+cert-manager-55c69bf5cf-9vz7r              4m           79Mi            
+cert-manager-cainjector-5765b5f544-vnh5h   3m           56Mi            
+cert-manager-webhook-6b67444dc9-tqs4s      2m           58Mi            
+```
+
+
+## 🔄 Sealed Secrets (`kube-system`)
+### Sealed Secrets pods
+```bash
++ kubectl get pods -n kube-system -l name=sealed-secrets-controller -o wide
+NAME                                         READY   STATUS    RESTARTS   AGE   IP          NODE                     NOMINATED NODE   READINESS GATES
+sealed-secrets-controller-79c4ffdbd7-m4v7d   1/1     Running   0          14m   10.42.0.4   k3d-vyking-dev-agent-0   <none>           <none>
+```
+
+### Sealed Secrets deployment
+```bash
++ kubectl get deploy -n kube-system -l name=sealed-secrets-controller -o wide
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS                  IMAGES                                               SELECTOR
+sealed-secrets-controller   1/1     1            1           14m   sealed-secrets-controller   docker.io/bitnami/sealed-secrets-controller:0.27.1   name=sealed-secrets-controller
+```
+
+### Sealed Secrets service
+```bash
++ kubectl get svc -n kube-system -l name=sealed-secrets-controller -o wide
+NAME                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE   SELECTOR
+sealed-secrets-controller   ClusterIP   10.43.223.249   <none>        8080/TCP   14m   name=sealed-secrets-controller
+```
+
+### Recent kube-system events
+```bash
++ bash -lc set\ -o\ pipefail\;\ kubectl\ get\ events\ -n\ kube-system\ --sort-by=.metadata.creationTimestamp\ \|\ tail\ -n\ 40
+28m         Normal    Pulled              pod/local-path-provisioner-5cf85fd84d-rxsss       Successfully pulled image "rancher/local-path-provisioner:v0.0.30" in 1m27.797s (1m27.798s including waiting). Image size: 52043662 bytes.
+28m         Normal    Started             pod/local-path-provisioner-5cf85fd84d-rxsss       Started container local-path-provisioner
+28m         Normal    Created             pod/local-path-provisioner-5cf85fd84d-rxsss       Created container local-path-provisioner
+26m         Normal    Created             pod/metrics-server-5985cbc9d7-phtvv               Created container metrics-server
+26m         Normal    Pulled              pod/metrics-server-5985cbc9d7-phtvv               Successfully pulled image "rancher/mirrored-metrics-server:v0.7.2" in 2m25.38s (2m25.38s including waiting). Image size: 68121111 bytes.
+26m         Normal    Started             pod/metrics-server-5985cbc9d7-phtvv               Started container metrics-server
+24m         Warning   Unhealthy           pod/metrics-server-5985cbc9d7-phtvv               Readiness probe failed: Get "https://10.42.1.2:10250/readyz": dial tcp 10.42.1.2:10250: connect: connection refused
+26m         Warning   Unhealthy           pod/metrics-server-5985cbc9d7-phtvv               Readiness probe failed: HTTP probe failed with statuscode: 500
+24m         Normal    Killing             pod/coredns-ccb96694c-nctpr                       Stopping container coredns
+24m         Normal    Scheduled           pod/coredns-ccb96694c-jd5h7                       Successfully assigned kube-system/coredns-ccb96694c-jd5h7 to k3d-vyking-dev-server-0
+24m         Normal    SuccessfulCreate    replicaset/metrics-server-5985cbc9d7              Created pod: metrics-server-5985cbc9d7-kd6vj
+24m         Normal    SuccessfulCreate    replicaset/coredns-ccb96694c                      Created pod: coredns-ccb96694c-jd5h7
+24m         Normal    SuccessfulCreate    replicaset/local-path-provisioner-5cf85fd84d      Created pod: local-path-provisioner-5cf85fd84d-2nbk4
+24m         Normal    Killing             pod/metrics-server-5985cbc9d7-phtvv               Stopping container metrics-server
+24m         Normal    Killing             pod/local-path-provisioner-5cf85fd84d-rxsss       Stopping container local-path-provisioner
+24m         Normal    Scheduled           pod/local-path-provisioner-5cf85fd84d-2nbk4       Successfully assigned kube-system/local-path-provisioner-5cf85fd84d-2nbk4 to k3d-vyking-dev-agent-0
+24m         Normal    Scheduled           pod/metrics-server-5985cbc9d7-kd6vj               Successfully assigned kube-system/metrics-server-5985cbc9d7-kd6vj to k3d-vyking-dev-agent-1
+24m         Warning   Unhealthy           pod/coredns-ccb96694c-nctpr                       Readiness probe failed: Get "http://10.42.2.2:8181/ready": dial tcp 10.42.2.2:8181: connect: connection refused
+24m         Normal    Pulled              pod/metrics-server-5985cbc9d7-kd6vj               Container image "rancher/mirrored-metrics-server:v0.7.2" already present on machine
+24m         Normal    Pulled              pod/coredns-ccb96694c-jd5h7                       Container image "rancher/mirrored-coredns-coredns:1.12.0" already present on machine
+24m         Normal    Created             pod/coredns-ccb96694c-jd5h7                       Created container coredns
+24m         Normal    Pulled              pod/local-path-provisioner-5cf85fd84d-2nbk4       Container image "rancher/local-path-provisioner:v0.0.30" already present on machine
+24m         Warning   Unhealthy           pod/metrics-server-5985cbc9d7-phtvv               Readiness probe failed: Get "https://10.42.1.2:10250/readyz": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+24m         Normal    Created             pod/local-path-provisioner-5cf85fd84d-2nbk4       Created container local-path-provisioner
+24m         Normal    Started             pod/coredns-ccb96694c-jd5h7                       Started container coredns
+24m         Normal    Created             pod/metrics-server-5985cbc9d7-kd6vj               Created container metrics-server
+24m         Warning   Unhealthy           pod/metrics-server-5985cbc9d7-kd6vj               Readiness probe failed: Get "https://10.42.1.3:10250/readyz": dial tcp 10.42.1.3:10250: connect: connection refused
+24m         Warning   Unhealthy           pod/coredns-ccb96694c-jd5h7                       Readiness probe failed: Get "http://10.42.2.3:8181/ready": dial tcp 10.42.2.3:8181: connect: connection refused
+24m         Normal    Started             pod/metrics-server-5985cbc9d7-kd6vj               Started container metrics-server
+24m         Normal    Started             pod/local-path-provisioner-5cf85fd84d-2nbk4       Started container local-path-provisioner
+24m         Warning   Unhealthy           pod/metrics-server-5985cbc9d7-kd6vj               Readiness probe failed: HTTP probe failed with statuscode: 500
+14m         Normal    ScalingReplicaSet   deployment/sealed-secrets-controller              Scaled up replica set sealed-secrets-controller-79c4ffdbd7 to 1
+14m         Normal    SuccessfulCreate    replicaset/sealed-secrets-controller-79c4ffdbd7   Created pod: sealed-secrets-controller-79c4ffdbd7-m4v7d
+14m         Normal    Scheduled           pod/sealed-secrets-controller-79c4ffdbd7-m4v7d    Successfully assigned kube-system/sealed-secrets-controller-79c4ffdbd7-m4v7d to k3d-vyking-dev-agent-0
+14m         Normal    Created             pod/sealed-secrets-controller-79c4ffdbd7-m4v7d    Created container sealed-secrets-controller
+14m         Normal    Pulled              pod/sealed-secrets-controller-79c4ffdbd7-m4v7d    Container image "docker.io/bitnami/sealed-secrets-controller:0.27.1" already present on machine
+14m         Normal    Started             pod/sealed-secrets-controller-79c4ffdbd7-m4v7d    Started container sealed-secrets-controller
+14m         Warning   Unhealthy           pod/sealed-secrets-controller-79c4ffdbd7-m4v7d    Readiness probe failed: Get "http://10.42.0.4:8080/healthz": dial tcp 10.42.0.4:8080: connect: connection refused
+7m47s       Normal    LeaderElection      lease/cert-manager-controller                     cert-manager-55c69bf5cf-9vz7r-external-cert-manager-controller became leader
+7m45s       Normal    LeaderElection      lease/cert-manager-cainjector-leader-election     cert-manager-cainjector-5765b5f544-vnh5h_b089e515-867c-4c8b-a8d6-7dba49cd663c became leader
+```
+
+
+## 🚀 Workload Rollouts
+### Namespace `argocd-dev`
+### Deployment argocd-applicationset-controller
+```bash
++ kubectl rollout status deploy argocd-applicationset-controller -n argocd-dev --timeout=30s
+deployment "argocd-applicationset-controller" successfully rolled out
+```
+
+### Deployment argocd-dex-server
+```bash
++ kubectl rollout status deploy argocd-dex-server -n argocd-dev --timeout=30s
+deployment "argocd-dex-server" successfully rolled out
+```
+
+### Deployment argocd-notifications-controller
+```bash
++ kubectl rollout status deploy argocd-notifications-controller -n argocd-dev --timeout=30s
+deployment "argocd-notifications-controller" successfully rolled out
+```
+
+### Deployment argocd-redis
+```bash
++ kubectl rollout status deploy argocd-redis -n argocd-dev --timeout=30s
+deployment "argocd-redis" successfully rolled out
+```
+
+### Deployment argocd-repo-server
+```bash
++ kubectl rollout status deploy argocd-repo-server -n argocd-dev --timeout=30s
+deployment "argocd-repo-server" successfully rolled out
+```
+
+### Deployment argocd-server
+```bash
++ kubectl rollout status deploy argocd-server -n argocd-dev --timeout=30s
+deployment "argocd-server" successfully rolled out
+```
+
+### StatefulSet argocd-application-controller
+```bash
++ kubectl rollout status statefulset argocd-application-controller -n argocd-dev --timeout=30s
+partitioned roll out complete: 1 new pods have been updated...
+```
+
+
+### Namespace `cert-manager`
+### Deployment cert-manager
+```bash
++ kubectl rollout status deploy cert-manager -n cert-manager --timeout=30s
+deployment "cert-manager" successfully rolled out
+```
+
+### Deployment cert-manager-cainjector
+```bash
++ kubectl rollout status deploy cert-manager-cainjector -n cert-manager --timeout=30s
+deployment "cert-manager-cainjector" successfully rolled out
+```
+
+### Deployment cert-manager-webhook
+```bash
++ kubectl rollout status deploy cert-manager-webhook -n cert-manager --timeout=30s
+deployment "cert-manager-webhook" successfully rolled out
+```
+
+
+### Namespace `kube-system`
+### Deployment coredns
+```bash
++ kubectl rollout status deploy coredns -n kube-system --timeout=30s
+deployment "coredns" successfully rolled out
+```
+
+### Deployment local-path-provisioner
+```bash
++ kubectl rollout status deploy local-path-provisioner -n kube-system --timeout=30s
+deployment "local-path-provisioner" successfully rolled out
+```
+
+### Deployment metrics-server
+```bash
++ kubectl rollout status deploy metrics-server -n kube-system --timeout=30s
+deployment "metrics-server" successfully rolled out
+```
+
+### Deployment sealed-secrets-controller
+```bash
++ kubectl rollout status deploy sealed-secrets-controller -n kube-system --timeout=30s
+deployment "sealed-secrets-controller" successfully rolled out
+```
+
+
+✅ Tests complete.

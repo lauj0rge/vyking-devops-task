@@ -18,6 +18,9 @@ resource "kubernetes_manifest" "mysql_sealed_secrets" {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
         path           = "infrastructure/sealed"
+        directory = {
+          recurse = true
+        }
       }
       destination = {
         server    = "https://kubernetes.default.svc"
