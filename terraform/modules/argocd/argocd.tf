@@ -41,12 +41,12 @@ resource "helm_release" "argocd" {
 
   set {
     name  = "server.replicas"
-    value = "1"
+    value = "2"
   }
 
   set {
     name  = "repoServer.replicas"
-    value = "1"
+    value = "2"
   }
 
   set {
