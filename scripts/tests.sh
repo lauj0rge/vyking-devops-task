@@ -69,7 +69,6 @@ EOF
 echo
 
 echo "## 🧭 Access Checks"
-run_cmd "kubectl version" kubectl version
 run_cmd "Current context" kubectl config current-context
 run_cmd "Available contexts" kubectl config get-contexts
 
