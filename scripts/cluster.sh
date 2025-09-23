@@ -41,9 +41,10 @@ IMAGES=(
   "nginx:1.25-alpine"
   "redis:7.2.8-alpine"
   "bitnami/mysql:8.0.39-debian-12-r1"
+  "quay.io/argoproj/argocd:v3.1.5"
+  "ghcr.io/dexidp/dex:v2.44.0"
   "quay.io/jetstack/cert-manager-cainjector:v1.16.1"
   "python:3.11-slim-bullseye"
-  "quay.io/argoproj/argocd:v3.1.5"
 )
 
 echo "==> Pulling and importing base images into $CLUSTER_NAME"
