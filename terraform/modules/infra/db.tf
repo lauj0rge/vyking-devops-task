@@ -52,6 +52,9 @@ resource "kubernetes_manifest" "mysql" {
         repoURL        = var.repo_url
         targetRevision = var.repo_branch
         path           = "infrastructure/mysql"
+        directory = {
+          recurse = true
+        }
         helm = {
           valueFiles = ["environments/${var.environment}-values.yaml"]
         }
