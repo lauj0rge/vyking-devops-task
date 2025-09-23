@@ -46,6 +46,7 @@ IMAGES=(
   "quay.io/jetstack/cert-manager-controller:v1.16.1"
   "quay.io/jetstack/cert-manager-cainjector:v1.16.1"
   "quay.io/jetstack/cert-manager-webhook:v1.16.1"
+  "quay.io/jetstack/cert-manager-startupapicheck:v1.16.1"
   "python:3.11-slim-bullseye"
 )
 
