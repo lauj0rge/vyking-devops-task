@@ -2,8 +2,48 @@
 set -euo pipefail
 
 ENVIRONMENT="${1:-dev}"
+TFVARS_FILE="terraform/env/${ENVIRONMENT}.tfvars"
+
+declare -A TFVARS=()
+
+parse_tfvars() {
+  local file="$1"
+  [[ -f "$file" ]] || return
+
+  local tfvars_regex='^[[:space:]]*([A-Za-z_][A-Za-z0-9_]*)[[:space:]]*=[[:space:]]*"([^"]*)"[[:space:]]*$'
+
+  while IFS= read -r line; do
+    line="${line%%#*}"
+    if [[ $line =~ ^[[:space:]]*$ ]]; then
+      continue
+    fi
+    if [[ $line =~ $tfvars_regex ]]; then
+      local key="${BASH_REMATCH[1]}"
+      local value="${BASH_REMATCH[2]}"
+      TFVARS["$key"]="$value"
+    fi
+  done < "$file"
+}
+
+get_tfvar_value() {
+  local key="$1"
+  local default_value="${2:-}"
+  if [[ ${TFVARS[$key]+isset} ]]; then
+    echo "${TFVARS[$key]}"
+  else
+    echo "$default_value"
+  fi
+}
+
+parse_tfvars "$TFVARS_FILE"
+
 CLUSTER_NAME="vyking-${ENVIRONMENT}"
-ARGO_NS="argocd-${ENVIRONMENT}"
+KUBECONFIG_PATH="$(get_tfvar_value "kubeconfig_path" "~/.kube/vyking-${ENVIRONMENT}-config")"
+ARGO_NS="$(get_tfvar_value "argocd_namespace" "argocd-${ENVIRONMENT}")"
+FRONTEND_NS="$(get_tfvar_value "frontend_namespace" "frontend-${ENVIRONMENT}")"
+BACKEND_NS="$(get_tfvar_value "backend_namespace" "backend-${ENVIRONMENT}")"
+MYSQL_NS="$(get_tfvar_value "mysql_namespace" "mysql-${ENVIRONMENT}")"
+FRONTEND_HOST="$(get_tfvar_value "frontend_host" "frontend-${ENVIRONMENT}.local")"
 TIMESTAMP="$(date '+%Y-%m-%d %H:%M:%S %Z')"
 
 echo "# 🧪 Cluster Test Results for \`${ENVIRONMENT}\`"
@@ -12,7 +52,19 @@ echo "## 📋 Summary"
 echo "- **Generated:** ${TIMESTAMP}"
 echo "- **Environment:** \`${ENVIRONMENT}\`"
 echo "- **Cluster Name:** \`${CLUSTER_NAME}\`"
+echo "- **Kubeconfig Path:** \`${KUBECONFIG_PATH}\`"
 echo "- **Argo CD Namespace:** \`${ARGO_NS}\`"
+echo "- **Frontend Namespace:** \`${FRONTEND_NS}\`"
+echo "- **Backend Namespace:** \`${BACKEND_NS}\`"
+echo "- **MySQL Namespace:** \`${MYSQL_NS}\`"
+if [[ -n "$FRONTEND_HOST" ]]; then
+  echo "- **Frontend Host:** \`${FRONTEND_HOST}\`"
+fi
+if [[ -f "$TFVARS_FILE" ]]; then
+  echo "- **tfvars source:** \`${TFVARS_FILE}\`"
+else
+  echo "- **tfvars source:** _(not found, using defaults)_"
+fi
 echo
 
 declare -a NAMESPACES_FOR_ROLLOUT=()
@@ -159,6 +211,7 @@ print_rollout_statuses() {
 print_service_access() {
   local namespace="$1"
   local default_port="$2"
+  local host="${3:-}"
 
   if ! kubectl get ns "$namespace" >/dev/null 2>&1; then
     return
@@ -185,7 +238,16 @@ print_service_access() {
   echo "- **Service:** \`${svc_name}\`"
   echo "- **Namespace:** \`${namespace}\`"
   echo "- **Port:** \`${svc_port}\`"
+  if [[ -n "$host" ]]; then
+    echo "- **Ingress Host:** \`${host}\`"
+  fi
   echo
+  if [[ -n "$host" ]]; then
+    echo "**Ingress URL:**"
+    echo
+    echo "[https://${host}](https://${host})"
+    echo
+  fi
   echo "**Port-forward command:**"
   echo '```bash'
   echo "kubectl port-forward svc/${svc_name} -n ${namespace} ${svc_port}:${svc_port}"
@@ -291,19 +353,25 @@ if namespace_overview "$ARGO_NS"; then
   print_argo_ui_details "$ARGO_NS"
 fi
 
-echo "## 🎨 Frontend (\`frontend-${ENVIRONMENT}\`)"
-if namespace_overview "frontend-${ENVIRONMENT}"; then
-  print_service_access "frontend-${ENVIRONMENT}" "80"
+if [[ -n "$FRONTEND_NS" ]]; then
+  echo "## 🎨 Frontend (\`${FRONTEND_NS}\`)"
+  if namespace_overview "$FRONTEND_NS"; then
+    print_service_access "$FRONTEND_NS" "8080" "$FRONTEND_HOST"
+  fi
 fi
 
-echo "## ⚙️ Backend (\`backend-${ENVIRONMENT}\`)"
-if namespace_overview "backend-${ENVIRONMENT}"; then
-  print_service_access "backend-${ENVIRONMENT}" "8081"
+if [[ -n "$BACKEND_NS" ]]; then
+  echo "## ⚙️ Backend (\`${BACKEND_NS}\`)"
+  if namespace_overview "$BACKEND_NS"; then
+    print_service_access "$BACKEND_NS" "8081"
+  fi
 fi
 
-echo "## 🛢️ MySQL (\`mysql-${ENVIRONMENT}\`)"
-if namespace_overview "mysql-${ENVIRONMENT}"; then
-  print_mysql_connection "mysql-${ENVIRONMENT}"
+if [[ -n "$MYSQL_NS" ]]; then
+  echo "## 🛢️ MySQL (\`${MYSQL_NS}\`)"
+  if namespace_overview "$MYSQL_NS"; then
+    print_mysql_connection "$MYSQL_NS"
+  fi
 fi
 
 echo "## 🔐 Cert-Manager (\`cert-manager\`)"
