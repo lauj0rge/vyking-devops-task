@@ -43,7 +43,9 @@ IMAGES=(
   "bitnami/mysql:8.0.39-debian-12-r1"
   "quay.io/argoproj/argocd:v3.1.5"
   "ghcr.io/dexidp/dex:v2.44.0"
+  "quay.io/jetstack/cert-manager-controller:v1.16.1"
   "quay.io/jetstack/cert-manager-cainjector:v1.16.1"
+  "quay.io/jetstack/cert-manager-webhook:v1.16.1"
   "python:3.11-slim-bullseye"
 )
 
