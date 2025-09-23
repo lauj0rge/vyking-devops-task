@@ -36,9 +36,6 @@ else
   exit 1
 fi
 
-# -------------------------
-# 2. Create cluster (with SealedSecrets)
-# -------------------------
 ./scripts/cluster.sh "$ENVIRONMENT"
 
 # -------------------------

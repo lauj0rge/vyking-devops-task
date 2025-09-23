@@ -65,7 +65,7 @@ docker pull "${SEALED_IMAGE}"
 echo "==> Importing SealedSecrets image into k3d cluster: ${CLUSTER_NAME}"
 k3d image import -c "${CLUSTER_NAME}" "${SEALED_IMAGE}" --keep-tools
 
-echo "==> Installing SealedSecrets controller (${SEALED_TAG})"
+echo "==> Installing SealedSecrets controller ${SEALED_TAG}"
 kubectl apply -f "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${SEALED_TAG}/controller.yaml"
 
 echo "==> Waiting for SealedSecrets controller to be ready..."
