@@ -57,7 +57,7 @@ spec:
       volumes:
         - name: nginx-config
           configMap:
-            name: {{ printf "%s-nginx-config" $name }}
+            name: {{ .Release.Name }}-nginx-config
             items:
               - key: default.conf
                 path: default.conf
