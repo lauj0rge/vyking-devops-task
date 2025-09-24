@@ -34,4 +34,3 @@ primary:
   persistence:
     size: 8Gi
 
-initdbScriptsConfigMap: mysql-init
