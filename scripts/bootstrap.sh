@@ -65,6 +65,13 @@ terraform apply -var-file="$TFVARS_FILE" -target=module.infra -auto-approve
 terraform apply -var-file="$TFVARS_FILE" -target=module.applications -auto-approve
 
 cd ..
+echo "==> Applying sealed secrets"
+kubectl apply -n backend-${ENVIRONMENT} -f infrastructure/sealed/ || true
+kubectl apply -n mysql-${ENVIRONMENT} -f infrastructure/sealed/ || true
+echo "==> Restarting pods that depend on secrets"
+kubectl rollout restart deployment -n backend-${ENVIRONMENT} || true
+kubectl rollout restart statefulset -n mysql-${ENVIRONMENT} || true
+
 
 # -------------------------
 # 6. ArgoCD login info

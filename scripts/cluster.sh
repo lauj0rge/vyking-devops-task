@@ -57,6 +57,9 @@ for IMAGE in "${IMAGES[@]}"; do
   k3d image import "$IMAGE" -c "$CLUSTER_NAME" --keep-tools
 done
 
+docker build -t vyking-backend:${ENVIRONMENT} ./applications/backend/app
+docker build -t vyking-frontend:${ENVIRONMENT} ./applications/frontend/app
+k3d image import vyking-backend:${ENVIRONMENT} vyking-frontend:${ENVIRONMENT} -c "$CLUSTER_NAME" --keep-tools
 
 # -------------------------
 # Install SealedSecrets
