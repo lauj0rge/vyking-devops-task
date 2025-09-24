@@ -47,11 +47,10 @@ namespace_overview() {
   if ! kubectl get ns "$ns" >/dev/null 2>&1; then
     echo "❌ Namespace \`${ns}\` not found." && return 1
   fi
-  local resources=(pods deploy statefulset daemonset svc ingress configmap secret hpa jobs cronjobs pvc)
+  local resources=(pods deploy statefulset  svc ingress)
   for kind in "${resources[@]}"; do
     run_cmd "${kind^}" kubectl get "$kind" -n "$ns" -o wide
   done
-  run_cmd "Recent Events" kubectl get events -n "$ns" --sort-by=.metadata.creationTimestamp | tail -n 20
   run_cmd "Resource Usage (pods)" kubectl top pods -n "$ns"
 }
 
@@ -77,14 +76,13 @@ echo "## 🌐 Cluster Overview"
 for kind in cluster-info nodes ns pv storageclass; do
   run_cmd "$kind" kubectl get $kind ${kind/cluster-info/}
 done
-for kind in pods svc ingress deploy statefulset daemonset pvc jobs cronjobs hpa; do
+for kind in pods svc ingress deploy statefulset cronjobs hpa; do
   run_cmd "$kind (all namespaces)" kubectl get "$kind" -A -o wide
 done
 run_cmd "Resource usage (nodes)" kubectl top nodes
 run_cmd "Resource usage (pods, all namespaces)" kubectl top pods -A
-run_cmd "Recent cluster events" kubectl get events -A --sort-by=.metadata.creationTimestamp | tail -n 40
 
-echo "## 🚦 Argo CD (\`${ARGO_NS}\`)"
+echo "## 🚦 Argo CD "
 namespace_overview "$ARGO_NS" || true
 
 [[ -n "$FRONTEND_NS" ]] && echo "## 🎨 Frontend (\`${FRONTEND_NS}\`)" && namespace_overview "$FRONTEND_NS" || true
