@@ -30,80 +30,8 @@ primary:
     connect_timeout=60
     net_read_timeout=60
     net_write_timeout=60
-  
+
   persistence:
     size: 8Gi
 
-  initContainers:
-    - name: init-mysql
-      image: docker.io/bitnami/mysql:8.0.39-debian-12-r1
-      env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-dev-secret
-              key: mysql-root-password
-      command: ['bash', '-c']
-      args:
-        - |
-          set -e
-          echo "Waiting for MySQL to be ready..."
-          while ! mysql -h mysql -uroot -p${MYSQL_ROOT_PASSWORD} -e "SELECT 1"; do
-            sleep 5
-            echo "Still waiting for MySQL..."
-          done
-          echo "MySQL is ready! Running initialization scripts..."
-          mysql -h mysql -uroot -p${MYSQL_ROOT_PASSWORD} < /scripts/init.sql
-          echo "Database initialized successfully!"
-          mysql -h mysql -uroot -p${MYSQL_ROOT_PASSWORD} < /data-scripts/data.sql
-          echo "Data loaded successfully!"
-      volumeMounts:
-        - name: init-scripts
-          mountPath: /scripts
-        - name: data-scripts
-          mountPath: /data-scripts
-
-  extraVolumes:
-    - name: init-scripts
-      configMap:
-        name: mysql-init-sql
-    - name: data-scripts
-      configMap:
-        name: mysql-data-sql
-
-  startupProbe:
-    enabled: true
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 15
-    command:
-      - bash
-      - -c
-      - |
-        mysqladmin ping -uroot -p${MYSQL_ROOT_PASSWORD} --silent
-
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 120
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 3
-    command:
-      - bash
-      - -c
-      - |
-        mysqladmin ping -uroot -p${MYSQL_ROOT_PASSWORD} --silent
-
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 30
-    periodSeconds: 5
-    timeoutSeconds: 3
-    failureThreshold: 3
-    command:
-      - bash
-      - -c
-      - |
-        mysqladmin ping -uroot -p${MYSQL_ROOT_PASSWORD} --silent
-
+initdbScriptsConfigMap: mysql-init
