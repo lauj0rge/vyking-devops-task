@@ -16,10 +16,9 @@ resource "helm_release" "ingress_nginx" {
 
   set {
     name  = "controller.service.type"
-    value = "ClusterIP"
+    value = "NodePort"
   }
 }
-
 resource "kubernetes_manifest" "frontend_app" {
   depends_on = [kubernetes_namespace.frontend]
 
