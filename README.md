@@ -159,7 +159,7 @@ PROD_DB_NAME=proddb
 
 ## Useful endpoints
 
-- **Argo CD UI:** forwarded to http://localhost:8080 for `dev` and 8080/8443 load balancer bindings in prod clusters.
-- **Frontend Ingress:** reachable via the ingress-nginx port-forward started by the bootstrap script at `https://frontend-<env>.local:8443`.
+- **Argo CD UI:** forwarded to http://frontend-dev.local:8080  and 8080/8443 load balancer bindings in prod clusters.
+- **Frontend Ingress:** `https://frontend-dev.local:30443` or  `https://frontend-dev.local:30443`
 - **Backend API:** available inside the cluster at the `backend` Service (default `ClusterIP` on port 8081) with `/health`, `/readiness`, and `/leaderboard` routes exposing the mock player leaderboard dataset.
-- **test-results folder:** [test-results.md](./test-results/test-results.md) it'll be generated after run, with test-results md file 
+- **test-results folder:** [test-results.md](./test-results/) it'll be generated after run, with test-results md file 
