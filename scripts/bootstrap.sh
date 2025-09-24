@@ -73,18 +73,7 @@ cd ..
 ./scripts/argocd-login-info.sh "$ENVIRONMENT" "$ARGO_NS"
 
 # -------------------------
-# 7. Ingress-NGINX port-forward
-# -------------------------
-echo "==> Setting up ingress-nginx port-forward"
-
-# Forward local 8443 -> ingress-nginx 443
-kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8443:443 >/dev/null 2>&1 &
-echo $! > "/tmp/ingress-port-forward-${ENVIRONMENT}.pid"
-
-echo "✅ Ingress-NGINX available at https://frontend-${ENVIRONMENT}.local:8443"
-
-# -------------------------
-# 10. Run Tests & Save Report
+# 7. Run Tests & Save Report
 # -------------------------
 
 echo "==> Running cluster tests..."

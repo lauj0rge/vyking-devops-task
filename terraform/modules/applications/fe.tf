@@ -18,6 +18,14 @@ resource "helm_release" "ingress_nginx" {
     name  = "controller.service.type"
     value = "NodePort"
   }
+  set {
+    name  = "controller.service.nodePorts.http"
+    value = "30080"
+  }
+  set {
+    name  = "controller.service.nodePorts.https"
+    value = "30443"
+  }
 }
 resource "kubernetes_manifest" "frontend_app" {
   depends_on = [kubernetes_namespace.frontend]

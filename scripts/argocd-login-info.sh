@@ -9,9 +9,5 @@ echo -n "==> Argo CD admin password: "
 kubectl -n "$ARGO_NS" get secret argocd-initial-admin-secret \
   -o jsonpath="{.data.password}" | base64 -d && echo
 
-# port-forward to local 8080
-kubectl port-forward svc/argocd-server -n "$ARGO_NS" 8080:443 >/dev/null 2>&1 &
-echo $! > "/tmp/argocd-port-forward-${ENVIRONMENT}.pid"
-
 echo "=== ✅ Environment $ENVIRONMENT ready ==="
-echo "==> Argo CD UI: http://frontend-dev.local:8080/"
+echo "==> Argo CD UI: http://frontend-dev.local:30443/"
