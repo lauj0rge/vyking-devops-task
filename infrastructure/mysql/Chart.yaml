@@ -5,7 +5,3 @@ type: application
 version: 0.1.0
 appVersion: "8.0"
 
-dependencies:
-  - name: mysql
-    version: 14.0.3
-    repository: "file://./charts/mysql"
