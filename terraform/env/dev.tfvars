@@ -1,7 +1,7 @@
 environment        = "dev"
 kubeconfig_path    = "~/.kube/vyking-dev-config"
 argocd_namespace   = "argocd-dev"
-repo_url           = "https://github.com/lauj0rge/vyking-devops-task.git"
+repo_url           = "https://github.com/lauj0rge/vykings.git"
 repo_branch        = "dev"
 frontend_namespace = "frontend-dev"
 backend_namespace  = "backend-dev"
