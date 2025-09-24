@@ -66,11 +66,11 @@ terraform apply -var-file="$TFVARS_FILE" -target=module.applications -auto-appro
 
 cd ..
 echo "==> Applying sealed secrets"
-kubectl apply -n backend-${ENVIRONMENT} -f infrastructure/sealed/ || true
-kubectl apply -n mysql-${ENVIRONMENT} -f infrastructure/sealed/ || true
+kubectl apply --namespace=backend-${ENVIRONMENT} -f infrastructure/sealed/ || true
+kubectl apply --namespace=mysql-${ENVIRONMENT} -f infrastructure/sealed/ || true
 echo "==> Restarting pods that depend on secrets"
-kubectl rollout restart deployment -n backend-${ENVIRONMENT} || true
-kubectl rollout restart statefulset -n mysql-${ENVIRONMENT} || true
+kubectl rollout restart deployment --namespace=backend-${ENVIRONMENT} || true
+kubectl rollout restart statefulset --namespace=mysql-${ENVIRONMENT} || true
 
 
 # -------------------------
